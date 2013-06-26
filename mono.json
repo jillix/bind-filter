@@ -1,0 +1,8 @@
+{
+    "source": "github",
+    "owner": "jillix",
+    "name": "bind",
+    "dependencies": [
+        "/filter.js"
+    ]
+}
