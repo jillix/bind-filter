@@ -1,4 +1,4 @@
-var = uiConfig = {
+/*var = uiConfig = {
     //logic: '#filter [name=logic]',
     field: '#filter [name=field]',
     value: '#filter [name=value]',
@@ -54,3 +54,5 @@ function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for
 function get(s,c){return (c||document).querySelector(s)}
 
 module.exports = init;
+*/
+
