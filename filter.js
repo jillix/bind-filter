@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 /*var = uiConfig = {
     //logic: '#filter [name=logic]',
     field: '#filter [name=field]',
@@ -55,4 +56,35 @@ function get(s,c){return (c||document).querySelector(s)}
 
 module.exports = init;
 */
+// ONLY FOR DEV (TEMPORARY)
+var tmpConfig = {
+    controls: {
+        filters: '',
+        addFilter: '',
+        cancel: '',
+        field: '',
+        operator: '',
+        value: ''
+    }
+};
 
+function init (config) {
+    
+    // ONLY FOR DEV (TEMPORARY)
+    config = tmpConfig;
+    
+    var self = this;
+    
+    self.onready('crud', function () {
+        
+        self.emit('find', {q: {_tp: 'tremplate'}}, function (err, data) {
+            console.log(err || data);
+        });
+    });
+    
+    self.emit('ready');
+}
+
+module.exports = init;
+
+return module; });
