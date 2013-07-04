@@ -51,11 +51,11 @@ function get(s,c){
     catch (err) {}
 }
 
-function find () {
+function find (callback) {
     var self = this;
     
     if (self.crudFindBusy) {
-        return;
+        return callback('Find is busy.');
     }
     
     self.crudFindBusy = true;
@@ -70,6 +70,7 @@ function find () {
         self.emit('find', query, function (err, data) {
             self.crudFindBusy = false;
             self.emit('result', err, data);
+            callback(err);
         });
     }
 }
@@ -123,7 +124,9 @@ var uiHandlers = {
         self.ui.filter.style.display = 'none';
         
         // call server
-        find.call(self);
+        find.call(self, function (err) {
+            // TODO enable ui
+        });
     },
     create: function () {
         var self = this;
