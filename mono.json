@@ -1,8 +1,11 @@
 {
     "source": "github",
     "owner": "jillix",
-    "name": "bind",
+    "name": "bind-filter",
     "dependencies": [
-        "/filter.js"
+        "/filter.js",
+        "/controls.js",
+        "/list.js",
+        "/find.js"
     ]
 }

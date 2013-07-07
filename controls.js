@@ -1,3 +1,6 @@
+var list = require('./list');
+var find = require('./find');
+
 var uiHandlers = {
     cancel: function () {
         var self = this;
@@ -37,3 +40,10 @@ if (uiHandlers[name]) {
     })(name), false);
 }
 */
+
+function init () {
+    var self = this;
+    console.log(self.config);
+}
+
+module.exports = init;

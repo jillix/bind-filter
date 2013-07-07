@@ -1,5 +1,7 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 
+var controls = require('./controls');
+
 // ONLY FOR DEV
 var tmpConfig = {
     crud: 'crud',
