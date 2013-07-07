@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, exports) {
 // TODO build queries
 function queryBuilder (domRefs) {
     
@@ -44,3 +45,5 @@ function find (callback) {
         });
     }
 }
+
+return module; });

@@ -1,3 +1,8 @@
+M.wrap('github/jillix/bind-filter/dev/list.js', function (require, module, exports) {
+
+// TODO use bind for dom interaction/manipulation
+function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
+
 function createFilterItem (values) {
     var self = this;
     // TODO make the filter item configurable
@@ -11,49 +16,102 @@ function createFilterItem (values) {
     </li>*/
     var li = elm('li');
     var onoff = elm('span', {'class': 'onoff'});
-    onoff.appendChild(elm('input', {type: 'checkbox', checked:true}));
+    var checkbox = elm('input', {type: 'checkbox', checked:true});
+    
+    // enable/disable filter
+    checkbox.addEventListener('change', function (event) {
+        if (checkbox.checked) {
+            enable.call(self, li, values);
+        } else {
+            disable.call(self, li. values);
+        }
+    }, false);
+    
+    onoff.appendChild(checkbox);
     li.appendChild(onoff);
-    
-    var value = elm('span', {'class':'value'});
-    value.innerHTML = values.value || '';
-    
-    var operator = elm('span', {'class':'operator'});
-    operator.innerHTML = values.operator;
     
     var field = elm('span', {'class':'field'});
     field.innerHTML = values.field;
+    field.addEventListener('click', function () {
+        edit.call(self, values);
+    }, false);
     
-    var remove = elm('span', {'class':'remove'});
-    remove.innerHTML = 'x';
-    remove.addEventListener('click', function () {
-        self.ui.filterList.removeChild(li);
-    });
+    var operator = elm('span', {'class':'operator'});
+    operator.innerHTML = values.operator;
+    operator.addEventListener('click', function () {
+        edit.call(self, values);
+    }, false);
     
+    var value = elm('span', {'class':'value'});
+    value.innerHTML = values.value || '';
+    value.addEventListener('click', function () {
+        edit.call(self, values);
+    }, false);
+    
+    // remove filter
+    var rm = elm('span', {'class':'remove'});
+    rm.innerHTML = 'x';
+    rm.addEventListener('click', function () {
+        remove.call(self, li, values);
+    }, false);
+    
+    // TODO sort filter (drag'n drop)
     var handler = elm('span', {'class':'handler'});
     handler.innerHTML = '#';
     
     li.appendChild(field);
     li.appendChild(operator);
     li.appendChild(value);
-    li.appendChild(remove);
+    li.appendChild(rm);
     li.appendChild(handler);
     return li;
 }
 
-function addFilter () {
+function save (key, values) {
     var self = this;
     
-    // TODO get filter values
-    var values = {
-        field: self.ui.field.value,
-        operator: self.ui.operator.value || '=',
-        value: self.ui.value.value
-    };
+    // get values
+    if (!values) {
+        var values = {
+            field: self.domRefs.inputs.field.value,
+            operator: self.domRefs.inputs.operator.value || '=',
+            value: self.domRefs.inputs.value.value
+        };
+        
+        self.domRefs.list.appendChild(createFilterItem.call(self, values));
+        return;
+    }
     
-    self.ui.filterList.appendChild(createFilterItem.call(self, values));
+    // TODO update filter
+}
+
+// TODO edit filter
+function edit (values) {
+    var self = this;
+    self.domRefs.filter.style.display = 'block';
+    console.log('edit filter');
 }
 
 // TODO remove filter
-function removeFilter () {
+function remove (li) {
     var self = this;
+    self.domRefs.list.removeChild(li);
+    console.log('remove filter');
 }
+
+// TODO enable filter
+function enable () {
+    var self = this;
+    console.log('enable filter');
+}
+
+// TODO disable filter
+function disable () {
+    var self = this;
+    console.log('disable filter');
+}
+
+exports.save = save;
+exports.remove = remove;
+
+return module; });

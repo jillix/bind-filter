@@ -1,6 +1,6 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 
-var controls = require('./controls');
+var controls = require('./controls').init;
 
 // ONLY FOR DEV
 var tmpConfig = {
@@ -20,14 +20,13 @@ var tmpConfig = {
     },
     controls: {
         create: 'button[name=create]',
-        add: 'button[name=add]',
+        save: 'button[name=save]',
         cancel: 'button[name=cancel]',
         remove: 'button[name=remove]'
     }
 };
 
 // TODO use bind for dom interaction/manipulation
-function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
 function get(s,c){
     try{return (c||document).querySelector(s);}
     catch (err) {}
@@ -55,9 +54,7 @@ function initDom () {
         self.domRefs.controls[name] = get(self.config.controls[name], self.dom);
     }
     
-    console.log(self.domRefs);
-    
-    // TODO init UI
+    controls.call(self);
 }
 
 function init (config) {

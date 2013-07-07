@@ -1,49 +1,53 @@
+M.wrap('github/jillix/bind-filter/dev/controls.js', function (require, module, exports) {
 var list = require('./list');
 var find = require('./find');
 
-var uiHandlers = {
+var handlers = {
     cancel: function () {
         var self = this;
-        self.ui.filter.style.display = 'none';
+        self.domRefs.filter.style.display = 'none';
     },
-    add: function () {
+    save: function () {
         var self = this;
         
         // TODO disable ui
-        self.ui.filter.style.display = 'none';
+        self.domRefs.filter.style.display = 'none';
+        
+        list.save.call(self);
         
         // call server
-        find.call(self, function (err) {
+        /*find.call(self, function (err) {
             // TODO enable ui
-        });
+        });*/
     },
     create: function () {
         var self = this;
         
         // TODO reset form
-        self.ui.filter.style.display = 'block';
+        self.domRefs.filter.style.display = 'block';
     },
     remove: function () {
         var self = this;
-        self.ui.filter.style.display = 'none';
+        self.domRefs.filter.style.display = 'none';
+        list.remove(self);
     }
 };
 
-
-/*
-// add events
-if (uiHandlers[name]) {
-    self.ui[name].addEventListener(self.config.events[name], (function (name) {
-        return function () {
-            uiHandlers[name].call(self);
-        };
-    })(name), false);
-}
-*/
-
 function init () {
     var self = this;
-    console.log(self.config);
+    
+    // add events to controls
+    for (var handler in handlers) {
+        if (self.domRefs.controls[handler]) {
+            self.domRefs.controls[handler].addEventListener(self.config.events[handler] || 'click', (function (handler) {
+                return function () {
+                    handlers[handler].call(self);
+                }
+            })(handler));
+        }
+    }
 }
 
-module.exports = init;
+exports.init = init;
+
+return module; });
