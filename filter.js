@@ -1,7 +1,4 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
-
-var controls = require('./controls').init;
-
 // ONLY FOR DEV
 var tmpConfig = {
     crud: 'crud',
@@ -25,6 +22,7 @@ var tmpConfig = {
         remove: 'button[name=remove]'
     }
 };
+var controls = require('./controls').init;
 
 // TODO use bind for dom interaction/manipulation
 function get(s,c){
@@ -64,6 +62,7 @@ function init (config) {
     
     var self = this;
     self.config = config;
+    self.filters = {};
     
     if (!config.crud) {
         return console.error('No crud miid defined.');

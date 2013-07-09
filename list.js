@@ -1,4 +1,5 @@
 M.wrap('github/jillix/bind-filter/dev/list.js', function (require, module, exports) {
+var controls = require('./controls');
 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
@@ -21,9 +22,9 @@ function createFilterItem (values) {
     // enable/disable filter
     checkbox.addEventListener('change', function (event) {
         if (checkbox.checked) {
-            enable.call(self, li, values);
+            self.emit('enableFilter', li, values);
         } else {
-            disable.call(self, li. values);
+            self.emit('disableFilter', li, values);
         }
     }, false);
     
@@ -33,26 +34,26 @@ function createFilterItem (values) {
     var field = elm('span', {'class':'field'});
     field.innerHTML = values.field;
     field.addEventListener('click', function () {
-        edit.call(self, values);
+        self.emit('editFilter', li, values);
     }, false);
     
     var operator = elm('span', {'class':'operator'});
     operator.innerHTML = values.operator;
     operator.addEventListener('click', function () {
-        edit.call(self, values);
+        self.emit('editFilter', li, values);
     }, false);
     
     var value = elm('span', {'class':'value'});
     value.innerHTML = values.value || '';
     value.addEventListener('click', function () {
-        edit.call(self, values);
+        self.emit('editFilter', li, values);
     }, false);
     
     // remove filter
     var rm = elm('span', {'class':'remove'});
     rm.innerHTML = 'x';
     rm.addEventListener('click', function () {
-        remove.call(self, li, values);
+        self.emit('removeFilter', li, values);
     }, false);
     
     // TODO sort filter (drag'n drop)
@@ -67,48 +68,31 @@ function createFilterItem (values) {
     return li;
 }
 
-function save (key, values) {
+function save (values) {
     var self = this;
+    var item = createFilterItem.call(self, values);
     
-    // get values
-    if (!values) {
-        var values = {
-            field: self.domRefs.inputs.field.value,
-            operator: self.domRefs.inputs.operator.value || '=',
-            value: self.domRefs.inputs.value.value
-        };
-        
+    // update filter
+    if (self.currentEdit) {
+        self.domRefs.list.replaceChild(item, self.currentEdit);
+        self.currentEdit = null;
+    
+    // add new filter
+    } else {
         self.domRefs.list.appendChild(createFilterItem.call(self, values));
-        return;
     }
-    
-    // TODO update filter
 }
 
-// TODO edit filter
-function edit (values) {
-    var self = this;
-    self.domRefs.filter.style.display = 'block';
-    console.log('edit filter');
-}
-
-// TODO remove filter
 function remove (li) {
     var self = this;
-    self.domRefs.list.removeChild(li);
-    console.log('remove filter');
-}
-
-// TODO enable filter
-function enable () {
-    var self = this;
-    console.log('enable filter');
-}
-
-// TODO disable filter
-function disable () {
-    var self = this;
-    console.log('disable filter');
+    
+    if (li || self.currentEdit) {
+        self.domRefs.list.removeChild(li || self.currentEdit);
+        
+        if (self.currentEdit) {
+            self.currentEdit = null;
+        }
+    }
 }
 
 exports.save = save;
