@@ -1,0 +1,61 @@
+{
+    "bind": [
+        {
+            "elm": ".create",
+            "on": {
+                "click": {
+                    "event": "create",
+                    "state": "edit"
+                }
+            }
+        },
+        {
+            "elm": ".save",
+            "on": {
+                "click": {
+                    "event": "save",
+                    "state": "hidden"
+                },
+            }
+        },
+        {
+            "elm": ".cancel",
+            "on": {
+                "click": {
+                    "event": "cancel",
+                    "state": "hidden"
+                },
+            }
+        },
+        {
+            "elm": ".remove",
+            "on": {
+                "click": {
+                    "event": "remove",
+                    "state": "hidden"
+                },
+            }
+        }
+    ],
+    "states": {
+        "edit": {},
+        "hidden": {
+            "view": 
+        }
+    },
+    "on": {
+        "save": {
+            "method": {
+                "name": "save",
+            }
+        }
+    },
+    "module": {
+        "list": {
+            "type": "table",
+            "sort": {
+                ""
+            }
+        }
+    }
+}
