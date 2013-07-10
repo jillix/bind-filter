@@ -19,11 +19,17 @@ function resetValues (values) {
     if (!values) {
         self.domRefs.inputs.field.options[0].selected = true;
         self.domRefs.inputs.operator.options[0].selected = true;
-        self.domRefs.inputs.value.value = '';
+        
+        if (self.domRefs.inputs.value) {
+            self.domRefs.inputs.value.value = '';
+        }
     } else {
         self.domRefs.inputs.field.value = values.field;
         self.domRefs.inputs.operator.value = values.operator;
-        self.domRefs.inputs.value.value = values.value;
+        
+        if (self.domRefs.inputs.value) {
+            self.domRefs.inputs.value.value = values.value;
+        }
     }
 }
 
@@ -53,12 +59,14 @@ function edit (li, values) {
         self.domRefs.controls.remove.style.display = 'none';
     }
     
+    // operator init
+    value.call(self, self.domRefs.inputs.operator.value);
     resetValues.call(self, values);
+    
     self.domRefs.filter.style.display = 'block';
 }
 
 function remove (li, values) {
-    
     var self = this;
     self.domRefs.filter.style.display = 'none';
     
@@ -70,18 +78,29 @@ function cancel () {
     self.domRefs.filter.style.display = 'none';
 }
 
-function enable () {
-    console.log('enable: ' + this.miid);
+function enable (li) {
+    // TODO remove class with bind
+    li.setAttribute('class', '');
 }
 
-function disable () {
-    console.log('disable: ' + this.miid);
+function disable (li) {
+    // TODO add class with bind
+    li.setAttribute('class', 'disabled');
 }
 
 function value (operator) {
     var self = this;
+    var valueField = operators.value.call(self, operator);
     
-    //operators.value.call(self, operator);
+    self.domRefs.inputs.value = valueField || {value: ''};
+    self.domRefs.valueField.innerHTML = '';
+    
+    if (valueField && operator) {
+        self.domRefs.valueLabel.style.display = 'block';
+        self.domRefs.valueField.appendChild(valueField);
+    } else {
+        self.domRefs.valueLabel.style.display = 'none';
+    }
 }
 
 function init () {

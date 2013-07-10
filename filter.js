@@ -10,24 +10,41 @@ var tmpConfig = {
     },
     filter: '.filter',
     list: '.filter-list',
+    valueLabel: '.valueLabel',
+    valueField: '.valueField',
     inputs: {
         field: 'select[name=field]',
-        operator: 'select[name=operator]',
-        value: 'input[name=value]'
+        operator: 'select[name=operator]'
     },
     controls: {
         create: 'button[name=create]',
         save: 'button[name=save]',
         cancel: 'button[name=cancel]',
         remove: 'button[name=remove]'
-    }
+    },
+    
+    // TODO get this fields dynamicaly from db
+    fields: ['id', 'field1', 'field2', 'field3', 'field4', 'field5']
 };
 var controls = require('./controls').init;
+var operators = require('./operators');
 
 // TODO use bind for dom interaction/manipulation
 function get(s,c){
     try{return (c||document).querySelector(s);}
     catch (err) {}
+}
+function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
+
+function createFieldSelection (fields) {
+    
+    var df = document.createDocumentFragment();
+    for (var i = 0, l = fields.length; i < l; ++i) {
+        var field = elm('option', {value: fields[i]});
+        field.innerHTML = fields[i];
+        df.appendChild(field);
+    }
+    return df;
 }
 
 function initDom () {
@@ -41,18 +58,23 @@ function initDom () {
     self.domRefs = {};
     self.domRefs.filter = get(self.config.filter, self.dom);
     self.domRefs.list = get(self.config.list, self.dom);
+    self.domRefs.valueLabel = get(self.config.valueLabel, self.dom);
+    self.domRefs.valueField = get(self.config.valueField, self.dom);
     
     self.domRefs.inputs = {};
     for (var name in self.config.inputs) {
         self.domRefs.inputs[name] = get(self.config.inputs[name], self.dom);
     }
     
+    // set operators
+    self.domRefs.inputs.operator.appendChild(operators.build());
+    // set fields
+    self.domRefs.inputs.field.appendChild(createFieldSelection(self.config.fields));
+    
     self.domRefs.controls = {};
     for (var name in self.config.controls) {
         self.domRefs.controls[name] = get(self.config.controls[name], self.dom);
     }
-    
-    // TOOD get field selection
     
     controls.call(self);
 }
