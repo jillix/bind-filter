@@ -52,6 +52,8 @@ function initDom () {
         self.domRefs.controls[name] = get(self.config.controls[name], self.dom);
     }
     
+    // TOOD get field selection
+    
     controls.call(self);
 }
 

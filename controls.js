@@ -1,6 +1,7 @@
 M.wrap('github/jillix/bind-filter/dev/controls.js', function (require, module, exports) {
 var list = require('./list');
 var find = require('./find');
+var operators = require('./operators');
 
 function getValues () {
     var self = this;
@@ -77,6 +78,12 @@ function disable () {
     console.log('disable: ' + this.miid);
 }
 
+function value (operator) {
+    var self = this;
+    
+    //operators.value.call(self, operator);
+}
+
 function init () {
     var self = this;
     
@@ -88,6 +95,7 @@ function init () {
     self.on('disableFilter', disable);
     self.on('removeFilter', remove);
     self.on('cancelFilter', cancel);
+    self.on('operatorChange', value);
     
     // add events to controls
     for (var handler in self.domRefs.controls) {
@@ -97,6 +105,11 @@ function init () {
             }
         })(handler));
     }
+    
+    // operator change
+    self.domRefs.inputs.operator.addEventListener('change', function () {
+        self.emit('operatorChange', self.domRefs.inputs.operator.value);
+    });
 }
 
 exports.init = init;
