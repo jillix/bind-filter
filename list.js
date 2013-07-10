@@ -3,9 +3,14 @@ var controls = require('./controls');
 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
+function get(s,c){
+    try{return (c||document).querySelector(s);}
+    catch (err) {}
+}
 
 function createFilterItem (values) {
     var self = this;
+    var item = self.domRefs.listItem.cloneNode(true);
     // TODO make the filter item configurable
     /*<li>
         <span class="onoff"><input type="checkbox" checked=""></span>
@@ -76,10 +81,9 @@ function save (values) {
     if (self.currentEdit) {
         self.domRefs.list.replaceChild(item, self.currentEdit);
         self.currentEdit = null;
-    
     // add new filter
     } else {
-        self.domRefs.list.appendChild(createFilterItem.call(self, values));
+        self.domRefs.list.appendChild(item);
     }
 }
 

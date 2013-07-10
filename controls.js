@@ -36,7 +36,6 @@ function resetValues (values) {
 function save () {
     var self = this;
     
-    // TODO disable ui
     self.domRefs.filter.style.display = 'none';
     
     var values = getValues.call(self);

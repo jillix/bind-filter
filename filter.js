@@ -10,6 +10,7 @@ var tmpConfig = {
     },
     filter: '.filter',
     list: '.filter-list',
+    listItem: 'li',
     valueLabel: '.valueLabel',
     valueField: '.valueField',
     inputs: {
@@ -22,7 +23,14 @@ var tmpConfig = {
         cancel: 'button[name=cancel]',
         remove: 'button[name=remove]'
     },
-    
+    item: {
+        onoff: '.onoff',
+        field: '.field',
+        operator: '.operator',
+        value: '.value',
+        remove: '.remove',
+        handler: '.handler'
+    },
     // TODO get this fields dynamicaly from db
     fields: ['id', 'field1', 'field2', 'field3', 'field4', 'field5']
 };
@@ -57,9 +65,13 @@ function initDom () {
     // get dom refs
     self.domRefs = {};
     self.domRefs.filter = get(self.config.filter, self.dom);
-    self.domRefs.list = get(self.config.list, self.dom);
     self.domRefs.valueLabel = get(self.config.valueLabel, self.dom);
     self.domRefs.valueField = get(self.config.valueField, self.dom);
+    
+    // list item
+    self.domRefs.list = get(self.config.list, self.dom);
+    self.domRefs.listItem = get(self.config.listItem, self.domRefs.list);
+    self.domRefs.list.innerHTML = '';
     
     self.domRefs.inputs = {};
     for (var name in self.config.inputs) {
