@@ -1,28 +1,50 @@
 M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, exports) {
 // TODO build queries
-function queryBuilder (domRefs) {
+var operators = {
+    '=': '',
+    '!=': '$ne',
+    '>': '$gt',
+    '<': '$lt',
+    '>=': '$gte',
+    '<=': '$lte',
+    'all': '$all',
+    'in': '$in',
+    'not in': '$nin',
+    'regExp': '$regex',
+    'exists': '$exists',
+    'where': '$where',
+    'mod': '$mod',
+    'type': '$type',
+    'null': '',
+    'not null': '$ne'
+};
+
+function queryBuilder (values) {
     
-    var values = {};
-    var value = {};
     var query = {};
+    var field = {};
     
-    for (var domRef in domRefs) {
-        values[domRef] = domRefs[domRef].value;
+    if (values.operator === 'null' || values.operator === 'not null') {
+        values.value = null;
     }
     
-    // field value
-    value[values.field] = values.value;
+    if (values.operator === 'exists') {
+        values.value = true;
+    }
     
-    if (values.operator !== '') {
-        query[values.operator] = value;
+    field[values.field] = values.value;
+    
+    // handle operator
+    if (operators[values.operator]) {
+        query[operators[values.operator]] = field;
     } else {
-        query = value;
+        query = field;
     }
     
     return {q: query};
 }
 
-function find (callback) {
+function find (values, callback) {
     var self = this;
     
     if (self.crudFindBusy) {
@@ -32,18 +54,18 @@ function find (callback) {
     self.crudFindBusy = true;
     
     // TODO build queries
-    var query = queryBuilder(self.ui);
+    var query = queryBuilder(values);
     console.log(query);
-    
-    addFilter.call(self);
     
     if (query) {
         self.emit('find', query, function (err, data) {
             self.crudFindBusy = false;
             self.emit('result', err, data);
-            callback(err);
+            callback(err, data);
         });
     }
 }
+
+module.exports = find;
 
 return module; });
