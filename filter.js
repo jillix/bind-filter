@@ -1,12 +1,14 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 // ONLY FOR DEV
 var tmpConfig = {
-    crud: 'crud',
+    crud: 'crud', // miid of crud module
     events: {
         add: 'click',
         cancel: 'click',
         create: 'click',
-        remove: 'click'
+        remove: 'click',
+        itemEdit: 'click',
+        itemRemove: 'click'
     },
     filter: '.filter',
     list: '.filter-list',
@@ -24,7 +26,7 @@ var tmpConfig = {
         remove: 'button[name=remove]'
     },
     item: {
-        onoff: '.onoff',
+        onoff: '.onoff > input',
         field: '.field',
         operator: '.operator',
         value: '.value',

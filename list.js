@@ -11,66 +11,47 @@ function get(s,c){
 function createFilterItem (values) {
     var self = this;
     var item = self.domRefs.listItem.cloneNode(true);
-    // TODO make the filter item configurable
-    /*<li>
-        <span class="onoff"><input type="checkbox" checked=""></span>
-        <span class="logic"></span>
-        <span class="field">Field Name</span>
-        <span class="operator">=</span>
-        <span class="value">filter value</span>
-        <span class="handler">#</span>
-    </li>*/
-    var li = elm('li');
-    var onoff = elm('span', {'class': 'onoff'});
-    var checkbox = elm('input', {type: 'checkbox', checked:true});
+    var checkbox = get(self.config.item.onoff, item);
+    var field = get(self.config.item.field, item);
+    var operator = get(self.config.item.operator, item);
+    var value = get(self.config.item.value, item);
+    var handler = get(self.config.item.handler, item);
+    var rm = get(self.config.item.remove, item);
     
     // enable/disable filter
     checkbox.addEventListener('change', function (event) {
         if (checkbox.checked) {
-            self.emit('enableFilter', li, values);
+            self.emit('enableFilter', item, values);
         } else {
-            self.emit('disableFilter', li, values);
+            self.emit('disableFilter', item, values);
         }
     }, false);
     
-    onoff.appendChild(checkbox);
-    li.appendChild(onoff);
-    
-    var field = elm('span', {'class':'field'});
     field.innerHTML = values.field;
-    field.addEventListener('click', function () {
-        self.emit('editFilter', li, values);
+    field.addEventListener(self.config.events.itemEdit || 'click', function () {
+        self.emit('editFilter', item, values);
     }, false);
     
-    var operator = elm('span', {'class':'operator'});
     operator.innerHTML = values.operator;
-    operator.addEventListener('click', function () {
-        self.emit('editFilter', li, values);
+    operator.addEventListener(self.config.events.itemEdit || 'click', function () {
+        self.emit('editFilter', item, values);
     }, false);
     
-    var value = elm('span', {'class':'value'});
     value.innerHTML = values.value || '';
-    value.addEventListener('click', function () {
-        self.emit('editFilter', li, values);
+    value.addEventListener(self.config.events.itemEdit || 'click', function () {
+        self.emit('editFilter', item, values);
     }, false);
     
     // remove filter
-    var rm = elm('span', {'class':'remove'});
     rm.innerHTML = 'x';
-    rm.addEventListener('click', function () {
-        self.emit('removeFilter', li, values);
+    rm.addEventListener(self.config.events.itemRemove || 'click', function () {
+        self.emit('removeFilter', item, values);
     }, false);
     
     // TODO sort filter (drag'n drop)
-    var handler = elm('span', {'class':'handler'});
     handler.innerHTML = '#';
     
-    li.appendChild(field);
-    li.appendChild(operator);
-    li.appendChild(value);
-    li.appendChild(rm);
-    li.appendChild(handler);
-    return li;
+    return item;
 }
 
 function save (values) {
