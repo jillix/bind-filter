@@ -2,7 +2,6 @@ M.wrap('github/jillix/bind-filter/dev/list.js', function (require, module, expor
 var controls = require('./controls');
 
 // TODO use bind for dom interaction/manipulation
-function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
 function get(s,c){
     try{return (c||document).querySelector(s);}
     catch (err) {}
