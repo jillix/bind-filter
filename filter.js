@@ -43,7 +43,9 @@ var operators = require('./operators');
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
 function get(s,c){
     try{return (c||document).querySelector(s);}
-    catch (err) {}
+    catch (err) {
+        return null;
+    }
 }
 
 function createFieldSelection (fields) {

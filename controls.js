@@ -42,13 +42,14 @@ function save () {
     list.save.call(self, values);
     
     // call server
-    /*find.call(self, function (err) {
+    find.call(self, values, function (err) {
         // TODO enable ui
-    });*/
+    });
 }
 
 function edit (li, values) {
     var self = this;
+    var tmp_value = values ? values.value : '';
     
     if (li) {
         self.currentEdit = li;
@@ -60,7 +61,7 @@ function edit (li, values) {
     
     // operator init
     resetValues.call(self, values);
-    value.call(self, self.domRefs.inputs.operator.value);
+    value.call(self, self.domRefs.inputs.operator.value, tmp_value);
     
     self.domRefs.filter.style.display = 'block';
 }
@@ -87,9 +88,9 @@ function disable (li) {
     li.setAttribute('class', 'disabled');
 }
 
-function value (operator) {
+function value (operator, value) {
     var self = this;
-    var valueField = operators.value.call(self, operator);
+    var valueField = operators.value.call(self, operator, value);
     
     self.domRefs.inputs.value = valueField || {value: ''};
     self.domRefs.valueField.innerHTML = '';
@@ -104,6 +105,11 @@ function value (operator) {
 
 function init () {
     var self = this;
+    
+    // only for dev
+    self.on('result', function (err, data) {
+        console.log(err || data);
+    });
     
     // listen
     self.on('saveFilter', save);

@@ -32,14 +32,17 @@ function build () {
     return df;
 }
 
-function value (operator) {
+function value (operator, value) {
     
     if (operators[operator]) {
+        
+        value = value || '';
         
         // TODO add interaction to value field
         if (typeof operators[operator] === 'string') {
             return elm('input', {
                 name: 'value',
+                value: value,
                 type: operators[operator]
             });
         } else if (operators[operator] instanceof Array) {
@@ -47,15 +50,17 @@ function value (operator) {
             for (var i = 0, l = operators[operator].length; i < l; ++i) {
                 df.appendChild(elm('input', {
                     name: 'value',
+                    value: value,
                     type: operators[operator][i]
                 }));
             }
             return df;
         } else if (operators[operator].type) {
             operators[operator].name = 'value';
+            operators[operator].value = value;
             return elm('input', operators[operator]);
         } else {
-            return elm('input', {name: 'value', type: 'text'});
+            return elm('input', {name: 'value', type: 'text', value: value});
         }
     }
 }
