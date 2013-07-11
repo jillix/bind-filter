@@ -59,8 +59,8 @@ function edit (li, values) {
     }
     
     // operator init
-    value.call(self, self.domRefs.inputs.operator.value);
     resetValues.call(self, values);
+    value.call(self, self.domRefs.inputs.operator.value);
     
     self.domRefs.filter.style.display = 'block';
 }
