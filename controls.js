@@ -3,6 +3,15 @@ var list = require('./list');
 var find = require('./find');
 var operators = require('./operators');
 
+function uid (len, uid) {
+    uid = "";
+    for (var i = 0, l = len || 24; i < l; ++i) {
+        uid += "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[0 | Math.random() * 62];
+    }
+    return uid;
+};
+
+
 function getValues () {
     var self = this;
     
@@ -16,21 +25,59 @@ function getValues () {
 function resetValues (values) {
     var self = this;
     
-    if (!values) {
-        self.domRefs.inputs.field.options[0].selected = true;
-        self.domRefs.inputs.operator.options[0].selected = true;
-        
-        if (self.domRefs.inputs.value) {
-            self.domRefs.inputs.value.value = '';
-        }
-    } else {
+    if (values.field) {
         self.domRefs.inputs.field.value = values.field;
         self.domRefs.inputs.operator.value = values.operator;
         
         if (self.domRefs.inputs.value) {
             self.domRefs.inputs.value.value = values.value;
         }
+    } else {
+        self.domRefs.inputs.field.options[0].selected = true;
+        self.domRefs.inputs.operator.options[0].selected = true;
+        
+        if (self.domRefs.inputs.value) {
+            self.domRefs.inputs.value.value = '';
+        }
     }
+}
+
+function handleFindResult (err, data) {
+    console.log(err || data);
+}
+
+function checkField (field) {
+    var self = this;
+    
+    for (var i = 0, l = self.config.fields.length; i < l; ++i) {
+        if (field === self.config.fields[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function setFilters (filters, enabled) {
+    var self = this;
+    
+    for (var i = 0, l = filters.length; i < l; ++i) {
+    
+        // skip fields that don't exists in schema
+        if (!checkField.call(self, filters[i].field)) {
+            continue;
+        }
+        
+        var hash = uid(4);
+        
+        self.filters[hash] = {
+            values: filters[i],
+            enabled: enabled ? true : false
+        };
+        
+        list.save.call(self, hash);
+    }
+    
+    find.call(self);
 }
 
 function save () {
@@ -38,54 +85,72 @@ function save () {
     
     self.domRefs.filter.style.display = 'none';
     
-    var values = getValues.call(self);
-    list.save.call(self, values);
+    // get or create filter hash
+    var hash = self.current || uid(4);
+    
+    self.filters[hash] = self.filters[hash] || {};
+    self.filters[hash].values = getValues.call(self);
+    self.filters[hash].enabled = true;
+    
+    // add list item
+    list.save.call(self, hash);
     
     // call server
-    find.call(self, values, function (err) {
-        // TODO enable ui
-    });
+    find.call(self);
 }
 
-function edit (li, values) {
+function edit (hash) {
     var self = this;
-    var tmp_value = values ? values.value : '';
+    var values = hash ? self.filters[hash].values : {};
+    self.current = hash || null;
     
-    if (li) {
-        self.currentEdit = li;
+    // handle remove button
+    if (hash && self.filters[hash]) {
         self.domRefs.controls.remove.style.display = 'inline';
     } else {
-        self.currentEdit = null;
         self.domRefs.controls.remove.style.display = 'none';
     }
     
     // operator init
     resetValues.call(self, values);
-    value.call(self, self.domRefs.inputs.operator.value, tmp_value);
+    
+    // change value field dependent of selected operator
+    value.call(self, self.domRefs.inputs.operator.value, values.value || '');
     
     self.domRefs.filter.style.display = 'block';
 }
 
-function remove (li, values) {
+function remove (hash) {
     var self = this;
-    self.domRefs.filter.style.display = 'none';
     
-    list.remove.call(self, li);
+    self.domRefs.filter.style.display = 'none';
+    list.remove.call(self, hash || self.current);
+    
+    find.call(self);
 }
 
 function cancel () {
     var self = this;
+    self.current = null;
     self.domRefs.filter.style.display = 'none';
 }
 
-function enable (li) {
+function enable (hash) {
+    var self = this;
     // TODO remove class with bind
-    li.setAttribute('class', '');
+    self.filters[hash].item.setAttribute('class', '');
+    self.filters[hash].enabled = true;
+    
+    find.call(self);
 }
 
-function disable (li) {
+function disable (hash) {
+    var self = this;
     // TODO add class with bind
-    li.setAttribute('class', 'disabled');
+    self.filters[hash].item.setAttribute('class', 'disabled');
+    self.filters[hash].enabled = false;
+    
+    find.call(self);
 }
 
 function value (operator, value) {
@@ -106,12 +171,9 @@ function value (operator, value) {
 function init () {
     var self = this;
     
-    // only for dev
-    self.on('result', function (err, data) {
-        console.log(err || data);
-    });
-    
     // listen
+    self.on('result', handleFindResult);
+    self.on('setFilters', setFilters);
     self.on('saveFilter', save);
     self.on('createFilter', edit);
     self.on('editFilter', edit);
@@ -134,6 +196,11 @@ function init () {
     self.domRefs.inputs.operator.addEventListener('change', function () {
         self.emit('operatorChange', self.domRefs.inputs.operator.value);
     });
+    
+    // set predefined filters
+    if (self.config.setFilters) {
+        setFilters.call(self, self.config.setFilters, self.config.enabled);
+    }
 }
 
 exports.init = init;

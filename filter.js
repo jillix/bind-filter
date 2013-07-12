@@ -33,8 +33,22 @@ var tmpConfig = {
         remove: '.remove',
         handler: '.handler'
     },
-    // TODO get this fields dynamicaly from db
-    fields: ['id', 'field1', 'field2', 'field3', 'field4', 'field5']
+    setFilters: [
+        {
+            field: 'id',
+            operator: 'all',
+            value: 'value1, value2 value3'
+        },
+        {
+            field: 'name',
+            operator: '=',
+            value: 'herbert'
+        }
+    ],
+    enabled: false,
+    // TODO get field names and type dynamicaly from db
+    type: 'template',
+    fields: ['id', 'name', 'field2', 'field3', 'field4', 'field5']
 };
 var controls = require('./controls').init;
 var operators = require('./operators');
@@ -84,6 +98,7 @@ function initDom () {
     
     // set operators
     self.domRefs.inputs.operator.appendChild(operators.build());
+    
     // set fields
     self.domRefs.inputs.field.appendChild(createFieldSelection(self.config.fields));
     

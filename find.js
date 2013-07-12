@@ -18,52 +18,71 @@ var operators = {
     'null': '',
     'not null': '$ne'
 };
+var currentFilters = {};
 
-function queryBuilder (values) {
+// TODO send template type always
+function queryBuilder (filters) {
     
-    var query = {};
-    var field = {};
+    var query;
     
-    if (values.operator === 'null' || values.operator === 'not null') {
-        values.value = null;
+    for (filter in filters) {
+        if (filters[filter].enabled) {
+            
+            query = query || {};
+            
+            var values = filters[filter].values;
+            var value = values.value;
+            
+            if (values.operator === 'null' || values.operator === 'not null') {
+                value = null;
+            }
+            
+            if (values.operator === 'exists') {
+                value = true;
+            }
+            
+            // handle value
+            if (values.operator === 'all' || values.operator === 'in' || values.operator === 'not in' || values.operator === 'mod') {
+                value = values.value.split(/ |, |,/g);
+            }
+            
+            // handle operator
+            if (operators[values.operator]) {
+                // TODO handle complex queries
+                query[values.field] = query[values.field] || {};
+                query[values.field][operators[values.operator]] = value;
+            } else {
+                query[values.field] = value;
+            }
+        }
     }
+    console.log(query);
     
-    if (values.operator === 'exists') {
-        values.value = true;
-    }
-    
-    field[values.field] = values.value;
-    
-    // handle operator
-    if (operators[values.operator]) {
-        query[operators[values.operator]] = field;
-    } else {
-        query = field;
-    }
-    
-    return {q: query};
+    return query;
 }
 
-function find (values, callback) {
+function find (all) {
     var self = this;
     
     if (self.crudFindBusy) {
-        return callback('Find is busy.');
+        return self.emit('result', null, 'Find is busy.');
     }
     
     self.crudFindBusy = true;
     
-    // TODO build queries
-    var query = queryBuilder(values);
-    console.log(query);
+    // build queries
+    self.query = all ? {} : queryBuilder(self.filters);
     
-    if (query) {
-        self.emit('find', query, function (err, data) {
-            self.crudFindBusy = false;
-            self.emit('result', err, data);
-            callback(err, data);
-        });
+    if (!self.query) {
+        self.crudFindBusy = false;
+        return self.emit('result', null, 'empty query');
     }
+    
+    // get data with crud module
+    return self.emit('find', {q: self.query, t: self.config.type}, function (err, data) {
+        self.crudFindBusy = false;
+        self.emit('result', err, data);
+    });
 }
 
 module.exports = find;

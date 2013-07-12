@@ -7,7 +7,7 @@ function get(s,c){
     catch (err) {}
 }
 
-function createFilterItem (values) {
+function createFilterItem (hash) {
     var self = this;
     var item = self.domRefs.listItem.cloneNode(true);
     var checkbox = get(self.config.item.onoff, item);
@@ -18,33 +18,37 @@ function createFilterItem (values) {
     var rm = get(self.config.item.remove, item);
     
     // enable/disable filter
+    if (!self.filters[hash].enabled) {
+        item.setAttribute('class', 'disabled');
+        checkbox.removeAttribute('checked');
+    }
     checkbox.addEventListener('change', function (event) {
         if (checkbox.checked) {
-            self.emit('enableFilter', item, values);
+            self.emit('enableFilter', hash);
         } else {
-            self.emit('disableFilter', item, values);
+            self.emit('disableFilter', hash);
         }
     }, false);
     
-    field.innerHTML = values.field;
+    field.innerHTML = self.filters[hash].values.field;
     field.addEventListener(self.config.events.itemEdit || 'click', function () {
-        self.emit('editFilter', item, values);
+        self.emit('editFilter', hash);
     }, false);
     
-    operator.innerHTML = values.operator;
+    operator.innerHTML = self.filters[hash].values.operator;
     operator.addEventListener(self.config.events.itemEdit || 'click', function () {
-        self.emit('editFilter', item, values);
+        self.emit('editFilter', hash);
     }, false);
     
-    value.innerHTML = values.value || '';
+    value.innerHTML = self.filters[hash].values.value || '';
     value.addEventListener(self.config.events.itemEdit || 'click', function () {
-        self.emit('editFilter', item, values);
+        self.emit('editFilter', hash);
     }, false);
     
     // remove filter
     rm.innerHTML = 'x';
     rm.addEventListener(self.config.events.itemRemove || 'click', function () {
-        self.emit('removeFilter', item, values);
+        self.emit('removeFilter', hash);
     }, false);
     
     // TODO sort filter (drag'n drop)
@@ -53,29 +57,33 @@ function createFilterItem (values) {
     return item;
 }
 
-function save (values) {
+function save (hash) {
     var self = this;
-    var item = createFilterItem.call(self, values);
     
-    // update filter
-    if (self.currentEdit) {
-        self.domRefs.list.replaceChild(item, self.currentEdit);
-        self.currentEdit = null;
-    // add new filter
+    // create filter item
+    var item = createFilterItem.call(self, hash);
+    
+    if (self.filters[hash].item) {
+        // replace filter
+        self.domRefs.list.replaceChild(item, self.filters[hash].item);
     } else {
+        // add new filter
         self.domRefs.list.appendChild(item);
     }
+    
+    // update cache
+    self.filters[hash].item = item;
 }
 
-function remove (li) {
+function remove (hash) {
     var self = this;
     
-    if (li || self.currentEdit) {
-        self.domRefs.list.removeChild(li || self.currentEdit);
+    if (self.filters[hash]) {
+        // remove dom element
+        self.domRefs.list.removeChild(self.filters[hash].item);
         
-        if (self.currentEdit) {
-            self.currentEdit = null;
-        }
+        // remove from cache
+        delete self.filters[hash];
     }
 }
 
