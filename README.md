@@ -4,7 +4,7 @@ bind-filter
 Bind filter module (UI)
 
 ####Example config:
-```
+```js
 // miid of crud module
 crud: 'crud',
 // what DOM event will trigger a filter UI interaction?
