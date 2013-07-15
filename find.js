@@ -56,7 +56,6 @@ function queryBuilder (filters) {
             }
         }
     }
-    console.log(query);
     
     return query;
 }
@@ -74,8 +73,16 @@ function find (all) {
     self.query = all ? {} : queryBuilder(self.filters);
     
     if (!self.query) {
-        self.crudFindBusy = false;
-        return self.emit('result', null, 'empty query');
+        
+        if (self.wasEmpty) {
+            self.crudFindBusy = false;
+            return self.emit('result', null, 'empty query');
+        }
+        
+        self.wasEmpty = true;
+        self.query = {};
+    } else {
+        self.wasEmpty = false;
     }
     
     // get data with crud module
