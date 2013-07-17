@@ -285,6 +285,11 @@ function init () {
         self.emit('operatorChange', self.domRefs.inputs.operator.value);
     });
     
+    // set types
+    if (self.config.setTypes) {
+        self.emit('setTypes', self.config.setTypes);
+    }
+    
     // init type
     if (self.config.type) {
         self.emit('setType', self.config.type);

@@ -46,6 +46,7 @@ var tmpConfig = {
             value: 'herbert'
         }
     ],
+    setTypes: ['typeA', 'template', 'typeB'],
     enabled: false,
     // TODO get field names and type dynamicaly from db
     type: 'template',
