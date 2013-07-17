@@ -15,6 +15,7 @@ var tmpConfig = {
     listItem: 'li',
     valueLabel: '.valueLabel',
     valueField: '.valueField',
+    typeSelector: '.filter select[name=type]',
     inputs: {
         field: 'select[name=field]',
         operator: 'select[name=operator]'
@@ -113,6 +114,7 @@ function initDom () {
     self.domRefs.filter = get(self.config.filter, self.dom);
     self.domRefs.valueLabel = get(self.config.valueLabel, self.dom);
     self.domRefs.valueField = get(self.config.valueField, self.dom);
+    self.domRefs.typeSelector= get(self.config.typeSelector, self.dom);
     
     // list item
     self.domRefs.list = get(self.config.list, self.dom);
@@ -140,9 +142,8 @@ function initDom () {
 
 function init (config) {
     
-    _SELF = this;
-    
     // ONLY FOR DEV
+    _SELF = this;
     config = tmpConfig;
     
     var self = this;
@@ -160,6 +161,7 @@ function init (config) {
         initDom.call(self);
         
         // reset filters when fields change
+        // TODO rename it to setType and get type from server
         self.on('setFields', function (fields, filters) {
             self.config.fields = fields;
             createFieldSelection.call(self);

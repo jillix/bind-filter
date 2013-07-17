@@ -26,6 +26,8 @@ listItem: 'li',
 valueLabel: '.valueLabel',
 // the value field container (can be 0 or more values, depending on the operator)
 valueField: '.valueField',
+// the type selector input element
+typeSelector: '.types',
 // DOM references to the field and operator inputs
 inputs: {
     field: 'select[name=field]',
@@ -76,6 +78,6 @@ setFilters: [
 enabled: false,
 // TODO - get field names and type dynamicaly from db
 //      - the type should define what fields are searchable and which not (probably all default searchable)
-type: 'template',
+type: 'template', // TOOD type can also be an array, which is selectable in the typeSelector
 fields: ['id', 'name', 'field2', 'field3', 'field4', 'field5']
 ```

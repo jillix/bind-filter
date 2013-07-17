@@ -14,6 +14,7 @@ function build () {
     return df;
 }
 
+// TODO create a input field of the schema field type
 function valueField (operator, value) {
     var self = this;
     var type = self.config.operators[operator][1];
@@ -58,7 +59,7 @@ function validateValue (values) {
     var validations = self.config.operators[values.operator];
     var value = values.value;
     
-    // TODO validation
+    // TODO validate with schema
     /*for (var validation in validations) {
         switch (validation) {
             case 'type':
@@ -66,8 +67,8 @@ function validateValue (values) {
         }
     }*/
     
-    console.log(validations);
-    console.log(value);
+    //console.log(validations);
+    //console.log(value);
     return true;
 }
 
