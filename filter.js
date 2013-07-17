@@ -160,10 +160,10 @@ function init (config) {
         initDom.call(self);
         
         // reset filters when fields change
-        self.on('setFields', function (fields) {
+        self.on('setFields', function (fields, filters) {
             self.config.fields = fields;
             createFieldSelection.call(self);
-            self.emit('setFilters', [], true);
+            self.emit('setFilters', filters || [], true);
         });
         
         self.emit('ready');
