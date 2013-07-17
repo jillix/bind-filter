@@ -25,7 +25,7 @@ function validateValue (values) {
         return false;
     }
     
-    var validations = self.config.operators[values.operator].validation;
+    var validations = self.config.operators[values.operator];
     var value = values.value;
     
     // TODO validation

@@ -53,106 +53,26 @@ var tmpConfig = {
 var controls = require('./controls').init;
 var operators = require('./operators');
 var operatorConfig = {
-    '=': {
-        queryName: '',
-        validation: {
-            type: 'text'
-        }
-    },
-    '!=': {
-        queryName: '$ne',
-        validation: {
-            type: 'text'
-        }
-    },
-    '>': {
-        queryName: '$gt',
-        validation: {
-            type: 'number',
-        }
-    },
-    '<': {
-        queryName: '$lt',
-        validation: {
-            type: 'number'
-        }
-    },
-    '>=': {
-        queryName: '$gte',
-        validation: {
-            type: 'number'
-        }
-    },
-    '<=': {
-        queryName: '$lte',
-        validation: {
-            type: 'number'
-        }
-    },
-    'all': {
-        queryName: '$all',
-        validation: {
-            type: 'array'
-        }
-    },
-    'in': {
-        queryName: '$in',
-        validation: {
-            type: 'array'
-        }
-    },
-    'notin': {
-        queryName: '$nin',
-        validation: {
-            type: 'array'
-        }
-    },
-    'regExp': {
-        queryName: '$regex',
-        validation: {
-            type: 'text'
-        }
-    },
-    'exists': {
-        queryName: '$exists',
-        validation: {
-            type: 'boolean'
-        }
-    },
-    'where': {
-        queryName: '$where',
-        validation: {
-            type: 'text'
-        }
-    },
-    'mod': {
-        queryName: '$mod',
-        validation: {
-            type: 'array',
-            maxLength: 2,
-            minLength: 2
-        }
-    },
-    'type': {
-        queryName: '$type',
-        validation: {
-            type: 'int',
-            max: 18,
-            min: 1,
-        }
-    },
-    'null': {
-        queryName: '',
-        validation: {
-            type: 'boolean'
-        }
-    },
-    'notnull': {
-        queryName: '$ne',
-        validation: {
-            type: 'boolean'
-        }
-    },
+    '=': ['', 'text'],
+    '!=': ['$ne', 'text'],
+    '>': ['$gt', 'number'],
+    '<': ['$lt', 'number'],
+    '>=': ['$gte', 'number'],
+    '<=': ['$lte', 'number'],
+    'all': ['$all', 'array'],
+    'in': ['$in', 'array'],
+    'notin': ['$nin', 'array'],
+    'regExp': ['$regex', 'text'],
+    'exists': ['$exists', 'boolean'],
+    'where': ['$where', 'text'],
+    'mod': ['$mod', 'array', {
+        maxLength: 2,
+        minLength: 2
+    }],
+    'type': ['$type', 'int', {
+        max: 18,
+        min: 1,
+    }]
 };
 
 // TODO use bind for dom interaction/manipulation

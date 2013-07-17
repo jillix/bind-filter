@@ -32,7 +32,7 @@ function queryBuilder (filters) {
             if (self.config.operators[values.operator]) {
                 // TODO handle complex queries
                 query[values.field] = query[values.field] || {};
-                query[values.field][self.config.operators[values.operator].queryName] = value;
+                query[values.field][self.config.operators[values.operator][0]] = value;
             } else {
                 query[values.field] = value;
             }
