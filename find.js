@@ -45,6 +45,10 @@ function queryBuilder (filters) {
 function find (all) {
     var self = this;
     
+    if (!self.type) {
+        return self.emit('result', null, 'No type selected.');
+    }
+    
     if (self.crudFindBusy) {
         return self.emit('result', null, 'Find is busy.');
     }
@@ -68,7 +72,7 @@ function find (all) {
     }
     
     // get data with crud module
-    return self.emit('find', {q: self.query, t: self.config.type}, function (err, data) {
+    return self.emit('find', {q: self.query, t: self.type}, function (err, data) {
         self.crudFindBusy = false;
         self.emit('result', err, data);
     });

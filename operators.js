@@ -2,7 +2,8 @@ M.wrap('github/jillix/bind-filter/dev/operators.js', function (require, module, 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
     
-function build () {
+// TODO show only the operators which are compatible with the field type
+function buildOperators () {
     var self = this;
     var df = document.createDocumentFragment();
     
@@ -11,7 +12,23 @@ function build () {
         option.innerHTML = operator;
         df.appendChild(option);
     }
-    return df;
+    
+    self.domRefs.inputs.operator.appendChild(df);
+}
+
+function buildFields () {
+    var self = this;
+    var fields = self.config.fields;
+    
+    var df = document.createDocumentFragment();
+    for (var i = 0, l = fields.length; i < l; ++i) {
+        var field = elm('option', {value: fields[i]});
+        field.innerHTML = fields[i];
+        df.appendChild(field);
+    }
+    
+    self.domRefs.inputs.field.innerHTML = '';
+    self.domRefs.inputs.field.appendChild(df);
 }
 
 // TODO create a input field of the schema field type
@@ -72,7 +89,8 @@ function validateValue (values) {
     return true;
 }
 
-exports.build = build;
+exports.buildOperators = buildOperators;
+exports.buildFields = buildFields;
 exports.valueField = valueField;
 exports.validateValue = validateValue;
 

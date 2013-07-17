@@ -79,27 +79,11 @@ var operatorConfig = {
 };
 
 // TODO use bind for dom interaction/manipulation
-function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
 function get(s,c){
     try{return (c||document).querySelector(s);}
     catch (err) {
         return null;
     }
-}
-
-function createFieldSelection () {
-    var self = this;
-    var fields = self.config.fields;
-    
-    var df = document.createDocumentFragment();
-    for (var i = 0, l = fields.length; i < l; ++i) {
-        var field = elm('option', {value: fields[i]});
-        field.innerHTML = fields[i];
-        df.appendChild(field);
-    }
-    
-    self.domRefs.inputs.field.innerHTML = '';
-    self.domRefs.inputs.field.appendChild(df);
 }
 
 function initDom () {
@@ -126,12 +110,6 @@ function initDom () {
         self.domRefs.inputs[name] = get(self.config.inputs[name], self.dom);
     }
     
-    // set operators
-    self.domRefs.inputs.operator.appendChild(operators.build.call(self));
-    
-    // set fields
-    createFieldSelection.call(self);
-    
     self.domRefs.controls = {};
     for (var name in self.config.controls) {
         self.domRefs.controls[name] = get(self.config.controls[name], self.dom);
@@ -149,7 +127,7 @@ function init (config) {
     var self = this;
     self.config = config;
     self.filters = {};
-    
+    self.types = {};
     self.config.operators = operatorConfig;
     
     if (!config.crud) {
@@ -159,15 +137,6 @@ function init (config) {
     // wait for the crud module
     self.onready(config.crud, function () {
         initDom.call(self);
-        
-        // reset filters when fields change
-        // TODO rename it to setType and get type from server
-        self.on('setFields', function (fields, filters) {
-            self.config.fields = fields;
-            createFieldSelection.call(self);
-            self.emit('setFilters', filters || [], true);
-        });
-        
         self.emit('ready');
     });
 }

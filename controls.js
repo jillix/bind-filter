@@ -189,6 +189,64 @@ function value (operator, value) {
     }
 }
 
+function createTypeSelectOption (type) {
+    var option = elm('option', {value: type});
+    option.innerHTML = type;
+    return option;
+}
+
+function setTypes (types) {
+    var self = this;
+    
+    if (types instanceof Array && self.domRefs.typeSelector) {
+        var df = document.createDocumentFragment();
+        
+        self.types = {};
+        
+        for (var i = 0, l = types.length; i < l; ++i) {
+            self.types[types[i]] = {};
+            df.appendChild(createTypeSelectOption(types[i]));
+        }
+        
+        self.domRefs.typeSelector.innerHTML = '';
+        self.domRefs.typeSelector.appendChild(df);
+    }
+}
+
+function changeType (type) {
+    var self = this;
+    
+    if (typeof type !== 'string' || !type) {
+        return;
+    }
+    
+    // TODO get type from server or cache
+    
+    // set fields
+    operators.buildFields.call(self);
+    
+    // TODO select field and update operators
+    
+    // set operators
+    operators.buildOperators.call(self);
+    
+    self.type = type;
+    
+    // reset predefined filters
+    setFilters.call(self, self.config.setFilters || [], true);
+    
+    // add type to typeSelector
+    if (self.types && !self.types[type]) {
+        self.types[type] = type;
+        self.domRefs.typeSelector.appendChild(createTypeSelectOption(type));
+    }
+    
+    // select type
+    if (self.domRefs.typeSelector) {
+        self.domRefs.typeSelector.value = type;
+    }
+}
+
 function init () {
     var self = this;
     
@@ -203,6 +261,8 @@ function init () {
     self.on('removeFilter', remove);
     self.on('cancelFilter', cancel);
     self.on('operatorChange', value);
+    self.on('setType', changeType);
+    self.on('setTypes', setTypes);
     
     // add events to controls
     for (var handler in self.domRefs.controls) {
@@ -213,14 +273,21 @@ function init () {
         })(handler));
     }
     
+    // type change
+    if (self.domRefs.typeSelector) {
+        self.domRefs.typeSelector.addEventListener('change', function () {
+            self.emit('setType', self.domRefs.typeSelector.value);
+        });
+    }
+    
     // operator change
     self.domRefs.inputs.operator.addEventListener('change', function () {
         self.emit('operatorChange', self.domRefs.inputs.operator.value);
     });
     
-    // set predefined filters
-    if (self.config.setFilters) {
-        setFilters.call(self, self.config.setFilters);
+    // init type
+    if (self.config.type) {
+        self.emit('setType', self.config.type);
     }
 }
 
