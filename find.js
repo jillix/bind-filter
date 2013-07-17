@@ -1,28 +1,10 @@
 M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, exports) {
-// TODO build queries
-var operators = {
-    '=': '',
-    '!=': '$ne',
-    '>': '$gt',
-    '<': '$lt',
-    '>=': '$gte',
-    '<=': '$lte',
-    'all': '$all',
-    'in': '$in',
-    'not in': '$nin',
-    'regExp': '$regex',
-    'exists': '$exists',
-    'where': '$where',
-    'mod': '$mod',
-    'type': '$type',
-    'null': '',
-    'not null': '$ne'
-};
+
 var currentFilters = {};
 
 // TODO send template type always
 function queryBuilder (filters) {
-    
+    var self = this;
     var query;
     
     for (filter in filters) {
@@ -47,10 +29,10 @@ function queryBuilder (filters) {
             }
             
             // handle operator
-            if (operators[values.operator]) {
+            if (self.config.operators[values.operator]) {
                 // TODO handle complex queries
                 query[values.field] = query[values.field] || {};
-                query[values.field][operators[values.operator]] = value;
+                query[values.field][self.config.operators[values.operator].queryName] = value;
             } else {
                 query[values.field] = value;
             }
@@ -70,7 +52,7 @@ function find (all) {
     self.crudFindBusy = true;
     
     // build queries
-    self.query = all ? {} : queryBuilder(self.filters);
+    self.query = all ? {} : queryBuilder.call(self, self.filters);
     
     if (!self.query) {
         

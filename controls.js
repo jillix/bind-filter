@@ -3,6 +3,9 @@ var list = require('./list');
 var find = require('./find');
 var operators = require('./operators');
 
+// TODO handle dom with bind
+function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
+
 function uid (len, uid) {
     uid = "";
     for (var i = 0, l = len || 24; i < l; ++i) {
@@ -43,7 +46,7 @@ function resetValues (values) {
 }
 
 function handleFindResult (err, data) {
-    console.log(err || data);
+    //console.log(err || data);
 }
 
 function checkField (field) {
@@ -82,6 +85,12 @@ function setFilters (filters, enabled) {
 
 function save () {
     var self = this;
+    var values = getValues.call(self);
+    
+    // validate value
+    if (!operators.validateValue.call(self, values)) {
+        return;
+    }
     
     self.domRefs.filter.style.display = 'none';
     
@@ -89,7 +98,7 @@ function save () {
     var hash = self.current || uid(4);
     
     self.filters[hash] = self.filters[hash] || {};
-    self.filters[hash].values = getValues.call(self);
+    self.filters[hash].values = values;
     self.filters[hash].enabled = true;
     
     // add list item
@@ -155,16 +164,20 @@ function disable (hash) {
 
 function value (operator, value) {
     var self = this;
-    var valueField = operators.value.call(self, operator, value);
     
-    self.domRefs.inputs.value = valueField || {value: ''};
-    self.domRefs.valueField.innerHTML = '';
-    
-    if (valueField && operator) {
-        self.domRefs.valueLabel.style.display = 'block';
-        self.domRefs.valueField.appendChild(valueField);
-    } else {
-        self.domRefs.valueLabel.style.display = 'none';
+    if (typeof self.config.operators[operator] !== 'undefined') {
+        
+        var valueField = operators.valueField(value);
+        
+        self.domRefs.inputs.value = valueField || {value: ''};
+        self.domRefs.valueField.innerHTML = '';
+        
+        if (valueField && operator) {
+            self.domRefs.valueLabel.style.display = 'block';
+            self.domRefs.valueField.appendChild(valueField);
+        } else {
+            self.domRefs.valueLabel.style.display = 'none';
+        }
     }
 }
 

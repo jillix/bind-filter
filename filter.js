@@ -52,6 +52,108 @@ var tmpConfig = {
 };
 var controls = require('./controls').init;
 var operators = require('./operators');
+var operatorConfig = {
+    '=': {
+        queryName: '',
+        validation: {
+            type: 'text'
+        }
+    },
+    '!=': {
+        queryName: '$ne',
+        validation: {
+            type: 'text'
+        }
+    },
+    '>': {
+        queryName: '$gt',
+        validation: {
+            type: 'number',
+        }
+    },
+    '<': {
+        queryName: '$lt',
+        validation: {
+            type: 'number'
+        }
+    },
+    '>=': {
+        queryName: '$gte',
+        validation: {
+            type: 'number'
+        }
+    },
+    '<=': {
+        queryName: '$lte',
+        validation: {
+            type: 'number'
+        }
+    },
+    'all': {
+        queryName: '$all',
+        validation: {
+            type: 'array'
+        }
+    },
+    'in': {
+        queryName: '$in',
+        validation: {
+            type: 'array'
+        }
+    },
+    'notin': {
+        queryName: '$nin',
+        validation: {
+            type: 'array'
+        }
+    },
+    'regExp': {
+        queryName: '$regex',
+        validation: {
+            type: 'text'
+        }
+    },
+    'exists': {
+        queryName: '$exists',
+        validation: {
+            type: 'boolean'
+        }
+    },
+    'where': {
+        queryName: '$where',
+        validation: {
+            type: 'text'
+        }
+    },
+    'mod': {
+        queryName: '$mod',
+        validation: {
+            type: 'array',
+            maxLength: 2,
+            minLength: 2
+        }
+    },
+    'type': {
+        queryName: '$type',
+        validation: {
+            type: 'int',
+            max: 18,
+            min: 1,
+        }
+    },
+    'null': {
+        queryName: '',
+        validation: {
+            type: 'boolean'
+        }
+    },
+    'notnull': {
+        queryName: '$ne',
+        validation: {
+            type: 'boolean'
+        }
+    },
+};
 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
@@ -97,7 +199,7 @@ function initDom () {
     }
     
     // set operators
-    self.domRefs.inputs.operator.appendChild(operators.build());
+    self.domRefs.inputs.operator.appendChild(operators.build.call(self));
     
     // set fields
     self.domRefs.inputs.field.appendChild(createFieldSelection(self.config.fields));
@@ -118,6 +220,8 @@ function init (config) {
     var self = this;
     self.config = config;
     self.filters = {};
+    
+    self.config.operators = operatorConfig;
     
     if (!config.crud) {
         return console.error('No crud miid defined.');
