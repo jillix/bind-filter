@@ -14,8 +14,38 @@ function build () {
     return df;
 }
 
-function valueField (value) {
-    return elm('input', {name: 'value', type: 'text', value: value || ''});
+function valueField (operator, value) {
+    var self = this;
+    var type = self.config.operators[operator][1];
+    
+    // handle boolean input
+    if (type === 'boolean') {
+        var select = elm('select', {name: 'value', value: value || ''});
+        var opt1 = elm('option', {value: true});
+        opt1.innerHTML = 'true';
+        
+        var opt2 = elm('option', {value: false});
+        opt2.innerHTML = 'false';
+        
+        select.appendChild(opt1);
+        select.appendChild(opt2);
+        return select;
+    }
+    
+    // handle array input
+    if (type === 'array') {
+        var array = elm('input', {name: 'value', type: 'text', value: value || ''});
+        // TODO implement tag input plugin here...
+        /*array.addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+                console.log(array.value);
+            }
+        });*/
+        return array;
+    }
+    
+    // handle number and text input
+    return elm('input', {name: 'value', type: type, value: value || ''});
 }
 
 function validateValue (values) {

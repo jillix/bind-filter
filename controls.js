@@ -167,7 +167,7 @@ function value (operator, value) {
     
     if (typeof self.config.operators[operator] !== 'undefined') {
         
-        var valueField = operators.valueField(value);
+        var valueField = operators.valueField.call(self, operator, value);
         
         self.domRefs.inputs.value = valueField || {value: ''};
         self.domRefs.valueField.innerHTML = '';

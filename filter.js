@@ -50,6 +50,7 @@ var tmpConfig = {
     type: 'template',
     fields: ['id', 'name', 'field2', 'field3', 'field4', 'field5']
 };
+
 var controls = require('./controls').init;
 var operators = require('./operators');
 var operatorConfig = {
@@ -69,7 +70,8 @@ var operatorConfig = {
         maxLength: 2,
         minLength: 2
     }],
-    'type': ['$type', 'int', {
+    'type': ['$type', 'number', {
+        int: true,
         max: 18,
         min: 1,
     }]
