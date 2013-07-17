@@ -60,11 +60,18 @@ function checkField (field) {
     return false;
 }
 
-function setFilters (filters, enabled) {
+function setFilters (filters, reset) {
     var self = this;
     
-    for (var i = 0, l = filters.length; i < l; ++i) {
+    // reset filters if reset is true
+    if (reset) {
+        self.filters = {};
+        self.domRefs.list.innerHTML = '';
+    }
     
+    // TODO implement hidden and fixed filters
+    for (var i = 0, l = filters.length; i < l; ++i) {
+        
         // skip fields that don't exists in schema
         if (!checkField.call(self, filters[i].field)) {
             continue;
@@ -74,7 +81,8 @@ function setFilters (filters, enabled) {
         
         self.filters[hash] = {
             values: filters[i],
-            enabled: enabled ? true : false
+            // TODO enable/disable individual filters
+            enabled: self.config.enabled ? true : false
         };
         
         list.save.call(self, hash);
@@ -212,7 +220,7 @@ function init () {
     
     // set predefined filters
     if (self.config.setFilters) {
-        setFilters.call(self, self.config.setFilters, self.config.enabled);
+        setFilters.call(self, self.config.setFilters);
     }
 }
 

@@ -76,7 +76,6 @@ setFilters: [
 enabled: false,
 // TODO - get field names and type dynamicaly from db
 //      - the type should define what fields are searchable and which not (probably all default searchable)
-//      - this module should react to a different events and call a "set type" operation that reconfigures it
 type: 'template',
 fields: ['id', 'name', 'field2', 'field3', 'field4', 'field5']
 ```

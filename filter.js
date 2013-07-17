@@ -86,7 +86,9 @@ function get(s,c){
     }
 }
 
-function createFieldSelection (fields) {
+function createFieldSelection () {
+    var self = this;
+    var fields = self.config.fields;
     
     var df = document.createDocumentFragment();
     for (var i = 0, l = fields.length; i < l; ++i) {
@@ -94,7 +96,9 @@ function createFieldSelection (fields) {
         field.innerHTML = fields[i];
         df.appendChild(field);
     }
-    return df;
+    
+    self.domRefs.inputs.field.innerHTML = '';
+    self.domRefs.inputs.field.appendChild(df);
 }
 
 function initDom () {
@@ -124,7 +128,7 @@ function initDom () {
     self.domRefs.inputs.operator.appendChild(operators.build.call(self));
     
     // set fields
-    self.domRefs.inputs.field.appendChild(createFieldSelection(self.config.fields));
+    createFieldSelection.call(self);
     
     self.domRefs.controls = {};
     for (var name in self.config.controls) {
@@ -135,6 +139,8 @@ function initDom () {
 }
 
 function init (config) {
+    
+    _SELF = this;
     
     // ONLY FOR DEV
     config = tmpConfig;
@@ -152,6 +158,14 @@ function init (config) {
     // wait for the crud module
     self.onready(config.crud, function () {
         initDom.call(self);
+        
+        // reset filters when fields change
+        self.on('setFields', function (fields) {
+            self.config.fields = fields;
+            createFieldSelection.call(self);
+            self.emit('setFilters', [], true);
+        });
+        
         self.emit('ready');
     });
 }
