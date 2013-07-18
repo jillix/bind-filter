@@ -200,18 +200,27 @@ function createTypeSelectOption (type) {
 function setTypes (types) {
     var self = this;
     
-    if (types instanceof Array && self.domRefs.typeSelector) {
-        var df = document.createDocumentFragment();
-        
-        self.types = {};
-        
-        for (var i = 0, l = types.length; i < l; ++i) {
-            self.types[types[i]] = {};
-            df.appendChild(createTypeSelectOption(types[i]));
-        }
-        
-        self.domRefs.typeSelector.innerHTML = '';
-        self.domRefs.typeSelector.appendChild(df);
+    if (types instanceof Array) {
+        // TODO check cache
+        self.emit('getTypes', types, function (err, schemas) {
+            
+            console.log(err || schemas);
+            
+            if (self.domRefs.typeSelector) {
+            
+                var df = document.createDocumentFragment();
+                
+                self.types = {};
+                
+                for (var i = 0, l = types.length; i < l; ++i) {
+                    self.types[types[i]] = {};
+                    df.appendChild(createTypeSelectOption(types[i]));
+                }
+                
+                self.domRefs.typeSelector.innerHTML = '';
+                self.domRefs.typeSelector.appendChild(df);
+            }
+        });
     }
 }
 
@@ -223,9 +232,9 @@ function changeType (type) {
     }
     
     // TODO get type from server or cache
-    self.emit('getTypes', type, function (err, schema) {
-        console.log(err || schema);
-    });
+    //self.emit('getTypes', type, function (err, schema) {
+    //    console.log(err || schema[0]);
+    //});
     
     // set fields
     operators.buildFields.call(self);
