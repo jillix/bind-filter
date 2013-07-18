@@ -8,11 +8,11 @@ function queryBuilder (filters) {
     var query;
     
     for (filter in filters) {
-        if (filters[filter].enabled) {
+        if (!filters[filter].disabled) {
             
             query = query || {};
             
-            var values = filters[filter].values;
+            var values = filters[filter];
             var value = values.value;
             
             if (values.operator === 'null' || values.operator === 'not null') {

@@ -38,12 +38,16 @@ var tmpConfig = {
         {
             field: 'id',
             operator: 'all',
-            value: 'value1, value2 value3'
+            value: 'value1, value2 value3',
+            fixed: true,
+            hidden: true
         },
         {
             field: 'name',
             operator: '=',
-            value: 'herbert'
+            value: 'herbert',
+            disabled: true,
+            fixed: true
         }
     ],
     setTypes: ['typeA', 'template', 'typeB'],

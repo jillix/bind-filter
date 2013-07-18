@@ -61,11 +61,11 @@ setFilters: [
         field: 'id',
         operator: 'all',
         value: 'value1, value2 value3',
-        // TODO start state of the filter
-        enabled: true,
-        // TODO do not allow UI removal
+        // start state of the filter
+        disbaled: false,
+        // do not allow UI removal
         fixed: true,
-        // TODO hide from the UI
+        // hide from the UI
         hidden: true
     },
     {
@@ -76,8 +76,6 @@ setFilters: [
 ],
 // define type to select
 setTypes: ['typeA', 'template', 'typeB'],
-// TODO this might become obsolete when this option can be set on individual filters
-enabled: false,
 // TODO - get field names and type dynamicaly from db
 //      - the type should define what fields are searchable and which not (probably all default searchable)
 type: 'template',

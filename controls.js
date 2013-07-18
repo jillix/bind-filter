@@ -69,7 +69,6 @@ function setFilters (filters, reset) {
         self.domRefs.list.innerHTML = '';
     }
     
-    // TODO implement hidden and fixed filters
     for (var i = 0, l = filters.length; i < l; ++i) {
         
         // skip fields that don't exists in schema
@@ -78,13 +77,14 @@ function setFilters (filters, reset) {
         }
         
         var hash = uid(4);
-        
         self.filters[hash] = {
-            values: filters[i],
-            // TODO enable/disable individual filters
-            enabled: self.config.enabled ? true : false
+            field: filters[i].field,
+            value: filters[i].value,
+            operator: filters[i].operator,
+            disabled: filters[i].disabled,
+            fixed: filters[i].fixed,
+            hidden: filters[i].hidden
         };
-        
         list.save.call(self, hash);
     }
     
@@ -106,8 +106,10 @@ function save () {
     var hash = self.current || uid(4);
     
     self.filters[hash] = self.filters[hash] || {};
-    self.filters[hash].values = values;
-    self.filters[hash].enabled = true;
+    self.filters[hash].field = values.field,
+    self.filters[hash].operator = values.operator,
+    self.filters[hash].value = values.value,
+    self.filters[hash].disabled = false;
     
     // add list item
     list.save.call(self, hash);
@@ -118,7 +120,7 @@ function save () {
 
 function edit (hash) {
     var self = this;
-    var values = hash ? self.filters[hash].values : {};
+    var values = hash ? self.filters[hash] : {};
     self.current = hash || null;
     
     // handle remove button
@@ -156,7 +158,7 @@ function enable (hash) {
     var self = this;
     // TODO remove class with bind
     self.filters[hash].item.setAttribute('class', '');
-    self.filters[hash].enabled = true;
+    self.filters[hash].disabled = false;
     
     find.call(self);
 }
@@ -165,7 +167,7 @@ function disable (hash) {
     var self = this;
     // TODO add class with bind
     self.filters[hash].item.setAttribute('class', 'disabled');
-    self.filters[hash].enabled = false;
+    self.filters[hash].disabled = true;
     
     find.call(self);
 }

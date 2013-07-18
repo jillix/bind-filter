@@ -18,10 +18,16 @@ function createFilterItem (hash) {
     var rm = get(self.config.item.remove, item);
     
     // enable/disable filter
-    if (!self.filters[hash].enabled) {
+    if (self.filters[hash].disabled) {
         item.setAttribute('class', 'disabled');
         checkbox.removeAttribute('checked');
     }
+    
+    // hide filter item
+    if (self.filters[hash].hidden) {
+        item.style.display = 'none';
+    }
+    
     checkbox.addEventListener('change', function (event) {
         if (checkbox.checked) {
             self.emit('enableFilter', hash);
@@ -30,29 +36,30 @@ function createFilterItem (hash) {
         }
     }, false);
     
-    field.innerHTML = self.filters[hash].values.field;
+    field.innerHTML = self.filters[hash].field;
     field.addEventListener(self.config.events.itemEdit || 'click', function () {
         self.emit('editFilter', hash);
     }, false);
     
-    operator.innerHTML = self.filters[hash].values.operator;
+    operator.innerHTML = self.filters[hash].operator;
     operator.addEventListener(self.config.events.itemEdit || 'click', function () {
         self.emit('editFilter', hash);
     }, false);
     
-    value.innerHTML = self.filters[hash].values.value || '';
+    value.innerHTML = self.filters[hash].value || '';
     value.addEventListener(self.config.events.itemEdit || 'click', function () {
         self.emit('editFilter', hash);
     }, false);
     
     // remove filter
-    rm.innerHTML = 'x';
-    rm.addEventListener(self.config.events.itemRemove || 'click', function () {
-        self.emit('removeFilter', hash);
-    }, false);
-    
-    // TODO sort filter (drag'n drop)
-    handler.innerHTML = '#';
+    if (!self.filters[hash].fixed) {
+        rm.addEventListener(self.config.events.itemRemove || 'click', function () {
+            self.emit('removeFilter', hash);
+        }, false);
+    } else {
+        // TODO handle attributs with bind
+        item.setAttribute('class', 'fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
+    }
     
     return item;
 }
@@ -62,10 +69,10 @@ function save (hash) {
     
     // create filter item
     var item = createFilterItem.call(self, hash);
-    
     if (self.filters[hash].item) {
         // replace filter
         self.domRefs.list.replaceChild(item, self.filters[hash].item);
+        //self.domRefs.list.appendChild(item);
     } else {
         // add new filter
         self.domRefs.list.appendChild(item);
