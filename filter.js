@@ -46,7 +46,7 @@ var tmpConfig = {
             field: 'name',
             operator: '=',
             value: 'herbert',
-            disabled: true,
+            disabled: false,
             fixed: true
         }
     ],
