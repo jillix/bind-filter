@@ -223,6 +223,9 @@ function changeType (type) {
     }
     
     // TODO get type from server or cache
+    self.emit('getTypes', type, function (err, schema) {
+        console.log(err || schema);
+    });
     
     // set fields
     operators.buildFields.call(self);
