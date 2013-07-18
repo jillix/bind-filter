@@ -236,9 +236,12 @@ function changeType (type) {
     setFilters.call(self, self.config.setFilters || [], true);
     
     // add type to typeSelector
-    if (self.types && !self.types[type]) {
+    if (!self.types[type]) {
         self.types[type] = type;
-        self.domRefs.typeSelector.appendChild(createTypeSelectOption(type));
+        
+        if (self.domRefs.typeSelector) {
+            self.domRefs.typeSelector.appendChild(createTypeSelectOption(type));
+        }
     }
     
     // select type

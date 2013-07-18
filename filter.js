@@ -99,7 +99,10 @@ function initDom () {
     self.domRefs.filter = get(self.config.filter, self.dom);
     self.domRefs.valueLabel = get(self.config.valueLabel, self.dom);
     self.domRefs.valueField = get(self.config.valueField, self.dom);
-    self.domRefs.typeSelector= get(self.config.typeSelector, self.dom);
+    
+    if (self.config.typeSelector) {
+        self.domRefs.typeSelector= get(self.config.typeSelector, self.dom);
+    }
     
     // list item
     self.domRefs.list = get(self.config.list, self.dom);
