@@ -1,4 +1,4 @@
-M.wrap('github/jillix/bind-filter/dev/operators.js', function (require, module, exports) {
+M.wrap('github/jillix/bind-filter/dev/inputs.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
     
