@@ -5,7 +5,7 @@
     "dependencies": [
         "/filter.js",
         "/controls.js",
-        "/operators.js",
+        "/inputs.js",
         "/list.js",
         "/find.js"
     ]

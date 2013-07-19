@@ -1,7 +1,7 @@
 M.wrap('github/jillix/bind-filter/dev/controls.js', function (require, module, exports) {
 var list = require('./list');
 var find = require('./find');
-var operators = require('./operators');
+var inputs = require('./inputs');
 
 // TODO handle dom with bind
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
@@ -24,39 +24,8 @@ function getValues () {
     };
 }
 
-function resetValues (values) {
-    var self = this;
-    
-    if (values.field) {
-        self.domRefs.inputs.field.value = values.field;
-        self.domRefs.inputs.operator.value = values.operator;
-        
-        if (self.domRefs.inputs.value) {
-            self.domRefs.inputs.value.value = values.value;
-        }
-    } else {
-        self.domRefs.inputs.field.options[0].selected = true;
-        self.domRefs.inputs.operator.options[0].selected = true;
-        
-        if (self.domRefs.inputs.value) {
-            self.domRefs.inputs.value.value = '';
-        }
-    }
-}
-
 function handleFindResult (err, data) {
     //console.log(err || data);
-}
-
-function checkField (field) {
-    var self = this;
-    
-    for (var i = 0, l = self.config.fields.length; i < l; ++i) {
-        if (field === self.config.fields[i]) {
-            return true;
-        }
-    }
-    return false;
 }
 
 function setFilters (filters, reset) {
@@ -70,10 +39,7 @@ function setFilters (filters, reset) {
     
     for (var i = 0, l = filters.length; i < l; ++i) {
         
-        // skip fields that don't exists in schema
-        if (!checkField.call(self, filters[i].field)) {
-            continue;
-        }
+        // TODO validate all filter data with current type
         
         var hash = uid(4);
         self.filters[hash] = {
@@ -88,33 +54,14 @@ function setFilters (filters, reset) {
     }
     
     find.call(self);
+    return true;
 }
 
 function save () {
     var self = this;
-    var values = getValues.call(self);
-    
-    // validate value
-    if (!operators.validateValue.call(self, values)) {
-        return;
+    if (setFilters.call(self, [getValues.call(self)])) {
+        self.domRefs.filter.style.display = 'none';
     }
-    
-    self.domRefs.filter.style.display = 'none';
-    
-    // get or create filter hash
-    var hash = self.current || uid(4);
-    
-    self.filters[hash] = self.filters[hash] || {};
-    self.filters[hash].field = values.field,
-    self.filters[hash].operator = values.operator,
-    self.filters[hash].value = values.value,
-    self.filters[hash].disabled = false;
-    
-    // add list item
-    list.save.call(self, hash);
-    
-    // call server
-    find.call(self);
 }
 
 function edit (hash) {
@@ -129,11 +76,8 @@ function edit (hash) {
         self.domRefs.controls.remove.style.display = 'none';
     }
     
-    // operator init
-    resetValues.call(self, values);
-    
-    // change value field dependent of selected operator
-    value.call(self, self.domRefs.inputs.operator.value, values.value || '');
+    // change value field and operator selection dependent of selected field
+    changeField.call(self, values.field, values);
     
     self.domRefs.filter.style.display = 'block';
 }
@@ -171,23 +115,22 @@ function disable (hash) {
     find.call(self);
 }
 
-function value (operator, value) {
+function changeField (field, values) {
     var self = this;
+    values = values || {};
     
-    if (typeof self.config.operators[operator] !== 'undefined') {
-        
-        var valueField = operators.valueField.call(self, operator, value);
-        
-        self.domRefs.inputs.value = valueField || {value: ''};
-        self.domRefs.valueField.innerHTML = '';
-        
-        if (valueField && operator) {
-            self.domRefs.valueLabel.style.display = 'block';
-            self.domRefs.valueField.appendChild(valueField);
-        } else {
-            self.domRefs.valueLabel.style.display = 'none';
-        }
+    if (!field) {
+        return;
     }
+    
+    // select field if it exists in the schema
+    self.domRefs.inputs.field.value = field;
+    
+    // set operators which are compatible with the field type
+    inputs.buildOperators.call(self, field, values.operator || '');
+    
+    // create value field and set the value if available
+    inputs.buildValue.call(self, field, values.value || '');
 }
 
 function createTypeSelectOption (type) {
@@ -274,9 +217,13 @@ function changeType (type) {
         self.type = type;
         
         // set fields
-        operators.buildFields.call(self);
-        // set operators
-        operators.buildOperators.call(self);
+        inputs.buildFields.call(self);
+        
+        // select a field
+        for (var field in self.types[self.type]) {
+            changeField.call(self, field);
+            break;
+        }
         
         // reset predefined filters
         setFilters.call(self, self.config.setFilters || [], true);
@@ -310,7 +257,7 @@ function init () {
     self.on('disableFilter', disable);
     self.on('removeFilter', remove);
     self.on('cancelFilter', cancel);
-    self.on('operatorChange', value);
+    self.on('fieldChange', changeField);
     self.on('setType', changeType);
     self.on('setTypes', setTypes);
     
@@ -330,12 +277,12 @@ function init () {
         });
     }
     
-    // operator change
-    self.domRefs.inputs.operator.addEventListener('change', function () {
-        self.emit('operatorChange', self.domRefs.inputs.operator.value);
+    // field change
+    self.domRefs.inputs.field.addEventListener('change', function () {
+        self.emit('fieldChange', self.domRefs.inputs.field.value);
     });
     
-    // set types
+    // init types
     if (self.config.setTypes) {
         self.emit('setTypes', self.config.setTypes);
     }

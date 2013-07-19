@@ -2,6 +2,21 @@ M.wrap('github/jillix/bind-filter/dev/operators.js', function (require, module, 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
     
+function buildFields () {
+    var self = this;
+    var fields = self.types[self.type];
+    
+    var df = document.createDocumentFragment();
+    for (var field in fields) {
+        var option = elm('option', {value: field});
+        option.innerHTML = field;
+        df.appendChild(option);
+    }
+    
+    self.domRefs.inputs.field.innerHTML = '';
+    self.domRefs.inputs.field.appendChild(df);
+}
+
 // TODO show only the operators which are compatible with the field type
 function buildOperators () {
     var self = this;
@@ -16,19 +31,32 @@ function buildOperators () {
     self.domRefs.inputs.operator.appendChild(df);
 }
 
-function buildFields () {
+function buildValue (field, value) {
     var self = this;
-    var fields = self.config.fields;
-    
-    var df = document.createDocumentFragment();
-    for (var i = 0, l = fields.length; i < l; ++i) {
-        var field = elm('option', {value: fields[i]});
-        field.innerHTML = fields[i];
-        df.appendChild(field);
+    if (self.domRefs.inputs.value) {
+        self.domRefs.inputs.value.innerHTML = value || '';
+    } else {
+        var tmp_value = elm('input', {type: 'text', name: 'value', value: value || ''});
+        self.domRefs.inputs.value = tmp_value;
     }
     
-    self.domRefs.inputs.field.innerHTML = '';
-    self.domRefs.inputs.field.appendChild(df);
+    self.domRefs.valueField.innerHTML = '';
+    self.domRefs.valueField.appendChild(self.domRefs.inputs.value);
+    
+    /*if (typeof self.config.operators[operator] !== 'undefined') {
+        
+        var valueField = operators.valueField.call(self, operator, value);
+        
+        self.domRefs.inputs.value = valueField || {value: ''};
+        self.domRefs.valueField.innerHTML = '';
+        
+        if (valueField && operator) {
+            self.domRefs.valueLabel.style.display = 'block';
+            self.domRefs.valueField.appendChild(valueField);
+        } else {
+            self.domRefs.valueLabel.style.display = 'none';
+        }
+    }*/
 }
 
 // TODO create a input field of the schema field type
@@ -77,20 +105,13 @@ function validateValue (values) {
     var value = values.value;
     
     // TODO validate with schema
-    /*for (var validation in validations) {
-        switch (validation) {
-            case 'type':
-                
-        }
-    }*/
     
-    //console.log(validations);
-    //console.log(value);
     return true;
 }
 
 exports.buildOperators = buildOperators;
 exports.buildFields = buildFields;
+exports.buildValue = buildValue;
 exports.valueField = valueField;
 exports.validateValue = validateValue;
 
