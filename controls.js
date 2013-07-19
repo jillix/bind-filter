@@ -14,7 +14,6 @@ function uid (len, uid) {
     return uid;
 };
 
-
 function getValues () {
     var self = this;
     
@@ -197,24 +196,58 @@ function createTypeSelectOption (type) {
     return option;
 }
 
+// TODO callback buffering
+function getTypes (types, reset, callback) {
+    var self = this;
+    
+    // get types to fetch from server
+    var resultTypes = {};
+    var typesToFetch = [];
+    for (var i = 0, l = types.length; i < l; ++i) {
+        if (self.types[types[i]]) {
+            resultTypes[types[i]] = self.types[types[i]];
+        } else {
+            typesToFetch.push(types[i]);
+        }
+    }
+    
+    if (typesToFetch.length > 0) {
+        self.emit('getTypes', types, function (err, types) {
+            if (err) {
+                return callback(err);
+            }
+            
+            // merge fetched types into result types
+            for (var type in types) {
+               self.types[type] = resultTypes[type] = types[type];
+            }
+            
+            // reset cache
+            if (reset) {
+                self.types = resultTypes;
+            }
+            callback(null);
+        });
+    } else {
+        // reset cache
+        if (reset) {
+            self.types = resultTypes;
+        }
+        callbacK(null);
+    }
+}
+
 function setTypes (types) {
     var self = this;
     
     if (types instanceof Array) {
-        // TODO check cache
-        self.emit('getTypes', types, function (err, schemas) {
-            
-            console.log(err || schemas);
-            
+        getTypes.call(self, types, true, function (err) {
             if (self.domRefs.typeSelector) {
             
                 var df = document.createDocumentFragment();
                 
-                self.types = {};
-                
-                for (var i = 0, l = types.length; i < l; ++i) {
-                    self.types[types[i]] = {};
-                    df.appendChild(createTypeSelectOption(types[i]));
+                for (var type in self.types) {
+                    df.appendChild(createTypeSelectOption(type));
                 }
                 
                 self.domRefs.typeSelector.innerHTML = '';
@@ -231,37 +264,37 @@ function changeType (type) {
         return;
     }
     
-    // TODO get type from server or cache
-    //self.emit('getTypes', type, function (err, schema) {
-    //    console.log(err || schema[0]);
-    //});
-    
-    // set fields
-    operators.buildFields.call(self);
-    
-    // TODO select field and update operators
-    
-    // set operators
-    operators.buildOperators.call(self);
-    
-    self.type = type;
-    
-    // reset predefined filters
-    setFilters.call(self, self.config.setFilters || [], true);
-    
-    // add type to typeSelector
-    if (!self.types[type]) {
-        self.types[type] = type;
+    // get type from server or cache
+    getTypes.call(self, [type], false, function (err) {
         
-        if (self.domRefs.typeSelector) {
-            self.domRefs.typeSelector.appendChild(createTypeSelectOption(type));
+        if (err || !self.types[type]) {
+            return console.error('Type error: ' + type);
         }
-    }
-    
-    // select type
-    if (self.domRefs.typeSelector) {
-        self.domRefs.typeSelector.value = type;
-    }
+        
+        self.type = type;
+        
+        // set fields
+        operators.buildFields.call(self);
+        // set operators
+        operators.buildOperators.call(self);
+        
+        // reset predefined filters
+        setFilters.call(self, self.config.setFilters || [], true);
+        
+        // add type to typeSelector
+        if (!self.types[type]) {
+            self.types[type] = type;
+            
+            if (self.domRefs.typeSelector) {
+                self.domRefs.typeSelector.appendChild(createTypeSelectOption(type));
+            }
+        }
+        
+        // select type
+        if (self.domRefs.typeSelector) {
+            self.domRefs.typeSelector.value = type;
+        }
+    });
 }
 
 function init () {
