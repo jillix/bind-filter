@@ -60,8 +60,8 @@ var tmpConfig = {
 var controls = require('./controls').init;
 var operators = require('./operators');
 var operatorConfig = {
-    '=': ['', 'text'],
-    '!=': ['$ne', 'text'],
+    '=': ['', 'mixed'],
+    '!=': ['$ne', 'mixed'],
     '>': ['$gt', 'number'],
     '<': ['$lt', 'number'],
     '>=': ['$gte', 'number'],
@@ -69,10 +69,10 @@ var operatorConfig = {
     'all': ['$all', 'array'],
     'in': ['$in', 'array'],
     'notin': ['$nin', 'array'],
-    'regExp': ['$regex', 'text'],
+    'regExp': ['$regex', 'string'],
     'exists': ['$exists', 'boolean'],
-    'where': ['$where', 'text'],
-    'mod': ['$mod', 'array', {
+    'where': ['$where', 'mixed'],
+    'mod': ['$mod', 'number', {
         maxLength: 2,
         minLength: 2
     }],

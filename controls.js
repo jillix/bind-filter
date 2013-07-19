@@ -28,6 +28,7 @@ function handleFindResult (err, data) {
     //console.log(err || data);
 }
 
+// TODO implement loaders and prevent redundant requests
 function setFilters (filters, reset) {
     var self = this;
     
@@ -53,7 +54,7 @@ function setFilters (filters, reset) {
         list.save.call(self, hash);
     }
     
-    find.call(self);
+    find.call(self, handleFindResult);
     return true;
 }
 
@@ -67,6 +68,7 @@ function save () {
 function edit (hash) {
     var self = this;
     var values = hash ? self.filters[hash] : {};
+    
     self.current = hash || null;
     
     // handle remove button
@@ -120,7 +122,9 @@ function changeField (field, values) {
     values = values || {};
     
     if (!field) {
-        return;
+        for (field in self.types[self.type]) {
+            break;
+        }
     }
     
     // select field if it exists in the schema
@@ -140,6 +144,7 @@ function createTypeSelectOption (type) {
 }
 
 // TODO callback buffering
+// TODO implement loaders and prevent redundant requests
 function getTypes (types, reset, callback) {
     var self = this;
     
@@ -220,10 +225,7 @@ function changeType (type) {
         inputs.buildFields.call(self);
         
         // select a field
-        for (var field in self.types[self.type]) {
-            changeField.call(self, field);
-            break;
-        }
+        changeField.call(self);
         
         // reset predefined filters
         setFilters.call(self, self.config.setFilters || [], true);

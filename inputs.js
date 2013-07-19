@@ -18,54 +18,49 @@ function buildFields () {
 }
 
 // TODO show only the operators which are compatible with the field type
-function buildOperators () {
+function checkOperator (fieldType, operator) {
     var self = this;
+    
+    if (self.config.operators[operator][1] === fieldType || self.config.operators[operator][1] === 'mixed') {
+        return true;
+    }
+}
+
+function buildOperators (field, operator) {
+    var self = this;
+    
+    if (!self.types[self.type][field] || !self.types[self.type][field].type) {
+        return;
+    }
+    
+    var fieldType = self.types[self.type][field].type;
     var df = document.createDocumentFragment();
     
     for (var operator in self.config.operators) {
-        var option = elm('option', {value: operator});
-        option.innerHTML = operator;
-        df.appendChild(option);
+        if (checkOperator.call(self, fieldType, operator)) {
+            var option = elm('option', {value: operator});
+            option.innerHTML = operator;
+            df.appendChild(option);
+        }
     }
     
+    self.domRefs.inputs.operator.innerHTML = '';
     self.domRefs.inputs.operator.appendChild(df);
 }
 
+// TODO create a input field of the schema field type
 function buildValue (field, value) {
     var self = this;
-    if (self.domRefs.inputs.value) {
-        self.domRefs.inputs.value.innerHTML = value || '';
-    } else {
-        var tmp_value = elm('input', {type: 'text', name: 'value', value: value || ''});
-        self.domRefs.inputs.value = tmp_value;
+    
+    if (!self.types[self.type][field] || !self.types[self.type][field].type) {
+        return;
     }
     
-    self.domRefs.valueField.innerHTML = '';
-    self.domRefs.valueField.appendChild(self.domRefs.inputs.value);
-    
-    /*if (typeof self.config.operators[operator] !== 'undefined') {
-        
-        var valueField = operators.valueField.call(self, operator, value);
-        
-        self.domRefs.inputs.value = valueField || {value: ''};
-        self.domRefs.valueField.innerHTML = '';
-        
-        if (valueField && operator) {
-            self.domRefs.valueLabel.style.display = 'block';
-            self.domRefs.valueField.appendChild(valueField);
-        } else {
-            self.domRefs.valueLabel.style.display = 'none';
-        }
-    }*/
-}
-
-// TODO create a input field of the schema field type
-function valueField (operator, value) {
-    var self = this;
-    var type = self.config.operators[operator][1];
+    var fieldType = self.types[self.type][field].type;
+    var input;
     
     // handle boolean input
-    if (type === 'boolean') {
+    if (fieldType === 'boolean') {
         var select = elm('select', {name: 'value', value: value || ''});
         var opt1 = elm('option', {value: true});
         opt1.innerHTML = 'true';
@@ -75,11 +70,11 @@ function valueField (operator, value) {
         
         select.appendChild(opt1);
         select.appendChild(opt2);
-        return select;
+        input = select;
     }
     
     // handle array input
-    if (type === 'array') {
+    if (fieldType === 'array') {
         var array = elm('input', {name: 'value', type: 'text', value: value || ''});
         // TODO implement tag input plugin here...
         /*array.addEventListener('keyup', function (event) {
@@ -87,14 +82,20 @@ function valueField (operator, value) {
                 console.log(array.value);
             }
         });*/
-        return array;
+        input = array;
     }
     
     // handle number and text input
-    return elm('input', {name: 'value', type: type, value: value || ''});
+    fieldType = fieldType === 'number' ? 'number' : 'text';
+    input = elm('input', {name: 'value', type: fieldType, value: value || ''});
+    
+    self.domRefs.inputs.value = input;
+    
+    self.domRefs.valueField.innerHTML = '';
+    self.domRefs.valueField.appendChild(self.domRefs.inputs.value);
 }
 
-function validateValue (values) {
+function validate (values) {
     var self = this;
     
     if (!self.config.operators[values.operator] || !values.value) {
@@ -112,7 +113,6 @@ function validateValue (values) {
 exports.buildOperators = buildOperators;
 exports.buildFields = buildFields;
 exports.buildValue = buildValue;
-exports.valueField = valueField;
-exports.validateValue = validateValue;
+exports.validate = validate;
 
 return module; });
