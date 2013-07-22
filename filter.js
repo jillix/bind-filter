@@ -15,7 +15,7 @@ var tmpConfig = {
     listItem: 'li',
     valueLabel: '.valueLabel',
     valueField: '.valueField',
-    typeSelector: '.filter select[name=type]',
+    typeSelector: 'select[name=type]',
     inputs: {
         field: 'select[name=field]',
         operator: 'select[name=operator]'
@@ -43,9 +43,9 @@ var tmpConfig = {
             hidden: true
         },
         {
-            field: 'name',
+            field: 'collection',
             operator: '=',
-            value: 'herbert',
+            value: 'users',
             disabled: false,
             fixed: true
         }
@@ -53,15 +53,15 @@ var tmpConfig = {
     setTypes: ['template', 'template', 'template'],
     enabled: false,
     // TODO get field names and type dynamicaly from db
-    type: 'template',
-    fields: ['id', 'name', 'field2', 'field3', 'field4', 'field5']
+    type: 'template'
 };
 
 var controls = require('./controls').init;
 var operators = require('./operators');
+var typeCache = {};
 var operatorConfig = {
-    '=': ['', 'mixed'],
-    '!=': ['$ne', 'mixed'],
+    '=': ['', 'mixed'], // schema
+    '!=': ['$ne', 'mixed'], // schema
     '>': ['$gt', 'number'],
     '<': ['$lt', 'number'],
     '>=': ['$gte', 'number'],
@@ -70,17 +70,7 @@ var operatorConfig = {
     'in': ['$in', 'array'],
     'notin': ['$nin', 'array'],
     'regExp': ['$regex', 'string'],
-    'exists': ['$exists', 'boolean'],
-    'where': ['$where', 'mixed'],
-    'mod': ['$mod', 'number', {
-        maxLength: 2,
-        minLength: 2
-    }],
-    'type': ['$type', 'number', {
-        int: true,
-        max: 18,
-        min: 1,
-    }]
+    'exists': ['$exists', 'mixed', 'boolean'] // op
 };
 
 // TODO use bind for dom interaction/manipulation
@@ -135,7 +125,7 @@ function init (config) {
     var self = this;
     self.config = config;
     self.filters = {};
-    self.types = {};
+    self.types = typeCache;
     self.config.operators = operatorConfig;
     
     if (!config.crud) {

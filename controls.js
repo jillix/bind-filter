@@ -14,21 +14,6 @@ function uid (len, uid) {
     return uid;
 };
 
-function getValues () {
-    var self = this;
-    
-    return {
-        field: self.domRefs.inputs.field.value,
-        operator: self.domRefs.inputs.operator.value || '=',
-        value: self.domRefs.inputs.value.value
-    };
-}
-
-function handleFindResult (err, data) {
-    //console.log(err || data);
-}
-
-// TODO implement loaders and prevent redundant requests
 function setFilters (filters, reset) {
     var self = this;
     
@@ -39,19 +24,17 @@ function setFilters (filters, reset) {
     }
     
     for (var i = 0, l = filters.length; i < l; ++i) {
-        
-        // TODO validate all filter data with current type
-        
-        var hash = uid(4);
-        self.filters[hash] = {
-            field: filters[i].field,
-            value: filters[i].value,
-            operator: filters[i].operator,
-            disabled: filters[i].disabled,
-            fixed: filters[i].fixed,
-            hidden: filters[i].hidden
-        };
-        list.save.call(self, hash);
+        if (inputs.validate.call(self, filters[i])) {
+            var hash = filters[i].hash || uid(4);
+            self.filters[hash] = self.filters[hash] || {};
+            
+            // merge filter
+            for (var key in filters[i]) {
+                self.filters[hash][key] = filters[i][key];
+            }
+            
+            list.save.call(self, hash);
+        }
     }
     
     find.call(self, handleFindResult);
@@ -60,7 +43,14 @@ function setFilters (filters, reset) {
 
 function save () {
     var self = this;
-    if (setFilters.call(self, [getValues.call(self)])) {
+    var filter = {
+        field: self.domRefs.inputs.field.value,
+        operator: self.domRefs.inputs.operator.value || '=',
+        value: self.domRefs.inputs.value.value,
+        hash: self.current
+    };
+    
+    if (setFilters.call(self, [filter])) {
         self.domRefs.filter.style.display = 'none';
     }
 }
@@ -79,7 +69,7 @@ function edit (hash) {
     }
     
     // change value field and operator selection dependent of selected field
-    changeField.call(self, values.field, values);
+    changeField.call(self, values.field, values.operator, values.value);
     
     self.domRefs.filter.style.display = 'block';
 }
@@ -117,9 +107,8 @@ function disable (hash) {
     find.call(self);
 }
 
-function changeField (field, values) {
+function changeField (field, operator, value) {
     var self = this;
-    values = values || {};
     
     if (!field) {
         for (field in self.types[self.type]) {
@@ -131,10 +120,8 @@ function changeField (field, values) {
     self.domRefs.inputs.field.value = field;
     
     // set operators which are compatible with the field type
-    inputs.buildOperators.call(self, field, values.operator || '');
-    
-    // create value field and set the value if available
-    inputs.buildValue.call(self, field, values.value || '');
+    // and create value field depending on schema and operator
+    inputs.value.call(self, field, operator, value);
 }
 
 function createTypeSelectOption (type) {
@@ -222,7 +209,7 @@ function changeType (type) {
         self.type = type;
         
         // set fields
-        inputs.buildFields.call(self);
+        inputs.fields.call(self);
         
         // select a field
         changeField.call(self);
@@ -244,6 +231,10 @@ function changeType (type) {
             self.domRefs.typeSelector.value = type;
         }
     });
+}
+
+function handleFindResult (err, data) {
+    //console.log(err || data);
 }
 
 function init () {
@@ -282,6 +273,11 @@ function init () {
     // field change
     self.domRefs.inputs.field.addEventListener('change', function () {
         self.emit('fieldChange', self.domRefs.inputs.field.value);
+    });
+    
+    // operator change
+    self.domRefs.inputs.operator.addEventListener('change', function () {
+        self.emit('fieldChange', self.domRefs.inputs.field.value, self.domRefs.inputs.operator.value);
     });
     
     // init types
