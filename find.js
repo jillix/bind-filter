@@ -2,44 +2,54 @@ M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, expor
 
 var currentFilters = {};
 
-// TODO send template type always
 function queryBuilder (filters) {
     var self = this;
-    var query;
+    var query = {};
+    var fieldsInQuery = {};
     
     for (filter in filters) {
-        if (!filters[filter].disabled) {
+        if (!filters[filter].disabled && self.config.operators[filters[filter].operator]) {
             
-            query = query || {};
-            
+            var expression = {};
             var values = filters[filter];
             var value = values.value;
             
-            if (values.operator === 'null' || values.operator === 'not null') {
-                value = null;
-            }
-            
-            if (values.operator === 'exists') {
-                value = true;
-            }
-            
-            // handle value
-            if (values.operator === 'all' || values.operator === 'in' || values.operator === 'not in' || values.operator === 'mod') {
+            // handle array value
+            if (self.config.operators[values.operator][1] === 'array') {
                 value = values.value.split(/ |, |,/g);
             }
             
-            // handle operator
-            if (self.config.operators[values.operator]) {
-                // TODO handle complex queries
-                query[values.field] = query[values.field] || {};
-                query[values.field][self.config.operators[values.operator][0]] = value;
+            // handle operators
+            if (self.config.operators[values.operator][0]) {
+                expression[values.field] = {};
+                expression[values.field][self.config.operators[values.operator][0]] = value;
             } else {
-                query[values.field] = value;
+                expression[values.field] = value;
             }
+            
+            // handle or
+            if (fieldsInQuery[values.field]) {
+                
+                // create or array and move the existing expression to the array
+                if (!query.$or) {
+                    query.$or = [{}];
+                    query.$or[0][values.field] = query[values.field];
+                    delete query[values.field];
+                }
+                
+                query.$or.push(expression);
+            } else {
+                query[values.field] = expression[values.field];
+            }
+            
+            fieldsInQuery[values.field] = 1;
         }
     }
     
-    return query;
+    return {
+        t: self.type,
+        q: query
+    };
 }
 
 function find (all) {
@@ -72,7 +82,7 @@ function find (all) {
     }
     
     // get data with crud module
-    return self.emit('find', {q: self.query, t: self.type}, function (err, data) {
+    return self.emit('find', self.query, function (err, data) {
         self.crudFindBusy = false;
         self.emit('result', err, data);
     });

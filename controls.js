@@ -37,7 +37,7 @@ function setFilters (filters, reset) {
         }
     }
     
-    find.call(self, handleFindResult);
+    find.call(self);
     return true;
 }
 
