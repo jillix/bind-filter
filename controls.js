@@ -147,7 +147,7 @@ function getTypes (types, reset, callback) {
     }
     
     if (typesToFetch.length > 0) {
-        self.emit('getTypes', types, function (err, types) {
+        self.emit('getTemplates', types, function (err, types) {
             if (err) {
                 return callback(err);
             }
