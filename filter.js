@@ -1,67 +1,10 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
-// ONLY FOR DEV
-var tmpConfig = {
-    crud: 'crud', // miid of crud module
-    events: {
-        add: 'click',
-        cancel: 'click',
-        create: 'click',
-        remove: 'click',
-        itemEdit: 'click',
-        itemRemove: 'click'
-    },
-    filter: '.filter',
-    list: '.filter-list',
-    listItem: 'li',
-    valueLabel: '.valueLabel',
-    valueField: '.valueField',
-    typeSelector: 'select[name=type]',
-    inputs: {
-        field: 'select[name=field]',
-        operator: 'select[name=operator]'
-    },
-    controls: {
-        create: 'button[name=create]',
-        save: 'button[name=save]',
-        cancel: 'button[name=cancel]',
-        remove: 'button[name=remove]'
-    },
-    item: {
-        onoff: '.onoff > input',
-        field: '.field',
-        operator: '.operator',
-        value: '.value',
-        remove: '.remove',
-        handler: '.handler'
-    },
-    setFilters: [
-        {
-            field: 'id',
-            operator: 'all',
-            value: 'value1, value2 value3',
-            fixed: true,
-            hidden: true
-        },
-        {
-            field: 'collection',
-            operator: '=',
-            value: 'users',
-            disabled: false,
-            fixed: true
-        }
-    ],
-    setTypes: ['template', 'template', 'template'],
-    enabled: false,
-    // TODO get field names and type dynamicaly from db
-    type: 'template'
-};
-
 var controls = require('./controls').init;
 var operators = require('./operators');
 var typeCache = {};
 var operatorConfig = {
-    '=': ['', 'mixed'], // schema
-    '!=': ['$ne', 'mixed'], // schema
+    '=': ['', 'mixed'],
+    '!=': ['$ne', 'mixed'],
     '>': ['$gt', 'number'],
     '<': ['$lt', 'number'],
     '>=': ['$gte', 'number'],
@@ -70,7 +13,7 @@ var operatorConfig = {
     'in': ['$in', 'array'],
     'notin': ['$nin', 'array'],
     'regExp': ['$regex', 'string'],
-    'exists': ['$exists', 'mixed', 'boolean'] // op
+    'exists': ['$exists', 'mixed', 'boolean']
 };
 
 // TODO use bind for dom interaction/manipulation
@@ -117,10 +60,6 @@ function initDom () {
 }
 
 function init (config) {
-    
-    // ONLY FOR DEV
-    _SELF = this;
-    config = tmpConfig;
     
     var self = this;
     self.config = config;
