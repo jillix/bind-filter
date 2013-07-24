@@ -168,7 +168,7 @@ function getTypes (types, reset, callback) {
         if (reset) {
             self.types = resultTypes;
         }
-        callbacK(null);
+        callback(null);
     }
 }
 
