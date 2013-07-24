@@ -1,5 +1,4 @@
 M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, exports) {
-
 var currentFilters = {};
 
 function queryBuilder (filters) {
@@ -48,7 +47,8 @@ function queryBuilder (filters) {
     
     return {
         t: self.type,
-        q: query
+        q: query,
+        o: {limit: 20}
     };
 }
 

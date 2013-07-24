@@ -77,14 +77,29 @@ function value (field, operator, value) {
         input = array;
         
     // handle number and text input
+    } else if (fieldType === 'number') {
+        input = elm('input', {name: 'value', type: 'number', value: value || '', step: 'any'});
     } else {
-        fieldType = fieldType === 'number' ? 'number' : 'text';
-        input = elm('input', {name: 'value', type: fieldType, value: value || ''});
+        input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
     
     self.domRefs.inputs.value = input;
     self.domRefs.valueField.innerHTML = '';
     self.domRefs.valueField.appendChild(input);
+}
+
+function convert (values) {
+    var self = this;
+    var schema = self.types[self.type];
+    
+    // check number
+    if (schema[values.field].type === 'number') {
+        values.value = values.value.indexOf('.') > -1 ? parseFloat(values.value) : parseInt(values.value, 10);
+    } else {
+        values.value = values.value.toString();
+    }
+    
+    return values;
 }
 
 function validate (values) {
@@ -96,21 +111,12 @@ function validate (values) {
         return false;
     }
     
-    // check strings
-    if (schema[values.field].type === 'string' && typeof values.value !== 'string') {
-        return false;
-    }
-    
-    // check number
-    if (schema[values.field].type === 'number' && typeof values.value !== 'number') {
-        return false;
-    }
-    
     return true;
 }
 
 exports.value = value;
 exports.fields = fields;
+exports.convert = convert;
 exports.validate = validate;
 
 return module; });

@@ -24,7 +24,13 @@ function setFilters (filters, reset) {
     }
     
     for (var i = 0, l = filters.length; i < l; ++i) {
+        
+        // validate field
         if (inputs.validate.call(self, filters[i])) {
+            
+            // convert value from value field
+            filters[i] = inputs.convert.call(self, filters[i]);
+            
             var hash = filters[i].hash || uid(4);
             self.filters[hash] = self.filters[hash] || {};
             
@@ -242,7 +248,7 @@ function changeType (type, callback) {
 }
 
 function handleFindResult (err, data) {
-    //console.log(err || data);
+    console.log(err || data.length + " items found.");
 }
 
 function init () {
