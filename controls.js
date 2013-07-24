@@ -172,7 +172,7 @@ function getTypes (types, reset, callback) {
     }
 }
 
-function setTypes (types) {
+function setTypes (types, callback) {
     var self = this;
     
     if (types instanceof Array) {
@@ -188,11 +188,15 @@ function setTypes (types) {
                 self.domRefs.typeSelector.innerHTML = '';
                 self.domRefs.typeSelector.appendChild(df);
             }
+            
+            if (callback) {
+                callback();
+            }
         });
     }
 }
 
-function changeType (type) {
+function changeType (type, callback) {
     var self = this;
     
     if (typeof type !== 'string' || !type) {
@@ -229,6 +233,10 @@ function changeType (type) {
         // select type
         if (self.domRefs.typeSelector) {
             self.domRefs.typeSelector.value = type;
+        }
+        
+        if (callback) {
+            callback();
         }
     });
 }
@@ -281,12 +289,16 @@ function init () {
     });
     
     // init types
+    // TODO this is a hack until callback buffering is implemented
     if (self.config.setTypes) {
-        self.emit('setTypes', self.config.setTypes);
-    }
-    
+        self.emit('setTypes', self.config.setTypes, function () {
+            // init type
+            if (self.config.type) {
+                self.emit('setType', self.config.type);
+            }
+        });
     // init type
-    if (self.config.type) {
+    } else if (self.config.type) {
         self.emit('setType', self.config.type);
     }
 }
