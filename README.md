@@ -78,6 +78,14 @@ setFilters: [
 setTypes: ['typeA', 'template', 'typeB'],
 // set type
 type: 'template',
+
+// listen to external events
+listen: {
+    /*
+        see here how to config:
+        https://github.com/jillix/events
+    */
+}
 ```
 
 ####Event interface
