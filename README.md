@@ -91,7 +91,7 @@ listen: {
 ####Event interface
 #####result
 ```js
-self.on('result', function (err, data) {});
+self.emit('result', function (err, data) {});
 ```
 
 #####setFilters
@@ -108,12 +108,12 @@ self.on('setFilters', [{
 
 #####setType
 ```js
-self.on('setType', 'typeName', function () {});
+self.emit('setType', 'typeName', function () {});
 ```
 
 #####setTypes
 ```js
-self.on('setTypes', ['typeName'], function () {});
+self.emit('setTypes', ['typeName'], function () {});
 ```
 
 #####setOptions
@@ -122,5 +122,5 @@ self.on('setTypes', ['typeName'], function () {});
 if true is set as second parameter, the options are set
 to the first parameter, otherwise the options are merged
 */
-self.on('setOptions', {limit: 20, fields: {}, ...}, true);
+self.emit('setOptions', {limit: 20, fields: {}, ...}, true);
 ```
