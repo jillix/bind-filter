@@ -271,7 +271,7 @@ function setOptions (options, reset) {
 }
 
 function handleFindResult (err, data) {
-    console.log(err || data.length + " items found.");
+    //console.log(err || data.length + " items found.");
 }
 
 function init () {
