@@ -48,7 +48,7 @@ function queryBuilder (filters) {
     return {
         t: self.type,
         q: query,
-        o: {limit: 20}
+        o: self.options
     };
 }
 

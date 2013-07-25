@@ -252,6 +252,24 @@ function changeType (type, callback) {
     });
 }
 
+function setOptions (options, reset) {
+    var self = this;
+    
+    if (typeof options !== 'object') {
+        return;
+    }
+    
+    // reset options
+    if (reset) {
+        self.options = options;
+    // merge options
+    } else {
+        for (var option in options) {
+            self.options[option] = value
+        }
+    }
+}
+
 function handleFindResult (err, data) {
     console.log(err || data.length + " items found.");
 }
@@ -272,6 +290,7 @@ function init () {
     self.on('fieldChange', changeField);
     self.on('setType', changeType);
     self.on('setTypes', setTypes);
+    self.on('setOptions', setOptions);
     
     // add events to controls
     for (var handler in self.domRefs.controls) {

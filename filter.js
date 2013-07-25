@@ -16,6 +16,9 @@ var operatorConfig = {
     'regExp': ['$regex', 'string'],
     'exists': ['$exists', 'mixed', 'boolean']
 };
+var defaultOptions = {
+    limit: 33
+};
 
 // TODO use bind for dom interaction/manipulation
 function get(s,c){
@@ -66,6 +69,7 @@ function init (config) {
     self.config = config;
     self.filters = {};
     self.types = typeCache;
+    self.options = defaultOptions;
     self.config.operators = operatorConfig;
     
     // listen to external events
