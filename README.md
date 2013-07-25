@@ -79,3 +79,40 @@ setTypes: ['typeA', 'template', 'typeB'],
 // set type
 type: 'template',
 ```
+
+####Event interface
+#####result
+```js
+self.on('result', function (err, data) {});
+```
+
+#####setFilters
+```js
+self.on('setFilters', [{
+    field: 'fieldName',
+    operator: '=',
+    value: 23,
+    disabled: false,
+    hidden: false,
+    fixed: false
+}]);
+```
+
+#####setType
+```js
+self.on('setType', 'typeName', function () {});
+```
+
+#####setTypes
+```js
+self.on('setTypes', ['typeName'], function () {});
+```
+
+#####setOptions
+```js
+/*
+if true is set as second parameter, the options are set
+to the first parameter, otherwise the options are merged
+*/
+self.on('setOptions', {limit: 20, fields: {}, ...}, true);
+```
