@@ -277,9 +277,7 @@ function handleFindResult (err, data) {
 function init () {
     var self = this;
     
-    // listen
-    self.on('result', handleFindResult);
-    self.on('setFilters', setFilters);
+    // listen to internal events
     self.on('saveFilter', save);
     self.on('createFilter', edit);
     self.on('editFilter', edit);
@@ -288,6 +286,10 @@ function init () {
     self.on('removeFilter', remove);
     self.on('cancelFilter', cancel);
     self.on('fieldChange', changeField);
+    
+    // listen to interface events
+    self.on('result', handleFindResult);
+    self.on('setFilters', setFilters);
     self.on('setType', changeType);
     self.on('setTypes', setTypes);
     self.on('setOptions', setOptions);
