@@ -1,4 +1,5 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
+var Events = require('github/jillix/events');
 var controls = require('./controls').init;
 var operators = require('./operators');
 var typeCache = {};
@@ -66,6 +67,9 @@ function init (config) {
     self.filters = {};
     self.types = typeCache;
     self.config.operators = operatorConfig;
+    
+    // listen to external events
+    Events.call(self, config);
     
     if (!config.crud) {
         return console.error('No crud miid defined.');

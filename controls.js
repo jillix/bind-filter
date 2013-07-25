@@ -205,6 +205,11 @@ function setTypes (types, callback) {
 function changeType (type, callback) {
     var self = this;
     
+    // TODO this is a hack until bind know how select keys in parameters
+    if (typeof type === 'object') {
+        type = type._id;
+    }
+    
     if (typeof type !== 'string' || !type) {
         return;
     }
