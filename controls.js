@@ -118,7 +118,9 @@ function changeField (field, operator, value) {
     
     if (!field) {
         for (field in self.types[self.type]) {
-            break;
+            if (field.indexOf('_') !== 0) {
+                break;
+            }
         }
     }
     

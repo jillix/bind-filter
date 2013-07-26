@@ -8,9 +8,11 @@ function fields () {
     
     var df = document.createDocumentFragment();
     for (var field in fields) {
-        var option = elm('option', {value: field});
-        option.innerHTML = field;
-        df.appendChild(option);
+        if (field.indexOf('_') !== 0) {
+            var option = elm('option', {value: field});
+            option.innerHTML = field;
+            df.appendChild(option);
+        }
     }
     
     self.domRefs.inputs.field.innerHTML = '';
