@@ -1,11 +1,11 @@
 M.wrap('github/jillix/bind-filter/dev/inputs.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
-    
+
 function fields () {
     var self = this;
     var fields = self.types[self.type];
-    
+
     var df = document.createDocumentFragment();
     for (var field in fields) {
         if (field.indexOf('_') !== 0) {
@@ -14,14 +14,16 @@ function fields () {
             df.appendChild(option);
         }
     }
-    
-    self.domRefs.inputs.field.innerHTML = '';
-    self.domRefs.inputs.field.appendChild(df);
+
+    if (self.domRefs.inputs.field) {
+        self.domRefs.inputs.field.innerHTML = '';
+        self.domRefs.inputs.field.appendChild(df);
+    }
 }
 
 function checkOperator (fieldType, operator) {
     var self = this;
-    
+
     if (self.config.operators[operator][1] === fieldType || self.config.operators[operator][1] === 'mixed') {
         return true;
     }
@@ -29,14 +31,14 @@ function checkOperator (fieldType, operator) {
 
 function value (field, operator, value) {
     var self = this;
-    
+
     if (!self.types[self.type][field] || !self.types[self.type][field].type) {
         return;
     }
-    
+
     var fieldType = self.config.operators[(operator || '=')][2] || self.types[self.type][field].type;
     var input;
-    
+
     // operators
     var df = document.createDocumentFragment();
     for (var op in self.config.operators) {
@@ -49,24 +51,26 @@ function value (field, operator, value) {
             df.appendChild(option);
         }
     }
-    
-    self.domRefs.inputs.operator.innerHTML = '';
-    self.domRefs.inputs.operator.appendChild(df);
-    
+
+    if (self.domRefs.inputs.operator) {
+        self.domRefs.inputs.operator.innerHTML = '';
+        self.domRefs.inputs.operator.appendChild(df);
+    }
+
     // handle boolean input
     if (fieldType === 'boolean') {
         var select = elm('select', {name: 'value'});
         var opt1 = elm('option', {value: 'true'});
         opt1.innerHTML = 'true';
-        
+
         var opt2 = elm('option', {value: 'false'});
         opt2.innerHTML = 'false';
-        
+
         select.appendChild(opt1);
         select.appendChild(opt2);
         select.value = value;
         input = select;
-        
+
     // handle array input
     } else if (fieldType === 'array') {
         var array = elm('input', {name: 'value', type: 'text', value: value || ''});
@@ -77,42 +81,45 @@ function value (field, operator, value) {
             }
         });*/
         input = array;
-        
+
     // handle number and text input
     } else if (fieldType === 'number') {
         input = elm('input', {name: 'value', type: 'number', value: value || '', step: 'any'});
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
-    
+
     self.domRefs.inputs.value = input;
-    self.domRefs.valueField.innerHTML = '';
-    self.domRefs.valueField.appendChild(input);
+
+    if (self.domRefs.valueField) {
+        self.domRefs.valueField.innerHTML = '';
+        self.domRefs.valueField.appendChild(input);
+    }
 }
 
 function convert (values) {
     var self = this;
     var schema = self.types[self.type];
-    
+
     // check number
     if (schema[values.field].type === 'number') {
         values.value = values.value.indexOf('.') > -1 ? parseFloat(values.value) : parseInt(values.value, 10);
     } else {
         values.value = values.value.toString();
     }
-    
+
     return values;
 }
 
 function validate (values) {
     var self = this;
     var schema = self.types[self.type];
-    
+
     // check if field and operator exists
     if (!schema[values.field] || !self.config.operators[values.operator]) {
         return false;
     }
-    
+
     return true;
 }
 

@@ -16,25 +16,31 @@ function createFilterItem (hash) {
     var value = get(self.config.item.value, item);
     var handler = get(self.config.item.handler, item);
     var rm = get(self.config.item.remove, item);
-    
+
     // enable/disable filter
     if (self.filters[hash].disabled) {
         item.setAttribute('class', 'disabled');
         checkbox.removeAttribute('checked');
     }
-    
+
     // hide filter item
     if (self.filters[hash].hidden) {
         item.style.display = 'none';
     }
-    
+
     // set content
-    field.innerHTML = self.filters[hash].field;
-    operator.innerHTML = self.filters[hash].operator;
-    value.innerHTML = self.filters[hash].value || '';
-    
+    if (field) {
+        field.innerHTML = self.filters[hash].field;
+    }
+    if (operator) {
+        operator.innerHTML = self.filters[hash].operator;
+    }
+    if (value) {
+        value.innerHTML = self.filters[hash].value || '';
+    }
+
     if (!self.filters[hash].fixed) {
-        
+
         checkbox.addEventListener('change', function (event) {
             if (checkbox.checked) {
                 self.emit('enableFilter', hash);
@@ -42,7 +48,7 @@ function createFilterItem (hash) {
                 self.emit('disableFilter', hash);
             }
         }, false);
-        
+
         // edit filter
         field.addEventListener(self.config.events.itemEdit || 'click', function () {
             self.emit('editFilter', hash);
@@ -53,7 +59,7 @@ function createFilterItem (hash) {
         value.addEventListener(self.config.events.itemEdit || 'click', function () {
             self.emit('editFilter', hash);
         }, false);
-    
+
         // remove filter
         rm.addEventListener(self.config.events.itemRemove || 'click', function () {
             self.emit('removeFilter', hash);
@@ -61,15 +67,17 @@ function createFilterItem (hash) {
     } else {
         // TODO handle attributs with bind
         item.setAttribute('class', 'fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
-        checkbox.setAttribute('disabled', true);
+        if (checkbox) {
+            checkbox.setAttribute('disabled', true);
+        }
     }
-    
+
     return item;
 }
 
 function save (hash) {
     var self = this;
-    
+
     // create filter item
     var item = createFilterItem.call(self, hash);
     if (self.filters[hash].item) {
@@ -78,20 +86,22 @@ function save (hash) {
         //self.domRefs.list.appendChild(item);
     } else {
         // add new filter
-        self.domRefs.list.appendChild(item);
+        if (self.domRefs.list) {
+            self.domRefs.list.appendChild(item);
+        }
     }
-    
+
     // update cache
     self.filters[hash].item = item;
 }
 
 function remove (hash) {
     var self = this;
-    
+
     if (self.filters[hash]) {
         // remove dom element
         self.domRefs.list.removeChild(self.filters[hash].item);
-        
+
         // remove from cache
         delete self.filters[hash];
     }

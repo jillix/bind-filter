@@ -20,7 +20,9 @@ function setFilters (filters, reset) {
     // reset filters if reset is true
     if (reset) {
         self.filters = {};
-        self.domRefs.list.innerHTML = '';
+        if (self.domRefs.list) {
+            self.domRefs.list.innerHTML = '';
+        }
     }
 
     for (var i = 0, l = filters.length; i < l; ++i) {
@@ -125,7 +127,9 @@ function changeField (field, operator, value) {
     }
 
     // select field if it exists in the schema
-    self.domRefs.inputs.field.value = field;
+    if (self.domRefs.inputs.field) {
+        self.domRefs.inputs.field.value = field;
+    }
 
     // set operators which are compatible with the field type
     // and create value field depending on schema and operator
