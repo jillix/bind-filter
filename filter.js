@@ -4,17 +4,17 @@ var controls = require('./controls').init;
 var operators = require('./operators');
 var typeCache = {};
 var operatorConfig = {
-    '=': ['', 'mixed'],
-    '!=': ['$ne', 'mixed'],
-    '>': ['$gt', 'number'],
-    '<': ['$lt', 'number'],
-    '>=': ['$gte', 'number'],
-    '<=': ['$lte', 'number'],
-    'all': ['$all', 'array'],
-    'in': ['$in', 'array'],
-    'notin': ['$nin', 'array'],
-    'regExp': ['$regex', 'string'],
-    'exists': ['$exists', 'mixed', 'boolean']
+    '=': ['', 'mixed'], // or
+    '!=': ['$ne', 'mixed'],// or
+    '>': ['$gt', 'number'], // no
+    '<': ['$lt', 'number'], // no
+    '>=': ['$gte', 'number'], // no
+    '<=': ['$lte', 'number'], // no
+    'all': ['$all', 'array'], // or
+    'in': ['$in', 'array'], // and
+    'notin': ['$nin', 'array'], // or
+    'regExp': ['$regex', 'string'], // and
+    'exists': ['$exists', 'mixed', 'boolean'] // no
 };
 var defaultOptions = {
     limit: 33
