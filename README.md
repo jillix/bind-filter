@@ -118,7 +118,7 @@ self.on('setFilters', [{
 | `<=`     | `$lte`                   | |
 | `all`    | `$all`                   | |
 | `in`     | `$in`                    | |
-| `notin`  | `$notin`                 | |
+| `notin`  | `$nin`                   | |
 | `regExp` | `$regex`                 | |
 | `exists` | `$exists`                | |
 
