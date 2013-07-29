@@ -106,6 +106,22 @@ self.on('setFilters', [{
 }]);
 ```
 
+**Supported operators**
+
+| Operator | Mongo Equivalent         | Comments |
+| -------- |:------------------------ | -------- |
+| `=`      | `key`: `value` notation  | |
+| `!=`     | `$ne`                    | |
+| `>`      | `$gt`                    | |
+| `<`      | `$lt`                    | |
+| `>=`     | `$ge`                    | |
+| `<=`     | `$le`                    | |
+| `all`    | `$all`                   | |
+| `in`     | `$in`                    | |
+| `notin`  | `$notin`                 | |
+| `regExp` | `$regex`                 | |
+| `exists` | `$exists`                | |
+
 #####setType
 ```js
 self.emit('setType', 'typeName', function () {});
