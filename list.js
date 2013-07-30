@@ -14,7 +14,7 @@ function createFilterItem (hash) {
     var field = get(self.config.item.field, item);
     var operator = get(self.config.item.operator, item);
     var value = get(self.config.item.value, item);
-    var handler = get(self.config.item.handler, item);
+    var edit = get(self.config.item.edit, item);
     var rm = get(self.config.item.remove, item);
 
     // enable/disable filter
@@ -52,20 +52,15 @@ function createFilterItem (hash) {
         }
 
         // edit filter
-        if (field) {
-            field.addEventListener(self.config.events.itemEdit || 'click', function () {
-                self.emit('editFilter', hash);
-            }, false);
-        }
-        if (operator) {
-            operator.addEventListener(self.config.events.itemEdit || 'click', function () {
-                self.emit('editFilter', hash);
-            }, false);
-        }
-        if (value) {
-            value.addEventListener(self.config.events.itemEdit || 'click', function () {
-                self.emit('editFilter', hash);
-            }, false);
+        if (edit) {
+            // hide edit if it's a link field
+            if (self.filters[hash].field.indexOf('_ln') > -1) {
+                edit.style.display = 'none';
+            } else {
+                edit.addEventListener(self.config.events.itemEdit || 'click', function () {
+                    self.emit('editFilter', hash);
+                }, false);
+            }
         }
 
         // remove filter
@@ -75,7 +70,7 @@ function createFilterItem (hash) {
             }, false);
         }
     } else {
-        // TODO handle attributs with bind
+        // TODO handle attributes with bind
         item.setAttribute('class', 'fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
         if (checkbox) {
             checkbox.setAttribute('disabled', true);
