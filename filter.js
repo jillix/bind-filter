@@ -1,7 +1,6 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 var Events = require('github/jillix/events');
 var controls = require('./controls').init;
-var operators = require('./operators');
 var templateCache = {};
 var operatorConfig = {
     '=': ['', 'mixed'], // or

@@ -36,7 +36,7 @@ function value (field, operator, value) {
         return;
     }
 
-    var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].template;
+    var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].type;
     var input;
     
     // operators

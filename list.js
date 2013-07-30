@@ -53,8 +53,8 @@ function createFilterItem (hash) {
 
         // edit filter
         if (edit) {
-            // hide edit if it's a link field
-            if (self.filters[hash].field.indexOf('_ln') > -1) {
+            // hide edit if it's a core field
+            if (self.filters[hash].field.indexOf('_') > -1) {
                 edit.style.display = 'none';
             } else {
                 edit.addEventListener(self.config.events.itemEdit || 'click', function () {
@@ -102,7 +102,7 @@ function save (hash) {
 
 function remove (hash) {
     var self = this;
-
+    
     if (self.filters[hash]) {
         // remove dom element
         self.domRefs.list.removeChild(self.filters[hash].item);
