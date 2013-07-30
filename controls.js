@@ -279,7 +279,12 @@ function setOptions (options, reset) {
 }
 
 function getFilters (callback) {
-    callback(self.filters);
+    var self = this;
+    var filters = [];
+    for (var id in self.filters) {
+        filters.push(self.filters[id]);
+    }
+    callback(filters);
 }
 
 function handleFindResult (err, data) {
