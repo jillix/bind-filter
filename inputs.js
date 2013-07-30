@@ -21,10 +21,10 @@ function fields () {
     }
 }
 
-function checkOperator (fieldType, operator) {
+function checkOperator (fieldTemplate, operator) {
     var self = this;
 
-    if (self.config.operators[operator][1] === fieldType || self.config.operators[operator][1] === 'mixed') {
+    if (self.config.operators[operator][1] === fieldTemplate || self.config.operators[operator][1] === 'mixed') {
         return true;
     }
 }
@@ -36,13 +36,13 @@ function value (field, operator, value) {
         return;
     }
 
-    var fieldType = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].template;
+    var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].template;
     var input;
 
     // operators
     var df = document.createDocumentFragment();
     for (var op in self.config.operators) {
-        if (checkOperator.call(self, fieldType, op)) {
+        if (checkOperator.call(self, fieldTemplate, op)) {
             var option = elm('option', {value: op});
             option.innerHTML = op;
             if (op === operator) {
@@ -58,7 +58,7 @@ function value (field, operator, value) {
     }
 
     // handle boolean input
-    if (fieldType === 'boolean') {
+    if (fieldTemplate === 'boolean') {
         var select = elm('select', {name: 'value'});
         var opt1 = elm('option', {value: 'true'});
         opt1.innerHTML = 'true';
@@ -72,7 +72,7 @@ function value (field, operator, value) {
         input = select;
 
     // handle array input
-    } else if (fieldType === 'array') {
+    } else if (fieldTemplate === 'array') {
         var array = elm('input', {name: 'value', type: 'text', value: value || ''});
         // TODO implement tag input plugin here...
         /*array.addEventListener('keyup', function (event) {
@@ -83,7 +83,7 @@ function value (field, operator, value) {
         input = array;
 
     // handle number and text input
-    } else if (fieldType === 'number') {
+    } else if (fieldTemplate === 'number') {
         input = elm('input', {name: 'value', type: 'number', value: value || '', step: 'any'});
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});

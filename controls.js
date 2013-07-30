@@ -136,7 +136,7 @@ function changeField (field, operator, value) {
     inputs.value.call(self, field, operator, value);
 }
 
-function createTypeSelectOption (template) {
+function createTemplateSelectOption (template) {
     var option = elm('option', {value: template});
     option.innerHTML = template;
     return option;
@@ -144,15 +144,15 @@ function createTypeSelectOption (template) {
 
 // TODO callback buffering
 // TODO implement loaders and prevent redundant requests
-function getTypes (templates, reset, callback) {
+function getTemplates (templates, reset, callback) {
     var self = this;
 
     // get templates to fetch from server
-    var resultTypes = {};
+    var resultTemplates = {};
     var templatesToFetch = [];
     for (var i = 0, l = templates.length; i < l; ++i) {
         if (self.templates[templates[i]]) {
-            resultTypes[templates[i]] = self.templates[templates[i]];
+            resultTemplates[templates[i]] = self.templates[templates[i]];
         } else {
             templatesToFetch.push(templates[i]);
         }
@@ -166,35 +166,35 @@ function getTypes (templates, reset, callback) {
 
             // merge fetched templates into result templates
             for (var template in templates) {
-               self.templates[template] = resultTypes[template] = templates[template];
+               self.templates[template] = resultTemplates[template] = templates[template];
             }
 
             // reset cache
             if (reset) {
-                self.templates = resultTypes;
+                self.templates = resultTemplates;
             }
             callback(null);
         });
     } else {
         // reset cache
         if (reset) {
-            self.templates = resultTypes;
+            self.templates = resultTemplates;
         }
         callback(null);
     }
 }
 
-function setTypes (templates, callback) {
+function setTemplates (templates, callback) {
     var self = this;
 
     if (templates instanceof Array) {
-        getTypes.call(self, templates, true, function (err) {
+        getTemplates.call(self, templates, true, function (err) {
             if (self.domRefs.templateSelector) {
 
                 var df = document.createDocumentFragment();
 
                 for (var template in self.templates) {
-                    df.appendChild(createTypeSelectOption(template));
+                    df.appendChild(createTemplateSelectOption(template));
                 }
 
                 self.domRefs.templateSelector.innerHTML = '';
@@ -208,7 +208,7 @@ function setTypes (templates, callback) {
     }
 }
 
-function changeType (template, callback) {
+function changeTemplate (template, callback) {
     var self = this;
 
     // TODO this is a hack until bind know how select keys in parameters
@@ -221,10 +221,10 @@ function changeType (template, callback) {
     }
 
     // get template from server or cache
-    getTypes.call(self, [template], false, function (err) {
+    getTemplates.call(self, [template], false, function (err) {
 
         if (err || !self.templates[template]) {
-            return console.error('Type error: ' + template);
+            return console.error('Template error: ' + template);
         }
 
         self.template = template;
@@ -243,7 +243,7 @@ function changeType (template, callback) {
             self.templates[template] = template;
 
             if (self.domRefs.templateSelector) {
-                self.domRefs.templateSelector.appendChild(createTypeSelectOption(template));
+                self.domRefs.templateSelector.appendChild(createTemplateSelectOption(template));
             }
         }
 
@@ -302,8 +302,8 @@ function init () {
     // listen to interface events
     self.on('result', handleFindResult);
     self.on('setFilters', setFilters);
-    self.on('setType', changeType);
-    self.on('setTypes', setTypes);
+    self.on('setTemplate', changeTemplate);
+    self.on('setTemplates', setTemplates);
     self.on('setOptions', setOptions);
     self.on('getFilters', getFilters);
 
@@ -323,7 +323,7 @@ function init () {
     // template change
     if (self.domRefs.templateSelector) {
         self.domRefs.templateSelector.addEventListener('change', function () {
-            self.emit('setType', self.domRefs.templateSelector.value);
+            self.emit('setTemplate', self.domRefs.templateSelector.value);
         });
     }
 
@@ -343,16 +343,16 @@ function init () {
 
     // init templates
     // TODO this is a hack until callback buffering is implemented
-    if (self.config.setTypes) {
-        self.emit('setTypes', self.config.setTypes, function () {
+    if (self.config.setTemplates) {
+        self.emit('setTemplates', self.config.setTemplates, function () {
             // init template
             if (self.config.template) {
-                self.emit('setType', self.config.template);
+                self.emit('setTemplate', self.config.template);
             }
         });
     // init template
     } else if (self.config.template) {
-        self.emit('setType', self.config.template);
+        self.emit('setTemplate', self.config.template);
     }
 }
 

@@ -26,8 +26,8 @@ listItem: 'li',
 valueLabel: '.valueLabel',
 // the value field container (can be 0 or more values, depending on the operator)
 valueField: '.valueField',
-// the type selector input element
-typeSelector: '.types',
+// the template selector input element
+templateSelector: '.templates',
 // DOM references to the field and operator inputs
 inputs: {
     field: 'select[name=field]',
@@ -74,10 +74,10 @@ setFilters: [
         value: 'herbert'
     }
 ],
-// define type to select
-setTypes: ['typeA', 'template', 'typeB'],
-// set type
-type: 'template',
+// define templates to select
+setTemplates: ['typeA', 'template', 'typeB'],
+// set template
+template: 'template',
 
 // listen to external events
 listen: {
@@ -122,14 +122,14 @@ self.on('setFilters', [{
 | `regExp` | `$regex`                 | |
 | `exists` | `$exists`                | |
 
-#####setType
+#####setTemplate
 ```js
-self.emit('setType', 'typeName', function () {});
+self.emit('setTemplate', 'templateName', function () {});
 ```
 
-#####setTypes
+#####setTemplate
 ```js
-self.emit('setTypes', ['typeName'], function () {});
+self.emit('setTemplate', ['templateName'], function () {});
 ```
 
 #####setOptions
