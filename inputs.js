@@ -32,7 +32,7 @@ function checkOperator (fieldTemplate, operator) {
 function value (field, operator, value) {
     var self = this;
 
-    if (!self.templates[self.template][field] || !self.templates[self.template][field].template) {
+    if (!self.templates[self.template][field] || !self.templates[self.template][field].type) {
         return;
     }
 
@@ -51,7 +51,7 @@ function value (field, operator, value) {
             df.appendChild(option);
         }
     }
-
+    
     if (self.domRefs.inputs.operator) {
         self.domRefs.inputs.operator.innerHTML = '';
         self.domRefs.inputs.operator.appendChild(df);
@@ -88,7 +88,7 @@ function value (field, operator, value) {
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
-
+    
     self.domRefs.inputs.value = input;
 
     if (self.domRefs.valueField) {

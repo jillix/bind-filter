@@ -62,7 +62,7 @@ function initDom () {
     for (var name in self.config.controls) {
         self.domRefs.controls[name] = get(self.config.controls[name], self.dom);
     }
-
+    
     controls.call(self);
 }
 
@@ -74,7 +74,7 @@ function init (config) {
     self.templates = templateCache;
     self.options = defaultOptions;
     self.config.operators = operatorConfig;
-
+    
     // listen to external events
     Events.call(self, config);
 
