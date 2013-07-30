@@ -32,13 +32,13 @@ function checkOperator (fieldTemplate, operator) {
 function value (field, operator, value) {
     var self = this;
 
-    if (!self.templates[self.template][field] || !self.templates[self.template][field].type) {
+    if (!self.template || !self.templates[self.template][field] || !self.templates[self.template][field].type) {
         return;
     }
 
     var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].template;
     var input;
-
+    
     // operators
     var df = document.createDocumentFragment();
     for (var op in self.config.operators) {
@@ -104,7 +104,9 @@ function convert (values) {
     // check number
     if (schema[values.field].type === 'number') {
         values.value = values.value.indexOf('.') > -1 ? parseFloat(values.value) : parseInt(values.value, 10);
-    } else {
+    } else if (values.value === 'false' || values.value === 'true') {
+        values.value = new Boolean(values.value).valueOf();
+    else {
         values.value = values.value.toString();
     }
 
