@@ -101,13 +101,12 @@ function convert (values) {
     var self = this;
     var schema = self.templates[self.template];
 
-    // check number
-    if (schema[values.field].type === 'number') {
-        values.value = values.value.indexOf('.') > -1 ? parseFloat(values.value) : parseInt(values.value, 10);
-    } else if (values.value === 'false') {
+    if (values.value === 'false') {
         values.value = false;
     } else if (values.value === 'true') {
         values.value = true;
+    } else if (schema[values.field].type === 'number') {
+        values.value = values.value.indexOf('.') > -1 ? parseFloat(values.value) : parseInt(values.value, 10);
     } else {
         values.value = values.value.toString();
     }
