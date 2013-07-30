@@ -4,7 +4,7 @@
     "name": "bind-filter",
     "dependencies": [
         "/filter.js",
-        "/controls.js",
+        "/ui.js",
         "/inputs.js",
         "/list.js",
         "/find.js",
