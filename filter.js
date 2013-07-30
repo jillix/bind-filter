@@ -2,6 +2,7 @@ M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exp
 var Events = require('github/jillix/events');
 var find = require('./find');
 var ui = require('./ui');
+var inputs = require('./inputs');
 var templateCache = {};
 var defaultOptions = {
     limit: 33
@@ -30,14 +31,13 @@ function uid (len, uid) {
 
 function setFilters (filters, reset) {
     var self = this;
-
+    
     // reset filters if reset is true
     if (reset) {
         self.filters = {};
-        if (self.domRefs.list) {
-            self.domRefs.list.innerHTML = '';
-        }
     }
+    
+    // create and buffer filters
     for (var i = 0, l = filters.length; i < l; ++i) {
 
         // validate field
@@ -53,13 +53,13 @@ function setFilters (filters, reset) {
             for (var key in filters[i]) {
                 self.filters[hash][key] = filters[i][key];
             }
-
-            list.save.call(self, hash);
         }
     }
     
-    self.domRefs.filter.style.display = 'none';
-
+    // emit filters cahed event
+    self.emit('filtersCached', self.filters, reset);
+    
+    // find data in db
     find.call(self);
 }
 
@@ -110,21 +110,17 @@ function setTemplates (templates, callback) {
 
     if (templates instanceof Array) {
         getTemplates.call(self, templates, true, function (err) {
-            if (self.domRefs.templateSelector) {
-
-                var df = document.createDocumentFragment();
-
-                for (var template in self.templates) {
-                    df.appendChild(createTemplateSelectOption(template));
-                }
-
-                self.domRefs.templateSelector.innerHTML = '';
-                self.domRefs.templateSelector.appendChild(df);
+            
+            if (err || !self.templates[templates[0]]) {
+                return console.error('Template error: ' + templates[0].id);
             }
-
+            
             if (callback) {
                 callback();
             }
+            
+            // emit the templates
+            self.emit('templates', self.templates);
         });
     }
 }
@@ -142,41 +138,15 @@ function changeTemplate (template, callback) {
     }
 
     // get template from server or cache
-    getTemplates.call(self, [template], false, function (err) {
-
-        if (err || !self.templates[template]) {
-            return console.error('Template error: ' + template);
-        }
-
+    getTemplates.call(self, [template], false, function () {
+        
+        // set current template
         self.template = template;
-
-        // set fields
-        inputs.fields.call(self);
-
-        // select a field
-        changeField.call(self);
-
+        
         // reset predefined filters
         setFilters.call(self, self.config.setFilters || [], true);
-
-        // add template to templateSelector
-        if (!self.templates[template]) {
-            self.templates[template] = template;
-
-            if (self.domRefs.templateSelector) {
-                self.domRefs.templateSelector.appendChild(createTemplateSelectOption(template));
-            }
-        }
-
-        // select template
-        if (self.domRefs.templateSelector) {
-            self.domRefs.templateSelector.value = template;
-        }
-
-        if (callback) {
-            callback();
-        }
         
+        // emit the template
         self.emit('template', self.templates[template]);
     });
 }
@@ -237,6 +207,9 @@ function init (config) {
     // wait for the crud module
     self.onready(config.crud, function () {
         
+        // setup interface
+        initInterface.call(self);
+        
         // init templates
         // TODO this is a hack until callback buffering is implemented
         if (self.config.setTemplates) {
@@ -250,9 +223,6 @@ function init (config) {
         } else if (self.config.template) {
             self.emit('setTemplate', self.config.template);
         }
-        
-        // setup interface
-        initInterface.call(self);
         
         // listen to external events
         Events.call(self, config);

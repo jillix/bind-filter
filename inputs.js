@@ -4,7 +4,7 @@ function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for
 
 function fields () {
     var self = this;
-    var fields = self.templates[self.template];
+    var fields = self.templates[self.template].schema;
 
     var df = document.createDocumentFragment();
     for (var field in fields) {
@@ -31,12 +31,12 @@ function checkOperator (fieldTemplate, operator) {
 
 function value (field, operator, value) {
     var self = this;
-
-    if (!self.template || !self.templates[self.template][field] || !self.templates[self.template][field].type) {
+    
+    if (!self.template || !self.templates[self.template].schema[field] || !self.templates[self.template].schema[field].type) {
         return;
     }
-
-    var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].type;
+    
+    var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template].schema[field].type;
     var input;
     
     // operators
@@ -99,7 +99,7 @@ function value (field, operator, value) {
 
 function convert (values) {
     var self = this;
-    var schema = self.templates[self.template];
+    var schema = self.templates[self.template].schema;
 
     if (values.value === 'false') {
         values.value = false;
@@ -114,8 +114,8 @@ function convert (values) {
 
 function validate (values) {
     var self = this;
-    var schema = self.templates[self.template];
-
+    var schema = self.templates[self.template].schema;
+    
     // check if field and operator exists
     if (!schema[values.field] || !self.config.operators[values.operator]) {
         return false;

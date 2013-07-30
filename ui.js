@@ -1,3 +1,5 @@
+M.wrap('github/jillix/bind-filter/dev/ui.js', function (require, module, exports) {
+var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
 
@@ -19,7 +21,7 @@ function save () {
         hash: self.current
     };
     
-    setFilters.call(self, [filter]);
+    self.emit('setFilters', [filter]);
 }
 
 function edit (hash) {
@@ -78,7 +80,7 @@ function changeField (field, operator, value) {
     var self = this;
 
     if (!field) {
-        for (field in self.templates[self.template]) {
+        for (field in self.templates[self.template].schema) {
             if (field.indexOf('_') !== 0) {
                 break;
             }
@@ -96,9 +98,65 @@ function changeField (field, operator, value) {
 }
 
 function createTemplateSelectOption (template) {
-    var option = elm('option', {value: template});
-    option.innerHTML = template;
+    var option = elm('option', {value: template.id});
+    option.innerHTML = template.name;
     return option;
+}
+
+function setFilters (filters, reset) {
+    var self = this;
+    
+    // reset filters if reset is true
+    if (reset && self.domRefs.list) {
+        self.domRefs.list.innerHTML = '';
+    }
+    
+    // filters to list
+    for (var hash in filters) {
+        // validate field
+        if (inputs.validate.call(self, filters[hash])) {
+            list.save.call(self, hash);
+        }
+    }
+    
+    // hide filter form
+    self.domRefs.filter.style.display = 'none';
+}
+
+function setTemplateOptions () {
+    var self = this;
+    
+    if (self.domRefs.templateSelector) {
+
+        var df = document.createDocumentFragment();
+        
+        for (var template in self.templates) {
+            df.appendChild(createTemplateSelectOption(self.templates[template]));
+        }
+
+        self.domRefs.templateSelector.innerHTML = '';
+        self.domRefs.templateSelector.appendChild(df);
+    }
+}
+
+function setTemplateSelection (template) {
+    var self = this;
+    
+    // set fields
+    inputs.fields.call(self);
+    
+    // select a field
+    changeField.call(self);
+    
+    // add template to selection, it it not exists
+    if (!self.templates[template.id] && self.domRefs.templateSelector) {
+        self.domRefs.templateSelector.appendChild(createTemplateSelectOption(template));
+    }
+    
+    // select template
+    if (self.domRefs.templateSelector) {
+        self.domRefs.templateSelector.value = template.id;
+    }
 }
 
 function handleFindResult (err, data) {
@@ -114,30 +172,30 @@ function ui () {
 
     // get dom refs
     self.domRefs = {};
-    self.domRefs.filter = get(self.config.filter, self.dom);
-    self.domRefs.valueLabel = get(self.config.valueLabel, self.dom);
-    self.domRefs.valueField = get(self.config.valueField, self.dom);
+    self.domRefs.filter = get(self.config.ui.filter, self.dom);
+    self.domRefs.valueLabel = get(self.config.ui.valueLabel, self.dom);
+    self.domRefs.valueField = get(self.config.ui.valueField, self.dom);
 
-    if (self.config.templateSelector) {
-        self.domRefs.templateSelector= get(self.config.templateSelector, self.dom);
+    if (self.config.ui.templateSelector) {
+        self.domRefs.templateSelector= get(self.config.ui.templateSelector, self.dom);
     }
 
     // list item
-    self.domRefs.list = get(self.config.list, self.dom);
-    self.domRefs.listItem = get(self.config.listItem, self.domRefs.list);
+    self.domRefs.list = get(self.config.ui.list, self.dom);
+    self.domRefs.listItem = get(self.config.ui.listItem, self.domRefs.list);
 
     if (self.domRefs.list) {
         self.domRefs.list.innerHTML = '';
     }
 
     self.domRefs.inputs = {};
-    for (var name in self.config.inputs) {
-        self.domRefs.inputs[name] = get(self.config.inputs[name], self.dom);
+    for (var name in self.config.ui.inputs) {
+        self.domRefs.inputs[name] = get(self.config.ui.inputs[name], self.dom);
     }
 
     self.domRefs.controls = {};
-    for (var name in self.config.controls) {
-        self.domRefs.controls[name] = get(self.config.controls[name], self.dom);
+    for (var name in self.config.ui.controls) {
+        self.domRefs.controls[name] = get(self.config.ui.controls[name], self.dom);
     }
     
     // listen to ui events
@@ -150,13 +208,16 @@ function ui () {
     self.on('cancelFilter', cancel);
     self.on('fieldChange', changeField);
     self.on('result', handleFindResult);
+    self.on('templates', setTemplateOptions);
+    self.on('template', setTemplateSelection);
+    self.on('filtersCached', setFilters);
     
     // add events to controls
     for (var handler in self.domRefs.controls) {
 
         var control = self.domRefs.controls[handler];
         if (control) {
-            control.addEventListener(self.config.events[handler] || 'click', (function (handler) {
+            control.addEventListener(self.config.ui.events[handler] || 'click', (function (handler) {
                 return function () {
                     self.emit(handler + 'Filter');
                 }
@@ -187,3 +248,5 @@ function ui () {
 }
 
 module.exports = ui;
+
+return module; });

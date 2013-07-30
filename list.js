@@ -10,12 +10,12 @@ function get(s,c){
 function createFilterItem (hash) {
     var self = this;
     var item = self.domRefs.listItem.cloneNode(true);
-    var checkbox = get(self.config.item.onoff, item);
-    var field = get(self.config.item.field, item);
-    var operator = get(self.config.item.operator, item);
-    var value = get(self.config.item.value, item);
-    var edit = get(self.config.item.edit, item);
-    var rm = get(self.config.item.remove, item);
+    var checkbox = get(self.config.ui.item.onoff, item);
+    var field = get(self.config.ui.item.field, item);
+    var operator = get(self.config.ui.item.operator, item);
+    var value = get(self.config.ui.item.value, item);
+    var edit = get(self.config.ui.item.edit, item);
+    var rm = get(self.config.ui.item.remove, item);
 
     // enable/disable filter
     if (self.filters[hash].disabled) {
@@ -57,7 +57,7 @@ function createFilterItem (hash) {
             if (self.filters[hash].field.indexOf('_') > -1) {
                 edit.style.display = 'none';
             } else {
-                edit.addEventListener(self.config.events.itemEdit || 'click', function () {
+                edit.addEventListener(self.config.ui.events.itemEdit || 'click', function () {
                     self.emit('editFilter', hash);
                 }, false);
             }
@@ -65,7 +65,7 @@ function createFilterItem (hash) {
 
         // remove filter
         if (rm) {
-            rm.addEventListener(self.config.events.itemRemove || 'click', function () {
+            rm.addEventListener(self.config.ui.events.itemRemove || 'click', function () {
                 self.emit('removeFilter', hash);
             }, false);
         }
@@ -82,7 +82,7 @@ function createFilterItem (hash) {
 
 function save (hash) {
     var self = this;
-
+    
     // create filter item
     var item = createFilterItem.call(self, hash);
     if (self.filters[hash].item) {

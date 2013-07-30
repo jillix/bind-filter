@@ -43,7 +43,7 @@ function queryBuilder (filters) {
             } else {
                 query[values.field] = expression[values.field];
             }
-            console.log(query);
+            
             fieldsInQuery[values.field] = 1;
         }
     }
