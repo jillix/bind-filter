@@ -108,7 +108,7 @@ function convert (values) {
         values.value = false;
     } else if (values.value === 'true') {
         values.value = true;
-    else {
+    } else {
         values.value = values.value.toString();
     }
 
