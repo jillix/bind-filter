@@ -41,29 +41,39 @@ function createFilterItem (hash) {
 
     if (!self.filters[hash].fixed) {
 
-        checkbox.addEventListener('change', function (event) {
-            if (checkbox.checked) {
-                self.emit('enableFilter', hash);
-            } else {
-                self.emit('disableFilter', hash);
-            }
-        }, false);
+        if (checkbox) {
+            checkbox.addEventListener('change', function (event) {
+                if (checkbox.checked) {
+                    self.emit('enableFilter', hash);
+                } else {
+                    self.emit('disableFilter', hash);
+                }
+            }, false);
+        }
 
         // edit filter
-        field.addEventListener(self.config.events.itemEdit || 'click', function () {
-            self.emit('editFilter', hash);
-        }, false);
-        operator.addEventListener(self.config.events.itemEdit || 'click', function () {
-            self.emit('editFilter', hash);
-        }, false);
-        value.addEventListener(self.config.events.itemEdit || 'click', function () {
-            self.emit('editFilter', hash);
-        }, false);
+        if (field) {
+            field.addEventListener(self.config.events.itemEdit || 'click', function () {
+                self.emit('editFilter', hash);
+            }, false);
+        }
+        if (operator) {
+            operator.addEventListener(self.config.events.itemEdit || 'click', function () {
+                self.emit('editFilter', hash);
+            }, false);
+        }
+        if (value) {
+            value.addEventListener(self.config.events.itemEdit || 'click', function () {
+                self.emit('editFilter', hash);
+            }, false);
+        }
 
         // remove filter
-        rm.addEventListener(self.config.events.itemRemove || 'click', function () {
-            self.emit('removeFilter', hash);
-        }, false);
+        if (rm) {
+            rm.addEventListener(self.config.events.itemRemove || 'click', function () {
+                self.emit('removeFilter', hash);
+            }, false);
+        }
     } else {
         // TODO handle attributs with bind
         item.setAttribute('class', 'fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
