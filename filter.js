@@ -2,7 +2,7 @@ M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exp
 var Events = require('github/jillix/events');
 var controls = require('./controls').init;
 var operators = require('./operators');
-var typeCache = {};
+var templateCache = {};
 var operatorConfig = {
     '=': ['', 'mixed'], // or
     '!=': ['$ne', 'mixed'],// or
@@ -41,8 +41,8 @@ function initDom () {
     self.domRefs.valueLabel = get(self.config.valueLabel, self.dom);
     self.domRefs.valueField = get(self.config.valueField, self.dom);
 
-    if (self.config.typeSelector) {
-        self.domRefs.typeSelector= get(self.config.typeSelector, self.dom);
+    if (self.config.templateSelector) {
+        self.domRefs.templateSelector= get(self.config.templateSelector, self.dom);
     }
 
     // list item
@@ -71,7 +71,7 @@ function init (config) {
     var self = this;
     self.config = config;
     self.filters = {};
-    self.types = typeCache;
+    self.templates = templateCache;
     self.options = defaultOptions;
     self.config.operators = operatorConfig;
 

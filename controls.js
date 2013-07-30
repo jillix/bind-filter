@@ -119,7 +119,7 @@ function changeField (field, operator, value) {
     var self = this;
 
     if (!field) {
-        for (field in self.types[self.type]) {
+        for (field in self.templates[self.template]) {
             if (field.indexOf('_') !== 0) {
                 break;
             }
@@ -131,74 +131,74 @@ function changeField (field, operator, value) {
         self.domRefs.inputs.field.value = field;
     }
 
-    // set operators which are compatible with the field type
+    // set operators which are compatible with the field template
     // and create value field depending on schema and operator
     inputs.value.call(self, field, operator, value);
 }
 
-function createTypeSelectOption (type) {
-    var option = elm('option', {value: type});
-    option.innerHTML = type;
+function createTypeSelectOption (template) {
+    var option = elm('option', {value: template});
+    option.innerHTML = template;
     return option;
 }
 
 // TODO callback buffering
 // TODO implement loaders and prevent redundant requests
-function getTypes (types, reset, callback) {
+function getTypes (templates, reset, callback) {
     var self = this;
 
-    // get types to fetch from server
+    // get templates to fetch from server
     var resultTypes = {};
-    var typesToFetch = [];
-    for (var i = 0, l = types.length; i < l; ++i) {
-        if (self.types[types[i]]) {
-            resultTypes[types[i]] = self.types[types[i]];
+    var templatesToFetch = [];
+    for (var i = 0, l = templates.length; i < l; ++i) {
+        if (self.templates[templates[i]]) {
+            resultTypes[templates[i]] = self.templates[templates[i]];
         } else {
-            typesToFetch.push(types[i]);
+            templatesToFetch.push(templates[i]);
         }
     }
 
-    if (typesToFetch.length > 0) {
-        self.emit('getTemplates', types, function (err, types) {
+    if (templatesToFetch.length > 0) {
+        self.emit('getTemplates', templates, function (err, templates) {
             if (err) {
                 return callback(err);
             }
 
-            // merge fetched types into result types
-            for (var type in types) {
-               self.types[type] = resultTypes[type] = types[type];
+            // merge fetched templates into result templates
+            for (var template in templates) {
+               self.templates[template] = resultTypes[template] = templates[template];
             }
 
             // reset cache
             if (reset) {
-                self.types = resultTypes;
+                self.templates = resultTypes;
             }
             callback(null);
         });
     } else {
         // reset cache
         if (reset) {
-            self.types = resultTypes;
+            self.templates = resultTypes;
         }
         callback(null);
     }
 }
 
-function setTypes (types, callback) {
+function setTypes (templates, callback) {
     var self = this;
 
-    if (types instanceof Array) {
-        getTypes.call(self, types, true, function (err) {
-            if (self.domRefs.typeSelector) {
+    if (templates instanceof Array) {
+        getTypes.call(self, templates, true, function (err) {
+            if (self.domRefs.templateSelector) {
 
                 var df = document.createDocumentFragment();
 
-                for (var type in self.types) {
-                    df.appendChild(createTypeSelectOption(type));
+                for (var template in self.templates) {
+                    df.appendChild(createTypeSelectOption(template));
                 }
 
-                self.domRefs.typeSelector.innerHTML = '';
-                self.domRefs.typeSelector.appendChild(df);
+                self.domRefs.templateSelector.innerHTML = '';
+                self.domRefs.templateSelector.appendChild(df);
             }
 
             if (callback) {
@@ -208,26 +208,26 @@ function setTypes (types, callback) {
     }
 }
 
-function changeType (type, callback) {
+function changeType (template, callback) {
     var self = this;
 
     // TODO this is a hack until bind know how select keys in parameters
-    if (typeof type === 'object') {
-        type = type._id;
+    if (typeof template === 'object') {
+        template = template._id;
     }
 
-    if (typeof type !== 'string' || !type) {
+    if (typeof template !== 'string' || !template) {
         return;
     }
 
-    // get type from server or cache
-    getTypes.call(self, [type], false, function (err) {
+    // get template from server or cache
+    getTypes.call(self, [template], false, function (err) {
 
-        if (err || !self.types[type]) {
-            return console.error('Type error: ' + type);
+        if (err || !self.templates[template]) {
+            return console.error('Type error: ' + template);
         }
 
-        self.type = type;
+        self.template = template;
 
         // set fields
         inputs.fields.call(self);
@@ -238,23 +238,25 @@ function changeType (type, callback) {
         // reset predefined filters
         setFilters.call(self, self.config.setFilters || [], true);
 
-        // add type to typeSelector
-        if (!self.types[type]) {
-            self.types[type] = type;
+        // add template to templateSelector
+        if (!self.templates[template]) {
+            self.templates[template] = template;
 
-            if (self.domRefs.typeSelector) {
-                self.domRefs.typeSelector.appendChild(createTypeSelectOption(type));
+            if (self.domRefs.templateSelector) {
+                self.domRefs.templateSelector.appendChild(createTypeSelectOption(template));
             }
         }
 
-        // select type
-        if (self.domRefs.typeSelector) {
-            self.domRefs.typeSelector.value = type;
+        // select template
+        if (self.domRefs.templateSelector) {
+            self.domRefs.templateSelector.value = template;
         }
 
         if (callback) {
             callback();
         }
+        
+        self.emit('template', self.templates[template]);
     });
 }
 
@@ -274,6 +276,10 @@ function setOptions (options, reset) {
             self.options[option] = value
         }
     }
+}
+
+function getFilters (callback) {
+    callback(self.filters);
 }
 
 function handleFindResult (err, data) {
@@ -299,6 +305,7 @@ function init () {
     self.on('setType', changeType);
     self.on('setTypes', setTypes);
     self.on('setOptions', setOptions);
+    self.on('getFilters', getFilters);
 
     // add events to controls
     for (var handler in self.domRefs.controls) {
@@ -313,10 +320,10 @@ function init () {
         }
     }
 
-    // type change
-    if (self.domRefs.typeSelector) {
-        self.domRefs.typeSelector.addEventListener('change', function () {
-            self.emit('setType', self.domRefs.typeSelector.value);
+    // template change
+    if (self.domRefs.templateSelector) {
+        self.domRefs.templateSelector.addEventListener('change', function () {
+            self.emit('setType', self.domRefs.templateSelector.value);
         });
     }
 
@@ -334,18 +341,18 @@ function init () {
         });
     }
 
-    // init types
+    // init templates
     // TODO this is a hack until callback buffering is implemented
     if (self.config.setTypes) {
         self.emit('setTypes', self.config.setTypes, function () {
-            // init type
-            if (self.config.type) {
-                self.emit('setType', self.config.type);
+            // init template
+            if (self.config.template) {
+                self.emit('setType', self.config.template);
             }
         });
-    // init type
-    } else if (self.config.type) {
-        self.emit('setType', self.config.type);
+    // init template
+    } else if (self.config.template) {
+        self.emit('setType', self.config.template);
     }
 }
 

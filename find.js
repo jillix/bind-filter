@@ -49,7 +49,7 @@ function queryBuilder (filters) {
     }
     
     return {
-        t: self.type,
+        t: self.template,
         q: query,
         o: self.options
     };
@@ -58,8 +58,8 @@ function queryBuilder (filters) {
 function find (all) {
     var self = this;
     
-    if (!self.type) {
-        return self.emit('result', null, 'No type selected.');
+    if (!self.template) {
+        return self.emit('result', null, 'No template selected.');
     }
     
     if (self.crudFindBusy) {

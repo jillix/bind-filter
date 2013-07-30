@@ -4,7 +4,7 @@ function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for
 
 function fields () {
     var self = this;
-    var fields = self.types[self.type];
+    var fields = self.templates[self.template];
 
     var df = document.createDocumentFragment();
     for (var field in fields) {
@@ -32,11 +32,11 @@ function checkOperator (fieldType, operator) {
 function value (field, operator, value) {
     var self = this;
 
-    if (!self.types[self.type][field] || !self.types[self.type][field].type) {
+    if (!self.templates[self.template][field] || !self.templates[self.template][field].template) {
         return;
     }
 
-    var fieldType = self.config.operators[(operator || '=')][2] || self.types[self.type][field].type;
+    var fieldType = self.config.operators[(operator || '=')][2] || self.templates[self.template][field].template;
     var input;
 
     // operators
@@ -99,7 +99,7 @@ function value (field, operator, value) {
 
 function convert (values) {
     var self = this;
-    var schema = self.types[self.type];
+    var schema = self.templates[self.template];
 
     // check number
     if (schema[values.field].type === 'number') {
@@ -113,7 +113,7 @@ function convert (values) {
 
 function validate (values) {
     var self = this;
-    var schema = self.types[self.type];
+    var schema = self.templates[self.template];
 
     // check if field and operator exists
     if (!schema[values.field] || !self.config.operators[values.operator]) {
