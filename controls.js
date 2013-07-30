@@ -44,9 +44,10 @@ function setFilters (filters, reset) {
             list.save.call(self, hash);
         }
     }
+    
+    self.domRefs.filter.style.display = 'none';
 
     find.call(self);
-    return true;
 }
 
 function save () {
@@ -57,10 +58,8 @@ function save () {
         value: self.domRefs.inputs.value.value,
         hash: self.current
     };
-
-    if (setFilters.call(self, [filter])) {
-        self.domRefs.filter.style.display = 'none';
-    }
+    
+    setFilters.call(self, [filter]);
 }
 
 function edit (hash) {
