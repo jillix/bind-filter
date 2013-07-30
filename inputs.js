@@ -107,8 +107,6 @@ function convert (values) {
         values.value = true;
     } else if (schema[values.field].type === 'number') {
         values.value = values.value.indexOf('.') > -1 ? parseFloat(values.value) : parseInt(values.value, 10);
-    } else {
-        values.value = values.value.toString();
     }
 
     return values;
