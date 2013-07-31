@@ -8,17 +8,17 @@ var defaultOptions = {
     limit: 33
 };
 var operatorConfig = {
-    '=': ['', 'mixed'], // or
-    '!=': ['$ne', 'mixed'],// or
-    '>': ['$gt', 'number'], // no
-    '<': ['$lt', 'number'], // no
-    '>=': ['$gte', 'number'], // no
-    '<=': ['$lte', 'number'], // no
-    'all': ['$all', 'array'], // or
-    'in': ['$in', 'array'], // and
-    'notin': ['$nin', 'array'], // or
-    'regExp': ['$regex', 'string'], // and
-    'exists': ['$exists', 'mixed', 'boolean'] // no
+    '=':        ['',        'mixed'],   // or
+    '!=':       ['$ne',     'mixed'],   // and
+    '>':        ['$gt',     'number'],  // and
+    '<':        ['$lt',     'number'],  // and
+    '>=':       ['$gte',    'number'],  // and
+    '<=':       ['$lte',    'number'],  // and
+    'all':      ['$all',    'array'],   // or ('and' can be achieved by concatenating the arrays)
+    'in':       ['$in',     'array'],   // and ('or' can be achieved by concatenating the arrays)
+    'notin':    ['$nin',    'array'],   // or ('and' can be achieved by concatenating the arrays)
+    'regExp':   ['$regex',  'string'],  // and ('or' is built in the regex syntax)
+    'exists':   ['$exists', 'mixed', 'boolean'] // makes no sense
 };
 
 function uid (len, uid) {
