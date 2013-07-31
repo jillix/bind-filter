@@ -218,7 +218,6 @@ function init (config) {
         }
         
         // init templates
-        // TODO this is a hack until callback buffering is implemented
         if (self.config.setTemplates) {
             self.emit('setTemplates', self.config.setTemplates, function () {
                 // init template

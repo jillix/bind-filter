@@ -184,9 +184,11 @@ function ui () {
     var self = this;
 
     if (!self.config.ui.controls) {
-        return console.error('No controls found.');
+        return self.emit('message', 'error', 'No controls configured.');
     }
-
+    
+    // TODO check dom elements
+    
     // get dom refs
     self.domRefs = {};
     self.domRefs.filter = get(self.config.ui.filter, self.dom);
