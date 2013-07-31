@@ -78,7 +78,7 @@ function getTemplates (templates, reset, callback) {
             templatesToFetch.push(templates[i]);
         }
     }
-
+    
     if (templatesToFetch.length > 0) {
         self.emit('getTemplates', templates, function (err, templates) {
             if (err) {
@@ -210,6 +210,13 @@ function init (config) {
         // setup interface
         initInterface.call(self);
         
+        // listen to external events
+        Events.call(self, config);
+    
+        if (self.config.ui) {
+            ui.call(self);
+        }
+        
         // init templates
         // TODO this is a hack until callback buffering is implemented
         if (self.config.setTemplates) {
@@ -222,13 +229,6 @@ function init (config) {
         // init template
         } else if (self.config.template) {
             self.emit('setTemplate', self.config.template);
-        }
-        
-        // listen to external events
-        Events.call(self, config);
-    
-        if (self.config.ui) {
-            ui.call(self);
         }
         
         self.emit('ready');

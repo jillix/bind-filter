@@ -63,6 +63,13 @@ ui: {
         container: '.message',
         // the measste text
         text: '.message .text'
+    },
+    // configure loader dom refs
+    loader: {
+        // the actual loader
+        loader: '.progress',
+        // all elements that should be hidden during a request
+        hide: '.hideOnLoad'
     }
 },
 // pre-defined filters

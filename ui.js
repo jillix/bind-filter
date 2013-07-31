@@ -23,6 +23,8 @@ function save () {
         hash: self.current
     };
     
+    self.emit('showLoader');
+    
     self.emit('setFilters', [filter]);
 }
 
@@ -47,7 +49,9 @@ function edit (hash) {
 
 function remove (hash) {
     var self = this;
-
+    
+    self.emit('showLoader');
+    
     self.domRefs.filter.style.display = 'none';
     list.remove.call(self, hash || self.current);
 
@@ -62,6 +66,9 @@ function cancel () {
 
 function enable (hash) {
     var self = this;
+    
+    self.emit('showLoader');
+    
     // TODO remove class with bind
     self.filters[hash].item.setAttribute('class', '');
     self.filters[hash].disabled = false;
@@ -71,6 +78,9 @@ function enable (hash) {
 
 function disable (hash) {
     var self = this;
+    
+    self.emit('showLoader');
+    
     // TODO add class with bind
     self.filters[hash].item.setAttribute('class', 'disabled');
     self.filters[hash].disabled = true;
@@ -159,7 +169,15 @@ function setTemplateSelection (template) {
 }
 
 function handleFindResult (err, data) {
-    //console.log(err || data.length + " items found.");
+    var self = this;
+    
+    // hide loader
+    self.emit('hideLoader');
+}
+
+function showLoader () {
+    var self = this;
+    self.emit('showLoader');
 }
 
 function ui () {
@@ -203,7 +221,7 @@ function ui () {
     }
     
     // init loader
-    // ...
+    loader.call(self);
     
     // listen to ui events
     self.on('saveFilter', save);
@@ -214,10 +232,16 @@ function ui () {
     self.on('removeFilter', remove);
     self.on('cancelFilter', cancel);
     self.on('fieldChange', changeField);
-    self.on('result', handleFindResult);
+    
+    // listen to alter inputs events
     self.on('templates', setTemplateOptions);
     self.on('template', setTemplateSelection);
     self.on('filtersCached', setFilters);
+    
+    // listen crud events
+    self.on('getTemplates', showLoader);
+    self.on('find', showLoader);
+    self.on('result', handleFindResult);
     
     // add events to controls
     for (var handler in self.domRefs.controls) {
