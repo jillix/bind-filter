@@ -8,17 +8,17 @@ var defaultOptions = {
     limit: 33
 };
 var operatorConfig = {
-    '=':        ['',        'mixed'],   // or
-    '!=':       ['$ne',     'mixed'],   // and
-    '>':        ['$gt',     'number'],  // and
-    '<':        ['$lt',     'number'],  // and
-    '>=':       ['$gte',    'number'],  // and
-    '<=':       ['$lte',    'number'],  // and
-    'all':      ['$all',    'array'],   // or ('and' can be achieved by concatenating the arrays)
-    'in':       ['$in',     'array'],   // and ('or' can be achieved by concatenating the arrays)
-    'notin':    ['$nin',    'array'],   // or ('and' can be achieved by concatenating the arrays)
-    'regExp':   ['$regex',  'string'],  // and ('or' is built in the regex syntax)
-    'exists':   ['$exists', 'mixed', 'boolean'] // makes no sense
+    '=':        ['',        'mixed'],               // or
+    '!=':       ['$ne',     'mixed'],               // and
+    '>':        ['$gt',     'number'],              // and
+    '<':        ['$lt',     'number'],              // and
+    '>=':       ['$gte',    'number'],              // and
+    '<=':       ['$lte',    'number'],              // and
+    'all':      ['$all',    'array',    'split'],   // or ('and' can be achieved by concatenating the arrays)
+    'in':       ['$in',     'mixed',    'split'],   // and ('or' can be achieved by concatenating the arrays)
+    'notin':    ['$nin',    'mixed',    'split'],   // or ('and' can be achieved by concatenating the arrays)
+    'regExp':   ['$regex',  'string'],              // and ('or' is built in the regex syntax)
+    'exists':   ['$exists', 'mixed',    'boolean']  // makes no sense
 };
 
 function uid (len, uid) {
