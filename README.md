@@ -54,8 +54,15 @@ ui: {
         value: '.value',
         // filter remove control DOM reference
         remove: '.remove',
-        // TODO
-        handler: '.handler'
+        // filter edit DOM reference
+        edit: '.edit'
+    },
+    // configure message dom
+    message: {
+        // the message container
+        container: '.message',
+        // the measste text
+        text: '.message .text'
     }
 },
 // pre-defined filters
@@ -160,3 +167,9 @@ self.emit('templates', [{
     schema: {/*modm schema*/}
 }];
 ```
+
+#####message
+```js
+self.emit('message', 'error', 'Message text');
+```
+Types: `alert` `error` `success` `info`
