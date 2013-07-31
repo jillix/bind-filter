@@ -24,6 +24,8 @@ function handleMessage (type, msg) {
         default:
             self.domRefs.message.container.setAttribute('class', 'alert');
             break;
+        case '':
+            break;
     }
     
     self.domRefs.message.text.innerHTML = msg;
