@@ -2,7 +2,7 @@ M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exp
 var Events = require('github/jillix/events');
 var find = require('./find');
 var ui = require('./ui');
-var inputs = require('./inputs');
+var validate = require('./validate');
 var templateCache = {};
 var defaultOptions = {
     limit: 33
@@ -39,16 +39,16 @@ function setFilters (filters, reset) {
     
     // create and buffer filters
     for (var i = 0, l = filters.length; i < l; ++i) {
-
+    
         // validate field
-        if (inputs.validate.call(self, filters[i])) {
-
+        if (validate.validate.call(self, filters[i])) {
+            
             // convert value from value field
-            filters[i] = inputs.convert.call(self, filters[i]);
-
+            filters[i] = validate.convert.call(self, filters[i]);
+            
             var hash = filters[i].hash || uid(4);
             self.filters[hash] = self.filters[hash] || {};
-
+            
             // merge filter
             for (var key in filters[i]) {
                 self.filters[hash][key] = filters[i][key];
@@ -84,12 +84,12 @@ function getTemplates (templates, reset, callback) {
             if (err) {
                 return callback(err);
             }
-
+            
             // merge fetched templates into result templates
             for (var template in templates) {
                self.templates[template] = resultTemplates[template] = templates[template];
             }
-
+            
             // reset cache
             if (reset) {
                 self.templates = resultTemplates;

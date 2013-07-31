@@ -5,6 +5,7 @@
     "dependencies": [
         "/filter.js",
         "/ui.js",
+        "/validate.js",
         "/inputs.js",
         "/list.js",
         "/find.js",

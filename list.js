@@ -1,5 +1,4 @@
 M.wrap('github/jillix/bind-filter/dev/list.js', function (require, module, exports) {
-var controls = require('./controls');
 
 // TODO use bind for dom interaction/manipulation
 function get(s,c){

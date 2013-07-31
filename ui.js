@@ -113,10 +113,7 @@ function setFilters (filters, reset) {
     
     // filters to list
     for (var hash in filters) {
-        // validate field
-        if (inputs.validate.call(self, filters[hash])) {
-            list.save.call(self, hash);
-        }
+        list.save.call(self, hash);
     }
     
     // hide filter form
