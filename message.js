@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/message.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c){
     try{return (c||document).querySelector(s);}
@@ -15,7 +16,7 @@ function handleMessage (type, msg) {
             // TODO handle attributes with bind
             self.domRefs.message.container.setAttribute('class', 'alert alert-danger');
             break;
-        case 'success'
+        case 'success':
             self.domRefs.message.container.setAttribute('class', 'alert alert-success');
             break;
         case 'info':
@@ -40,8 +41,10 @@ function init () {
     }
     
     // configure
-    self.domRefs.message.container = get(self.config.message.container, self.dom);
-    self.domRegs.message.text = get(self.config.message.text, self.dom);
+    self.domRefs.message = {
+        container: get(self.config.message.container, self.dom),
+        text: get(self.config.message.text, self.dom)
+    };
     
     if (!self.domRefs.message.container || !self.domRefs.message.container) {
         return;
@@ -52,3 +55,5 @@ function init () {
 }
 
 module.exports = init;
+
+return module; });
