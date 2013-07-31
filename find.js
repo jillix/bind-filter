@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, exports) {
 var currentFilters = {};
 
 function queryBuilder (filters) {
@@ -15,8 +14,8 @@ function queryBuilder (filters) {
             var operator = self.config.operators[values.operator];
             
             // handle array value
-            if (operator[1] === 'array') {
-                value = values.value.split(/ |, |,/g);
+            if (operator[2] === 'split') {
+                value = values.value.split(/,\s*/g);
             }
             
             // handle operators
@@ -93,4 +92,3 @@ function find (all) {
 
 module.exports = find;
 
-return module; });

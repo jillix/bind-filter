@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 var Events = require('github/jillix/events');
 var find = require('./find');
 var ui = require('./ui');
@@ -236,4 +235,3 @@ function init (config) {
 
 module.exports = init;
 
-return module; });

@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/message.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c){
     try{return (c||document).querySelector(s);}
@@ -54,4 +53,3 @@ function init () {
 
 module.exports = init;
 
-return module; });
