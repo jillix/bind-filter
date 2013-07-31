@@ -40,20 +40,13 @@ function hide () {
 function init () {
     var self = this;
     
-    // TODO only for dev
-    var tmpConfig = {
-        loader: '.progress',
-        hide: '.hideOnLoad'
-    };
-    self.config.loader = tmpConfig;
-    
-    if (!self.config.loader) {
+    if (!self.config.ui.loader) {
         return;
     }
     
     self.loader = {
-        loader: get(self.config.loader.loader, self.dom)[0],
-        hide: get(self.config.loader.hide, self.dom)
+        loader: get(self.config.ui.loader.loader, self.dom)[0],
+        hide: get(self.config.ui.loader.hide, self.dom)
     };
     
     self.on('showLoader', show);
