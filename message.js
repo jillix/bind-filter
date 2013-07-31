@@ -12,7 +12,7 @@ function handleMessage (type, msg) {
     
     // set bootstrap alert classes
     switch (type) {
-        case 'error' || 'danger':
+        case 'error':
             // TODO handle attributes with bind
             self.domRefs.message.container.setAttribute('class', 'alert alert-danger');
             break;
@@ -24,8 +24,6 @@ function handleMessage (type, msg) {
             break;
         default:
             self.domRefs.message.container.setAttribute('class', 'alert');
-            break;
-        case '':
             break;
     }
     

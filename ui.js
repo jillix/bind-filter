@@ -196,17 +196,9 @@ function ui () {
         self.domRefs.controls[name] = get(self.config.ui.controls[name], self.dom);
     }
     
-    // test alert config
-    self.config.message = {
-        container: '.message',
-        text: '.message .text'
-    }
-    
     // init message
     if (self.config.message) {
         message.call(self);
-        // test
-        self.emit('alert', 'Test alert message.');
     }
     
     // listen to ui events
