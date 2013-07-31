@@ -108,7 +108,6 @@ self.on('setFilters', [{
     fixed: false
 }]);
 ```
-
 **Supported operators**
 
 | Operator | Mongo Equivalent         | Comments |
@@ -130,7 +129,7 @@ self.on('setFilters', [{
 self.emit('setTemplate', 'templateName', function () {});
 ```
 
-#####setTemplate
+#####setTemplates
 ```js
 self.emit('setTemplate', ['templateName'], function () {});
 ```
@@ -142,4 +141,22 @@ if true is set as second parameter, the options are set
 to the first parameter, otherwise the options are merged
 */
 self.emit('setOptions', {limit: 20, fields: {}, ...}, true);
+```
+
+#####template
+```js
+self.emit('template', {
+    id: '',
+    name: '',
+    schema: {/*modm schema*/}
+};
+```
+
+#####templates
+```js
+self.emit('templates', [{
+    id: '',
+    name: '',
+    schema: {/*modm schema*/}
+}];
 ```
