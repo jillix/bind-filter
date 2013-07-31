@@ -14,16 +14,16 @@ function handleMessage (type, msg) {
     switch (type) {
         case 'error':
             // TODO handle attributes with bind
-            self.domRefs.message.container.setAttribute('class', 'alert alert-danger');
+            self.domRefs.message.container.setAttribute('class', 'message alert alert-danger hideOnLoad');
             break;
         case 'success':
-            self.domRefs.message.container.setAttribute('class', 'alert alert-success');
+            self.domRefs.message.container.setAttribute('class', 'message alert alert-success hideOnLoad');
             break;
         case 'info':
-            self.domRefs.message.container.setAttribute('class', 'alert alert-info');
+            self.domRefs.message.container.setAttribute('class', 'message alert alert-info hideOnLoad');
             break;
         default:
-            self.domRefs.message.container.setAttribute('class', 'alert');
+            self.domRefs.message.container.setAttribute('class', 'message alert hideOnLoad');
             break;
     }
     

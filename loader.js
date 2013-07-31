@@ -1,0 +1,59 @@
+// TODO use bind for dom interaction/manipulation
+function get(s,c){try{return (c||document).querySelectorAll(s);}catch (err) {return [null];}}
+
+function handleInputs(disable) {
+    var self = this;
+}
+
+function hideShowFilters (hide) {
+    var self = this;
+    
+    for (var i = 0, l = self.loader.hide.length; i < l; ++i) {
+        self.loader.hide[i].style.display = hide ? 'none' : 'block';
+    }
+}
+
+function show () {
+    var self = this;
+    
+    // hide filter
+    hideShowFilters.call(self, true);
+    // disable inputs
+    handleInputs.call(self, true);
+    // show loader
+    self.loader.loader.style.display = 'block';
+}
+
+function hide () {
+    var self = this;
+    
+    // hide loader
+    self.loader.loader.style.display = 'none';
+    // enable inputs
+    handleInputs.call(self);
+    // show filter
+    hideShowFilters.call(self);
+}
+
+function init () {
+    var self = this;
+    
+    // TODO only for dev
+    var tmpConfig = {
+        loader: '.progress',
+        hide: '.hideOnLoad'
+    };
+    self.config.loader = tmpConfig;
+    
+    if (!self.loader) {
+        return;
+    }
+    
+    var self.loader = {
+        loader: get(self.config.loader.loader, self.dom)[0],
+        hide: get(self.config.loader.hideOnLoad: '.hideOnLoad')
+    };
+    
+    self.on('showLoader', show);
+    self.on('hideLoader', hide);
+}

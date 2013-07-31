@@ -10,6 +10,7 @@
         "/list.js",
         "/find.js",
         "/message.js",
+        "/loader.js",
         "github/jillix/events/v0.1.2/events.js"
     ]
 }

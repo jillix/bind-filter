@@ -3,6 +3,7 @@ var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
 var message = require('./message');
+var loader = require('./loader');
 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
@@ -200,6 +201,9 @@ function ui () {
     if (self.config.message) {
         message.call(self);
     }
+    
+    // init loader
+    // ...
     
     // listen to ui events
     self.on('saveFilter', save);

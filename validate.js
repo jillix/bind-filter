@@ -3,6 +3,9 @@ function convert (values) {
     var self = this;
     var schema = self.templates[self.template].schema;
     
+    // TODO convert with respect to operator config index 2
+    // TODO handle regExp options
+    
     if (typeof value === 'string') {
         if (values.value === 'false') {
             values.value = false;
