@@ -9,6 +9,7 @@
         "/inputs.js",
         "/list.js",
         "/find.js",
+        "/message.js",
         "github/jillix/events/v0.1.2/events.js"
     ]
 }
