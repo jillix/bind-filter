@@ -2,6 +2,7 @@ M.wrap('github/jillix/bind-filter/dev/ui.js', function (require, module, exports
 var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
+var message = require('./message');
 
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
@@ -193,6 +194,19 @@ function ui () {
     self.domRefs.controls = {};
     for (var name in self.config.ui.controls) {
         self.domRefs.controls[name] = get(self.config.ui.controls[name], self.dom);
+    }
+    
+    // test alert config
+    self.config.message = {
+        container: '.message',
+        text: '.message .text'
+    }
+    
+    // init message
+    if (self.config.message) {
+        message.call(self);
+        // test
+        self.emit('alert', 'Test alert message.');
     }
     
     // listen to ui events
