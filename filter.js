@@ -63,8 +63,6 @@ function setFilters (filters, reset) {
     find.call(self);
 }
 
-// TODO callback buffering
-// TODO implement loaders and prevent redundant requests
 function getTemplates (templates, reset, callback) {
     var self = this;
 
@@ -110,7 +108,6 @@ function setTemplates (templates, callback) {
 
     if (templates instanceof Array) {
         getTemplates.call(self, templates, true, function (err) {
-            
             if (err || !self.templates[templates[0]]) {
                 return console.error('Template error: ' + templates[0].id);
             }
@@ -173,7 +170,9 @@ function getFilters (callback) {
     var self = this;
     var filters = [];
     for (var id in self.filters) {
-        filters.push(self.filters[id]);
+        var filter = self.filters[id];
+        filter.item = null;
+        filters.push(filters);
     }
     callback(filters);
 }
