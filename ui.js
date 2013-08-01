@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/ui.js', function (require, module, exports) {
 var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
@@ -45,6 +44,12 @@ function edit (hash) {
     changeField.call(self, values.field, values.operator, values.value);
 
     self.domRefs.filter.style.display = 'block';
+
+    if (hash && self.filters[hash]) {
+        self.domRefs.inputs.value.focus();
+    } else {
+        self.domRefs.inputs.field.focus();
+    }
 }
 
 function remove (hash) {
@@ -282,4 +287,3 @@ function ui () {
 
 module.exports = ui;
 
-return module; });
