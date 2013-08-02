@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/find.js', function (require, module, exports) {
 var currentFilters = {};
 
 function queryBuilder (filters) {
@@ -92,3 +93,5 @@ function find (all) {
 
 module.exports = find;
 
+
+return module; });

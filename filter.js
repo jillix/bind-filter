@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 var Events = require('github/jillix/events');
 var find = require('./find');
 var ui = require('./ui');
@@ -76,8 +77,10 @@ function getTemplates (templates, reset, callback) {
         }
     }
     
-    if (templatesToFetch.length > 0) {
+    if (templates.length === 0 || templatesToFetch.length > 0) {
         self.emit('getTemplates', templates, function (err, templates) {
+            self.emit('templateResult', err, templates);
+            
             if (err) {
                 return callback(err);
             }
@@ -91,6 +94,7 @@ function getTemplates (templates, reset, callback) {
             if (reset) {
                 self.templates = resultTemplates;
             }
+            
             callback(null);
         });
     } else {
@@ -107,8 +111,9 @@ function setTemplates (templates, callback) {
 
     if (templates instanceof Array) {
         getTemplates.call(self, templates, true, function (err) {
-            if (err || !self.templates[templates[0]]) {
-                return console.error('Template error: ' + templates[0].id);
+            if (err) {
+                // TODO handle error
+                return console.error(err);
             }
             
             if (callback) {
@@ -134,7 +139,12 @@ function changeTemplate (template, callback) {
     }
 
     // get template from server or cache
-    getTemplates.call(self, [template], false, function () {
+    getTemplates.call(self, [template], false, function (err) {
+        
+        if (err) {
+            // TODO handle error
+            return console.error(err);
+        }
         
         // set current template
         self.template = template;
@@ -234,3 +244,5 @@ function init (config) {
 
 module.exports = init;
 
+
+return module; });

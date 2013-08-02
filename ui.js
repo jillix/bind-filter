@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/ui.js', function (require, module, exports) {
 var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
@@ -175,8 +176,6 @@ function setTemplateSelection (template) {
 
 function handleFindResult (err, data) {
     var self = this;
-    
-    // hide loader
     self.emit('hideLoader');
 }
 
@@ -249,6 +248,7 @@ function ui () {
     self.on('getTemplates', showLoader);
     self.on('find', showLoader);
     self.on('result', handleFindResult);
+    self.on('templateResult', handleFindResult);
     
     // add events to controls
     for (var handler in self.domRefs.controls) {
@@ -287,3 +287,5 @@ function ui () {
 
 module.exports = ui;
 
+
+return module; });

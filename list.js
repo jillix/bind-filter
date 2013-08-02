@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/list.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c){
     try{return (c||document).querySelector(s);}
@@ -112,3 +113,5 @@ function remove (hash) {
 exports.save = save;
 exports.remove = remove;
 
+
+return module; });

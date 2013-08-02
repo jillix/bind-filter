@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/dev/validate.js', function (require, module, exports) {
 function convert (values) {
     var self = this;
     var schema = self.templates[self.template].schema;
@@ -33,3 +34,5 @@ function validate (values) {
 exports.convert = convert;
 exports.validate = validate;
 
+
+return module; });
