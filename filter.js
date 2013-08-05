@@ -126,7 +126,7 @@ function setTemplates (templates, callback) {
     }
 }
 
-function changeTemplate (template, callback) {
+function setTemplate (template, callback) {
     var self = this;
 
     // TODO this is a hack until bind know how select keys in parameters
@@ -191,7 +191,7 @@ function initInterface () {
     
     // listen to interface events
     self.on('setFilters', setFilters);
-    self.on('setTemplate', changeTemplate);
+    self.on('setTemplate', setTemplate);
     self.on('setTemplates', setTemplates);
     self.on('setOptions', setOptions);
     self.on('getFilters', getFilters);
