@@ -181,7 +181,7 @@ function getFilters (callback) {
     for (var id in self.filters) {
         var filter = self.filters[id];
         filter.item = null;
-        filters.push(filters);
+        filters.push(filter);
     }
     callback(filters);
 }
