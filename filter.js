@@ -131,7 +131,7 @@ function setTemplate (template, callback) {
 
     // TODO this is a hack until bind know how select keys in parameters
     if (typeof template === 'object') {
-        template = template._id;
+        template = template.id;
     }
 
     if (typeof template !== 'string' || !template) {
