@@ -6,7 +6,7 @@ function convert (values) {
     // TODO convert with respect to operator config index 2
     // TODO handle regExp options
     
-    if (typeof value === 'string') {
+    if (typeof values.value === 'string') {
         if (values.value === 'false') {
             values.value = false;
         } else if (values.value === 'true') {
