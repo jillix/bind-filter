@@ -9,11 +9,11 @@ function fields () {
     var fields = self.templates[self.template].schema;
 
     var df = document.createDocumentFragment();
-    var local = M.getLocale();
+    var locale = M.getLocale();
     for (var field in fields) {
         if (field.indexOf('_') !== 0) {
             var option = elm('option', {value: field});
-            option.innerHTML = getFieldLabel(field, locale);
+            option.innerHTML = getFieldLabel.call(self, field, locale);
             df.appendChild(option);
         }
     }

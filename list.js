@@ -30,7 +30,7 @@ function createFilterItem (hash) {
 
     // set content
     if (field) {
-        field.innerHTML = getFieldLabel(self.filters[hash].field);
+        field.innerHTML = getFieldLabel.call(self, self.filters[hash].field);
     }
     if (operator) {
         operator.innerHTML = self.filters[hash].operator;

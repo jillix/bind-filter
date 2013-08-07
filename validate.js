@@ -35,6 +35,11 @@ function validate (values) {
 
 function getFieldLabel (field, locale) {
     var self = this;
+    
+    if (!self.templates[self.template]) {
+        return;
+    };
+    
     var schema = self.templates[self.template].schema;
     
     if (!schema[field]) {
