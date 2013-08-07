@@ -116,6 +116,15 @@ function setTemplates (templates, callback) {
                 return console.error(err);
             }
             
+            // select a template
+            if (!self.template) {
+                for (template in self.templates) {
+                    self.template = template;
+                    self.emit('template', self.templates[template]);
+                    break;
+                }
+            }
+            
             if (callback) {
                 callback();
             }
