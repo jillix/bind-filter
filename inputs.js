@@ -2,15 +2,18 @@ M.wrap('github/jillix/bind-filter/dev/inputs.js', function (require, module, exp
 // TODO use bind for dom interaction/manipulation
 function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)b.setAttribute(c,a[c]);return b}catch(e){return null}}
 
+var getFieldLabel = require('./validate').getFieldLabel;
+
 function fields () {
     var self = this;
     var fields = self.templates[self.template].schema;
 
     var df = document.createDocumentFragment();
+    var local = M.getLocale();
     for (var field in fields) {
         if (field.indexOf('_') !== 0) {
             var option = elm('option', {value: field});
-            option.innerHTML = field;
+            option.innerHTML = getFieldLabel(field, locale);
             df.appendChild(option);
         }
     }

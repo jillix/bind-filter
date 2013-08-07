@@ -5,6 +5,8 @@ function convert (values) {
     
     // TODO convert with respect to operator config index 2
     // TODO handle regExp options
+    values.label = schema[values.field].label;
+    console.log(values.label);
     
     if (typeof values.value === 'string') {
         if (values.value === 'false') {
@@ -31,8 +33,27 @@ function validate (values) {
     return true;
 }
 
+function getFieldLabel (field, locale) {
+    var self = this;
+    var schema = self.templates[self.template].schema;
+    
+    if (!schema[field]) {
+        return;
+    }
+    
+    locale = locale || M.getLocale();
+    
+    var label = schema[field].label;
+    if (typeof  label === "object") {
+        label = label[local];
+    }
+    
+    return label || field;
+}
+
 exports.convert = convert;
 exports.validate = validate;
+exports.getFieldLabel = getFieldLabel;
 
 
 return module; });

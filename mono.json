@@ -5,12 +5,12 @@
     "dependencies": [
         "/filter.js",
         "/ui.js",
-        "/validate.js",
         "/inputs.js",
         "/list.js",
         "/find.js",
         "/message.js",
         "/loader.js",
+        "/validate.js",
         "github/jillix/events/v0.1.2/events.js"
     ]
 }

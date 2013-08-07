@@ -5,6 +5,8 @@ function get(s,c){
     catch (err) {}
 }
 
+var getFieldLabel = require('./validate').getFieldLabel;
+
 function createFilterItem (hash) {
     var self = this;
     var item = self.domRefs.listItem.cloneNode(true);
@@ -28,7 +30,7 @@ function createFilterItem (hash) {
 
     // set content
     if (field) {
-        field.innerHTML = self.filters[hash].field;
+        field.innerHTML = getFieldLabel(self.filters[hash].field);
     }
     if (operator) {
         operator.innerHTML = self.filters[hash].operator;
