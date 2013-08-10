@@ -3,10 +3,9 @@ function convert (values) {
     var self = this;
     var schema = self.templates[self.template].schema;
     
-    // TODO convert with respect to operator config index 2
     // TODO handle regExp options
+    
     values.label = schema[values.field].label;
-    console.log(values.label);
     
     if (typeof values.value === 'string') {
         if (values.value === 'false') {
