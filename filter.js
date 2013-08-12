@@ -217,7 +217,7 @@ function init (config) {
     self.options = defaultOptions;
     self.config.operators = operatorConfig;
     
-    if (!config.crud) {
+    if (!config.waitFor) {
         return console.error('No crud miid defined.');
     }
         
