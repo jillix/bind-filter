@@ -220,35 +220,31 @@ function init (config) {
     if (!config.crud) {
         return console.error('No crud miid defined.');
     }
-
-    // wait for the crud module
-    self.onready(config.crud, function () {
         
-        // setup interface
-        initInterface.call(self);
-        
-        // listen to external events
-        Events.call(self, config);
+    // setup interface
+    initInterface.call(self);
     
-        if (self.config.ui) {
-            ui.call(self);
-        }
-        
-        // init templates
-        if (self.config.setTemplates) {
-            self.emit('setTemplates', self.config.setTemplates, function () {
-                // init template
-                if (self.config.template) {
-                    self.emit('setTemplate', self.config.template);
-                }
-            });
-        // init template
-        } else if (self.config.template) {
-            self.emit('setTemplate', self.config.template);
-        }
-        
-        self.emit('ready');
-    });
+    // listen to external events
+    Events.call(self, config);
+
+    if (self.config.ui) {
+        ui.call(self);
+    }
+    
+    // init templates
+    if (self.config.setTemplates) {
+        self.emit('setTemplates', self.config.setTemplates, function () {
+            // init template
+            if (self.config.template) {
+                self.emit('setTemplate', self.config.template);
+            }
+        });
+    // init template
+    } else if (self.config.template) {
+        self.emit('setTemplate', self.config.template);
+    }
+    
+    self.emit('ready');
 }
 
 module.exports = init;
