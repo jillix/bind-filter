@@ -218,7 +218,7 @@ function init (config) {
     self.config.operators = operatorConfig;
     
     if (!config.waitFor) {
-        return console.error('No crud miid defined.');
+        return console.error('At least a CRUD mofule must be a dependency of the bind-filter module.');
     }
         
     // setup interface
