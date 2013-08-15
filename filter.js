@@ -79,6 +79,7 @@ function getTemplates (templates, reset, callback) {
     
     if (templates.length === 0 || templatesToFetch.length > 0) {
         self.emit('getTemplates', templates, function (err, templates) {
+
             self.emit('templateResult', err, templates);
             
             if (err) {
@@ -159,7 +160,8 @@ function setTemplate (template, callback) {
         self.template = template;
         
         // reset predefined filters
-        setFilters.call(self, self.config.setFilters || [], true);
+        
+        setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true);
         
         // emit the template
         self.emit('template', self.templates[template]);

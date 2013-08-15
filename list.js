@@ -39,6 +39,11 @@ function createFilterItem (hash) {
         value.innerHTML = self.filters[hash].value || '';
     }
 
+    // hide edit if it's a core field
+    if (edit && self.filters[hash].field[0] === '_') {
+        edit.style.display = 'none';
+    }
+
     if (!self.filters[hash].fixed) {
 
         if (checkbox) {
@@ -53,14 +58,10 @@ function createFilterItem (hash) {
 
         // edit filter
         if (edit) {
-            // hide edit if it's a core field
-            if (self.filters[hash].field.indexOf('_') > -1) {
-                edit.style.display = 'none';
-            } else {
-                edit.addEventListener(self.config.ui.events.itemEdit || 'click', function () {
-                    self.emit('editFilter', hash);
-                }, false);
-            }
+            edit.addEventListener(self.config.ui.events.itemEdit || 'click', function () {
+                self.emit('editFilter', hash);
+            }, false);
+            delete edit.style.display;
         }
 
         // remove filter
@@ -74,6 +75,9 @@ function createFilterItem (hash) {
         item.setAttribute('class', 'fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
         if (checkbox) {
             checkbox.setAttribute('disabled', true);
+        }
+        if (edit) {
+            edit.style.display = 'none';
         }
     }
 
