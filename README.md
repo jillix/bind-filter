@@ -79,7 +79,7 @@ setFilters: [
         operator: 'all',
         value: 'value1, value2 value3',
         // start state of the filter
-        disbaled: false,
+        disabled: false,
         // do not allow UI removal
         fixed: true,
         // hide from the UI
