@@ -139,6 +139,13 @@ function setTemplates (templates, callback) {
 function setTemplate (template, callback) {
     var self = this;
 
+    // set sort options
+    var sort = template.sort;
+    var options = { sort: sort };
+    if (sort) {
+        self.emit("setOptions", options);
+    }
+
     // TODO this is a hack until bind know how select keys in parameters
     if (typeof template === 'object') {
         template = template._id;
