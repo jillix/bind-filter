@@ -188,6 +188,7 @@ function setOptions (options, reset) {
     // merge options
     } else {
         for (var option in options) {
+            var value = options[option];
             self.options[option] = value
         }
     }
