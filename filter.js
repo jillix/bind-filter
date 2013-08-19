@@ -237,6 +237,24 @@ function init (config) {
     // listen to external events
     Events.call(self, config);
 
+    // i18n for operators
+    if (self.config.i18n === true) {
+
+        // cache for translated operators
+        self.config.i18n = {};
+
+        var operators = self.config.operators;
+        for (var operator in operators) {
+            (function (op) {
+                self.emit("message", op, function (err, newOperator) {
+                    if (err) { return; }
+                    // cache the translated operator
+                    self.config.i18n[op] = newOperator.message;;
+                });
+            })(operator);
+        }
+    }
+
     if (self.config.ui) {
         ui.call(self);
     }

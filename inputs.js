@@ -47,7 +47,7 @@ function value (field, operator, value) {
     for (var op in self.config.operators) {
         if (checkOperator.call(self, fieldTemplate, op)) {
             var option = elm('option', {value: op});
-            option.innerHTML = op;
+            option.innerHTML = self.config.i18n[op] || op;
             if (op === operator) {
                 option.setAttribute('selected', true);
             }
