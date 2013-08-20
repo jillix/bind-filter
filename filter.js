@@ -189,9 +189,12 @@ function setOptions (options, reset) {
     } else {
         for (var option in options) {
             var value = options[option];
+            // TODO value can be an object, merge it
             self.options[option] = value
         }
     }
+
+    self.emit("optionsSet");
 }
 
 function getFilters (callback) {
