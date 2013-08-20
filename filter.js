@@ -37,6 +37,8 @@ function setFilters (filters, reset) {
         self.filters = {};
     }
     
+    if (!filters || typeof filters !== "object") { return; }
+
     // create and buffer filters
     for (var i = 0, l = filters.length; i < l; ++i) {
     
@@ -175,7 +177,7 @@ function setTemplate (template, callback) {
     });
 }
 
-function setOptions (options, reset) {
+function setOptions (options, reset, callFind) {
     var self = this;
 
     if (typeof options !== 'object') {
@@ -194,7 +196,13 @@ function setOptions (options, reset) {
         }
     }
 
-    self.emit("optionsSet");
+    // emit options cahed event
+    self.emit('optionsCached', self.options, reset);
+    
+    // find data in db
+    if (callFind) {
+        find.call(self);
+    }
 }
 
 function getFilters (callback) {
