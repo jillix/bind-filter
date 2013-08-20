@@ -21,6 +21,25 @@ var operatorConfig = {
     'exists':   ['$exists', 'mixed',    'boolean']  // makes no sense
 };
 
+function MergeRecursive(obj1, obj2) {
+
+    for (var p in obj2) {
+        try {
+            // Property in destination object set; update its value.
+            if (obj2[p].constructor == Object) {
+                obj1[p] = MergeRecursive(obj1[p], obj2[p]);
+            } else {
+                obj1[p] = obj2[p];
+            }
+        } catch(e) {
+            // Property in destination object not set; create it and set its value.
+            obj1[p] = obj2[p];
+        }
+    }
+
+    return obj1;
+}
+
 function uid (len, uid) {
     uid = "";
     for (var i = 0, l = len || 24; i < l; ++i) {
@@ -191,8 +210,31 @@ function setOptions (options, reset, callFind) {
     } else {
         for (var option in options) {
             var value = options[option];
-            // TODO value can be an object, merge it
-            self.options[option] = value
+            
+            // option is an array
+            //var optionValue = self.options[option];
+
+            // TODO How do we merge objects?
+            // switch ((optionValue || {}).constructor) {
+            //     case Array:
+            //         optionValue.push(value);
+            //         break;
+            //     case Object:
+            //         switch (value.constructor) {
+            //             case Object:
+            //                 optionValue = MergeRecursive(self.options[option], value);
+            //                 break;
+            //             default:
+            //                 optionValue = value;
+            //                 break;
+            //         }
+            //         break;
+            //     default:
+            //         optionValue = value;
+            // }
+
+            self.options[option] = value;
+
         }
     }
 
