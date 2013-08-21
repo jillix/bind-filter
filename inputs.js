@@ -91,8 +91,16 @@ function value (field, operator, value) {
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
-    
+
     self.domRefs.inputs.value = input;
+
+    // emit a saveFilter when pressing Enter while focused on this input
+    self.domRefs.inputs.value.addEventListener('keyup', function(event) {
+        if (event.keyCode === 13) {
+            self.emit('saveFilter');
+            self.domRefs.inputs.value.blur();
+        }
+    });
 
     if (self.domRefs.valueField) {
         self.domRefs.valueField.innerHTML = '';

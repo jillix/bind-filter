@@ -26,6 +26,11 @@ function save () {
     self.emit('showLoader');
     
     self.emit('setFilters', [filter]);
+
+    var createKey = 'create';
+    if (self.domRefs.controls[createKey]) {
+        self.domRefs.controls[createKey].focus();
+    }
 }
 
 function edit (hash) {
