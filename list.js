@@ -58,7 +58,9 @@ function createFilterItem (hash) {
 
         // edit filter
         if (edit) {
-            edit.addEventListener(self.config.ui.events.itemEdit || 'click', function () {
+            edit.addEventListener(self.config.ui.events.itemEdit || 'click', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
                 self.emit('editFilter', hash);
             }, false);
             delete edit.style.display;
@@ -66,7 +68,9 @@ function createFilterItem (hash) {
 
         // remove filter
         if (rm) {
-            rm.addEventListener(self.config.ui.events.itemRemove || 'click', function () {
+            rm.addEventListener(self.config.ui.events.itemRemove || 'click', function (event) {
+                event.stopPropagation();
+                event.preventDefault();
                 self.emit('removeFilter', hash);
             }, false);
         }
