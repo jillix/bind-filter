@@ -100,6 +100,11 @@ function value (field, operator, value) {
             self.emit('saveFilter');
             self.domRefs.inputs.value.blur();
         }
+
+        if(event.keyCode === 27) {
+            self.emit('cancelFilter');
+            self.domRefs.inputs.value.blur();
+        }
     });
 
     if (self.domRefs.valueField) {
