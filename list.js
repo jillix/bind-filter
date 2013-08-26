@@ -53,6 +53,7 @@ function createFilterItem (hash) {
                 } else {
                     self.emit('disableFilter', hash);
                 }
+                self.emit("filtersChanged");
             }, false);
         }
 
@@ -62,6 +63,7 @@ function createFilterItem (hash) {
                 event.stopPropagation();
                 event.preventDefault();
                 self.emit('editFilter', hash);
+                self.emit("filtersChanged");
             }, false);
             delete edit.style.display;
         }
@@ -72,6 +74,7 @@ function createFilterItem (hash) {
                 event.stopPropagation();
                 event.preventDefault();
                 self.emit('removeFilter', hash);
+                self.emit("filtersChanged");
             }, false);
         }
     } else {
