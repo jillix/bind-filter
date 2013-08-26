@@ -118,6 +118,7 @@ function changeField (field, operator, value) {
     // set operators which are compatible with the field template
     // and create value field depending on schema and operator
     inputs.value.call(self, field, operator, value);
+    self.emit("filtersChanged");
 }
 
 function createTemplateSelectOption (template) {
