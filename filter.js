@@ -263,11 +263,22 @@ function getItem (dataItem, callback) {
 
     if (!self.query) { return; }
 
+    if (self.crudFindBusy) {
+        return callback('Find is busy.');
+    }
+
     self.crudFindBusy = true;
     self.emit('find', self.query, function (err, data) {
         self.crudFindBusy = false;
-        debugger;
-        // TODO
+        console.log(dataItem, data);
+
+        for (var i = 0, l = data.length; i < l; ++i) {
+            if (data[i]._id === dataItem._id) {
+                return callback(null, data[i]);
+            }
+        }
+        
+        callback(null, null);
     });
 }
 
