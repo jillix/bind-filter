@@ -258,6 +258,19 @@ function getFilters (callback) {
     callback(filters);
 }
 
+function getItem (dataItem, callback) {
+    var self = this;
+
+    if (!self.query) { return; }
+
+    self.crudFindBusy = true;
+    self.emit('find', self.query, function (err, data) {
+        self.crudFindBusy = false;
+        debugger;
+        // TODO
+    });
+}
+
 function initInterface () {
     var self = this;
     
@@ -267,6 +280,7 @@ function initInterface () {
     self.on('setTemplates', setTemplates);
     self.on('setOptions', setOptions);
     self.on('getFilters', getFilters);
+    self.on('getItem', getItem);
 }
 
 function init (config) {
