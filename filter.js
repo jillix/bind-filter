@@ -270,15 +270,16 @@ function getItem (dataItem, callback) {
     self.crudFindBusy = true;
     self.emit('find', self.query, function (err, data) {
         self.crudFindBusy = false;
-        console.log(dataItem, data);
 
         for (var i = 0, l = data.length; i < l; ++i) {
             if (data[i]._id === dataItem._id) {
+                data[i].bindFilterMessage = 'show';
                 return callback(null, data[i]);
             }
         }
         
-        callback(null, null);
+        // TODO How must this look?
+        callback(null, {_id: dataItem._id, bindFilterMessage: 'hide'});
     });
 }
 
