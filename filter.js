@@ -281,7 +281,9 @@ function init (config) {
     self.config = config;
     self.filters = {};
     self.templates = templateCache;
-    self.options = defaultOptions;
+    
+    // TODO merge options
+    self.options = confg.options || defaultOptions;
     self.config.operators = operatorConfig;
     
     if (!config.waitFor) {
