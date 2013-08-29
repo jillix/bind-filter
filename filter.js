@@ -283,7 +283,7 @@ function init (config) {
     self.templates = templateCache;
     
     // TODO merge options
-    self.options = confg.options || defaultOptions;
+    self.options = config.options || defaultOptions;
     self.config.operators = operatorConfig;
     
     if (!config.waitFor) {
