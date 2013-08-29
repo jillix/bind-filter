@@ -88,44 +88,26 @@ function getTemplates (templates, reset, callback) {
     var self = this;
 
     // get templates to fetch from server
-    var resultTemplates = {};
-    var templatesToFetch = [];
-    for (var i = 0, l = templates.length; i < l; ++i) {
-        if (self.templates[templates[i]]) {
-            resultTemplates[templates[i]] = self.templates[templates[i]];
-        } else {
-            templatesToFetch.push(templates[i]);
-        }
-    }
-    
-    if (templates.length === 0 || templatesToFetch.length > 0) {
-        self.emit('getTemplates', templates, function (err, templates) {
+    self.emit('getTemplates', templates, function (err, templates) {
 
-            self.emit('templateResult', err, templates);
-            
-            if (err) {
-                return callback(err);
-            }
-            
-            // merge fetched templates into result templates
-            for (var template in templates) {
-               self.templates[template] = resultTemplates[template] = templates[template];
-            }
-            
-            // reset cache
-            if (reset) {
-                self.templates = resultTemplates;
-            }
-            
-            callback(null);
-        });
-    } else {
+        self.emit('templateResult', err, templates);
+        
+        if (err) {
+            return callback(err);
+        }
+        
+        // merge fetched templates into result templates
+        for (var template in templates) {
+           self.templates[template] = templates[template];
+        }
+        
         // reset cache
         if (reset) {
-            self.templates = resultTemplates;
+            self.templates = templates;
         }
+        
         callback(null);
-    }
+    });
 }
 
 function setTemplates (templates, callback) {
