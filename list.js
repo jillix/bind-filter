@@ -98,7 +98,9 @@ function save (hash) {
     var item = createFilterItem.call(self, hash);
     if (self.filters[hash].item) {
         // replace filter
+        try {
         self.domRefs.list.replaceChild(item, self.filters[hash].item);
+        } catch (e) {}
         //self.domRefs.list.appendChild(item);
     } else {
         // add new filter
