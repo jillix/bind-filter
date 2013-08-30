@@ -85,9 +85,10 @@ function find (all) {
     }
     
     // get data with crud module
-    return self.emit('find', self.query, function (err, data) {
+    return self.emit('find', self.query, function (err, data, xhr) {
         self.crudFindBusy = false;
-        self.emit('result', err, data);
+        var count = xhr.getResponseHeader('X-Mono-CRUD-Count');
+        self.emit('result', err, data, count);
     });
 }
 
