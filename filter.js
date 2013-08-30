@@ -142,13 +142,6 @@ function setTemplates (templates, callback) {
 function setTemplate (template, callback) {
     var self = this;
 
-    // set sort options
-    var sort = template.sort;
-    var options = { sort: sort };
-    if (sort) {
-        self.emit("setOptions", options);
-    }
-
     // TODO this is a hack until bind know how select keys in parameters
     if (typeof template === 'object') {
         template = template._id;
@@ -169,7 +162,10 @@ function setTemplate (template, callback) {
         // set current template
         self.template = template;
         
-        // reset predefined filters
+        // set sort options
+        if (template.sort) {
+            self.emit("setOptions", {sort: template.sort});
+        }
         
         setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true);
         
@@ -285,7 +281,9 @@ function init (config) {
     self.config = config;
     self.filters = {};
     self.templates = templateCache;
-    self.options = defaultOptions;
+    
+    // TODO merge options
+    self.options = config.options || defaultOptions;
     self.config.operators = operatorConfig;
     
     if (!config.waitFor) {
