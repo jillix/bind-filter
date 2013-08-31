@@ -5,7 +5,7 @@ var ui = require('./ui');
 var validate = require('./validate');
 var templateCache = {};
 var defaultOptions = {
-    limit: 33
+    limit: 17
 };
 var operatorConfig = {
     '=':        ['',        'mixed'],               // or
