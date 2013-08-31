@@ -51,13 +51,15 @@ function uid (len, uid) {
 function setFilters (filters, reset) {
     var self = this;
     
+    if (!filters || typeof filters !== "object") {
+        return;
+    }
+    
     // reset filters if reset is true
     if (reset) {
         self.filters = {};
     }
     
-    if (!filters || typeof filters !== "object") { return; }
-
     // create and buffer filters
     for (var i = 0, l = filters.length; i < l; ++i) {
     
@@ -77,7 +79,7 @@ function setFilters (filters, reset) {
         }
     }
     
-    // emit filters cahed event
+    // emit filters cached event
     self.emit('filtersCached', self.filters, reset);
     
     // find data in db
