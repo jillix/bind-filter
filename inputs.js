@@ -11,7 +11,7 @@ function fields () {
     var df = document.createDocumentFragment();
     var locale = M.getLocale();
     for (var field in fields) {
-        if (field.indexOf('_') !== 0) {
+        if (field.indexOf('_') !== 0 && !fields[field].noSearch) {
             var option = elm('option', {value: field});
             option.innerHTML = getFieldLabel.call(self, field, locale);
             df.appendChild(option);
