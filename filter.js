@@ -3,6 +3,7 @@ var Events = require('github/jillix/events');
 var find = require('./find');
 var ui = require('./ui');
 var validate = require('./validate');
+var firstTemplate = true;
 var templateCache = {};
 var defaultOptions = {
     limit: 17
@@ -48,7 +49,7 @@ function uid (len, uid) {
     return uid;
 };
 
-function setFilters (filters, reset) {
+function setFilters (filters, reset, dontFetchData) {
     var self = this;
     
     if (!filters || typeof filters !== "object") {
@@ -83,7 +84,9 @@ function setFilters (filters, reset) {
     self.emit('filtersCached', self.filters, reset);
     
     // find data in db
-    find.call(self);
+    if (!dontFetchData) {
+        find.call(self);
+    }
 }
 
 function getTemplates (templates, reset, callback) {
@@ -141,7 +144,7 @@ function setTemplates (templates, callback) {
     }
 }
 
-function setTemplate (template, callback) {
+function setTemplate (template, dontFetchData) {
     var self = this;
 
     // TODO this is a hack until bind know how select keys in parameters
@@ -169,7 +172,7 @@ function setTemplate (template, callback) {
             self.emit("setOptions", {sort: template.sort});
         }
         
-        setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true);
+        setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true, dontFetchData);
         
         // emit the template
         self.emit('template', self.templates[template]);
