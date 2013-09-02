@@ -251,7 +251,11 @@ function getItem (dataItem, callback) {
     }
 
     self.crudFindBusy = true;
-    self.emit('find', self.query, function (err, data) {
+
+    var queryWithoutLimit = JSON.parse(JSON.stringify(self.query));
+    delete queryWithoutLimit.o.limit;
+
+    self.emit('find', queryWithoutLimit, function (err, data) {
         self.crudFindBusy = false;
 
         for (var i = 0, l = data.length; i < l; ++i) {
