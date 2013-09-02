@@ -147,6 +147,8 @@ function setTemplates (templates, callback) {
 function setTemplate (template, dontFetchData) {
     var self = this;
 
+    var oldTemplate = template;
+
     // TODO this is a hack until bind know how select keys in parameters
     if (typeof template === 'object') {
         template = template._id;
@@ -168,8 +170,8 @@ function setTemplate (template, dontFetchData) {
         self.template = template;
         
         // set sort options
-        if (template.sort) {
-            self.emit("setOptions", {sort: template.sort});
+        if (oldTemplate.sort) {
+            self.emit("setOptions", {sort: oldTemplate.sort});
         }
         
         setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true, dontFetchData);
