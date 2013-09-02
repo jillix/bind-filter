@@ -144,17 +144,19 @@ function setTemplates (templates, callback) {
     }
 }
 
-function setTemplate (template, dontFetchData) {
+// TODO swap force and dontFetchData parameter to have the same syntax everywhere
+function setTemplate (template, dontFetchData, force) {
     var self = this;
 
-    var oldTemplate = template;
-
-    // TODO this is a hack until bind know how select keys in parameters
-    if (typeof template === 'object') {
-        template = template._id;
+    // TODO this is a hack until bind knows how select keys in parameters
+    var template = typeof template === 'string' ? template : (template.id || template._id);
+    if (!template) {
+        // TODO handle error
+        return;
     }
 
-    if (typeof template !== 'string' || !template) {
+    // nothing to do if the same template
+    if (!force && self.template === template) {
         return;
     }
 
@@ -166,12 +168,12 @@ function setTemplate (template, dontFetchData) {
             return console.error(err);
         }
         
-        // set current template
+        // set current template (this is only the id)
         self.template = template;
         
         // set sort options
-        if (oldTemplate.sort) {
-            self.emit("setOptions", {sort: oldTemplate.sort});
+        if (self.templates[template].sort) {
+            self.emit("setOptions", { sort: self.templates[template].sort });
         }
         
         setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true, dontFetchData);
