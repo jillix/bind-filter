@@ -1,8 +1,11 @@
 M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
+var Bind = require('github/jillix/bind');
 var Events = require('github/jillix/events');
+
 var find = require('./find');
 var ui = require('./ui');
 var validate = require('./validate');
+
 var firstTemplate = true;
 var templateCache = {};
 var defaultOptions = {
@@ -308,6 +311,11 @@ function init (config) {
     
     // listen to external events
     Events.call(self, config);
+
+    // run the binds
+    for (var i in config.binds) {
+        Bind.call(self, config.binds[i]);
+    }
 
     // i18n for operators
     if (self.config.i18n === true) {
