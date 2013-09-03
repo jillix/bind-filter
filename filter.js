@@ -287,6 +287,7 @@ function initInterface () {
     self.on('setOptions', setOptions);
     self.on('getFilters', getFilters);
     self.on('getItem', getItem);
+    self.on('refresh', find);
 }
 
 function init (config) {
