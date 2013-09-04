@@ -42,22 +42,24 @@ function value (field, operator, value) {
     var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template].schema[field].type;
     var input;
     
-    // operators
-    var df = document.createDocumentFragment();
-    for (var op in self.config.operators) {
-        if (checkOperator.call(self, fieldTemplate, op)) {
-            var option = elm('option', {value: op});
-            option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;
-            if (op === operator) {
-                option.setAttribute('selected', true);
+    // refresh operators when changing the field
+    if (!operator) {
+        var df = document.createDocumentFragment();
+        for (var op in self.config.operators) {
+            if (checkOperator.call(self, fieldTemplate, op)) {
+                var option = elm('option', {value: op});
+                option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;
+                if (op === operator) {
+                    option.setAttribute('selected', true);
+                }
+                df.appendChild(option);
             }
-            df.appendChild(option);
         }
-    }
-    
-    if (self.domRefs.inputs.operator) {
-        self.domRefs.inputs.operator.innerHTML = '';
-        self.domRefs.inputs.operator.appendChild(df);
+        
+        if (self.domRefs.inputs.operator) {
+            self.domRefs.inputs.operator.innerHTML = '';
+            self.domRefs.inputs.operator.appendChild(df);
+        }
     }
 
     // handle boolean input
