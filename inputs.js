@@ -26,8 +26,8 @@ function fields () {
 
 function checkOperator (fieldTemplate, operator) {
     var self = this;
-
-    if (self.config.operators[operator][1] === fieldTemplate || self.config.operators[operator][1] === 'mixed') {
+    
+    if (self.config.operators[operator][1] === 'mixed' || (self.config.operators[operator][1].indexOf(fieldTemplate) > -1)) {
         return true;
     }
 }
