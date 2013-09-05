@@ -33,7 +33,13 @@ function createFilterItem (hash) {
         field.innerHTML = getFieldLabel.call(self, self.filters[hash].field);
     }
     if (operator) {
-        operator.innerHTML = self.filters[hash].operator;
+
+        var myOperator = self.filters[hash].operator;
+
+        self.emit("message", myOperator, function (err, newOperator) {
+            if(err) { return; }
+            operator.innerHTML = newOperator.message;
+        });
     }
     if (value) {
         value.innerHTML = self.filters[hash].value === undefined ? '' : self.filters[hash].value;
