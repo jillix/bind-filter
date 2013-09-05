@@ -23,6 +23,20 @@ function save () {
         hash: self.current
     };
     
+    var fieldType = self.templates[self.template].schema[filter.field].type;
+    
+    // if field type is string, make it case insensitive
+    if (fieldType === "string") {
+        // supported operators
+        if (["=", "!="].indexOf(filter.operator) !== -1) {
+            filter.originalValue = filter.value;
+            filter.value = {
+                $regex : ".*" + filter.value.split(" ").join(".*") + ".*",
+                $options: "i"
+            }
+        }
+    }
+    
     self.emit('showLoader');
     
     self.emit('setFilters', [filter]);
@@ -47,7 +61,7 @@ function edit (hash) {
     }
 
     // change value field and operator selection dependent of selected field
-    changeField.call(self, values.field, values.operator, values.value);
+    changeField.call(self, values.field, values.operator, values.originalValue || values.value);
 
     self.domRefs.filter.style.display = 'block';
 
