@@ -23,18 +23,12 @@ function save () {
         hash: self.current
     };
     
-    var fieldType = self.templates[self.template].schema[filter.field].type;
-    
-    // if field type is string, make it case insensitive
-    if (fieldType === "string") {
-        // supported operators
-        if (["=", "!="].indexOf(filter.operator) !== -1) {
-            filter.originalValue = filter.value;
-            filter.value = {
-                $regex : ".*" + filter.value.split(" ").join(".*") + ".*",
-                $options: "i"
-            }
-        }
+    var field = self.templates[self.template].schema[filter.field];
+
+    // if field type is string and operator is 'regexp' make it case insensitive
+    if (field.type === 'string' && filter.operator === 'regExp' && !field.casesensitive) {
+        filter.originalValue = filter.value;
+        filter.value = '(?i)' + filter.value;
     }
     
     self.emit('showLoader');
@@ -132,7 +126,7 @@ function changeField (field, operator, value) {
     // set operators which are compatible with the field template
     // and create value field depending on schema and operator
     inputs.value.call(self, field, operator, value);
-    self.emit("filtersChanged");
+    self.emit('filtersChanged');
 }
 
 function createTemplateSelectOption (template) {
