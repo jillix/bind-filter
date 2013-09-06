@@ -180,3 +180,11 @@ self.emit('templates', [{
 self.emit('message', 'error', 'Message text');
 ```
 Types: `alert` `error` `success` `info`
+
+## Changelog
+
+### dev
+ - Write here changes in dev...
+
+### v1.0.0
+ - Initial release
