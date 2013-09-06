@@ -9,6 +9,21 @@ Bind filter module (UI)
 crud: 'crud',
 // ui configuration (optional)
 ui: {
+    //operator order configuration (optional)
+    //this will tell the module in whitch order to display the operators
+    "operatorOrder": [
+        "regExp",
+        "in",
+        "=",
+        "!=",
+        ">",
+        "<",
+        ">=",
+        "<=",
+        "exists",
+        "notin",
+        "all"
+    ],
     // what DOM event will trigger a filter UI interaction?
     events: {
         add: 'click',
@@ -184,7 +199,7 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
- - Write here changes in dev...
+ - added `operatorOrder` option that tells the UI the order in which operators should be displayed
 
 ### v1.0.0
  - Initial release

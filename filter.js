@@ -277,6 +277,21 @@ function getItem (dataItem, callback) {
     });
 }
 
+function sortOperators () {
+    var self = this;
+    var operatorOrder = self.config.ui.operatorOrder;
+
+    // TODO objects are not sorted
+    // this should be an array or another sollution must be found
+    // I know it works in some JS engines, but ordered object keys is not a standard
+    var sortedOperators = {}
+    for(var key in operatorOrder){
+        sortedOperators[operatorOrder[key]] = operatorConfig[operatorOrder[key]];
+    }
+
+    return sortedOperators;
+}
+
 function initInterface () {
     var self = this;
     
@@ -293,7 +308,6 @@ function initInterface () {
 function init (config) {
 
     var self = this;
-    
     // prepare module
     self.config = config;
     self.filters = {};
@@ -303,6 +317,10 @@ function init (config) {
     self.options = config.options || defaultOptions;
     self.config.operators = operatorConfig;
     
+    if (self.config.operatorOrder) {
+        self.config.operators = sortOperators.call(self);
+    }
+
     if (!config.waitFor) {
         return console.error('At least a CRUD mofule must be a dependency of the bind-filter module.');
     }
@@ -358,5 +376,3 @@ function init (config) {
 
 module.exports = init;
 
-
-return module; });
