@@ -12,17 +12,17 @@ var defaultOptions = {
     limit: 17
 };
 var operatorConfig = {
+    'regExp':   ['$regex',  ['string']],                                    // and ('or' is built in the regex syntax)
+    'in':       ['$in',     ['number', 'string', 'array'],    'split'],     // and ('or' can be achieved by concatenating the arrays)
     '=':        ['',        'mixed'],                                       // or
     '!=':       ['$ne',     ['number', 'string', 'array']],                 // and
     '>':        ['$gt',     ['number']],                                    // and
     '<':        ['$lt',     ['number']],                                    // and
     '>=':       ['$gte',    ['number']],                                    // and
     '<=':       ['$lte',    ['number']],                                    // and
-    'all':      ['$all',    ['array'],    'split'],                         // or ('and' can be achieved by concatenating the arrays)
-    'in':       ['$in',     ['number', 'string', 'array'],    'split'],     // and ('or' can be achieved by concatenating the arrays)
+    'exists':   ['$exists', 'mixed',    'boolean'],                         // makes no sense
     'notin':    ['$nin',    ['number', 'string', 'array'],    'split'],     // or ('and' can be achieved by concatenating the arrays)
-    'regExp':   ['$regex',  ['string']],                                    // and ('or' is built in the regex syntax)
-    'exists':   ['$exists', 'mixed',    'boolean']                          // makes no sense
+    'all':      ['$all',    ['array'],    'split']                          // or ('and' can be achieved by concatenating the arrays)
 };
 
 function MergeRecursive(obj1, obj2) {
@@ -330,7 +330,7 @@ function init (config) {
                 self.emit("message", op, function (err, newOperator) {
                     if (err) { return; }
                     // cache the translated operator
-                    self.config.i18n[op] = newOperator.message;;
+                    self.config.i18n[op] = newOperator.message;
                 });
             })(operator);
         }
