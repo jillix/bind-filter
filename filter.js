@@ -376,3 +376,4 @@ function init (config) {
 
 module.exports = init;
 
+return module; });
