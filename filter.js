@@ -317,7 +317,7 @@ function init (config) {
     self.options = config.options || defaultOptions;
     self.config.operators = operatorConfig;
     
-    if (self.config.operatorOrder) {
+    if (self.config.ui.operatorOrder) {
         self.config.operators = sortOperators.call(self);
     }
 
