@@ -14,10 +14,6 @@ function queryBuilder (filters) {
             var value = values.value;
             var operator = self.config.operators[values.operator];
             
-            // handle array value
-            if (operator[2] === 'split') {
-                value = values.value.split(/,\s*/g);
-            }
             
             // handle operators
             if (operator[0]) {
@@ -47,7 +43,6 @@ function queryBuilder (filters) {
             fieldsInQuery[values.field] = 1;
         }
     }
-    
     return {
         t: self.template,
         q: query,

@@ -49,9 +49,9 @@ function value (field, operator, value) {
             if (checkOperator.call(self, fieldTemplate, op)) {
                 var option = elm('option', {value: op});
                 option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;
-                if (op === operator) {
-                    option.setAttribute('selected', true);
-                }
+
+                operator = operator || op;
+                
                 df.appendChild(option);
             }
         }
@@ -60,6 +60,7 @@ function value (field, operator, value) {
             self.domRefs.inputs.operator.innerHTML = '';
             self.domRefs.inputs.operator.appendChild(df);
         }
+
     }
 
     // handle boolean input
@@ -77,7 +78,7 @@ function value (field, operator, value) {
         input = select;
 
     // handle array input
-    } else if (fieldTemplate === 'array') {
+    } else if (fieldTemplate === 'array' || self.config.operators[operator][2] === 'split') {
         var array = elm('input', {name: 'value', type: 'text', value: value || ''});
         // TODO implement tag input plugin here...
         /*array.addEventListener('keyup', function (event) {
@@ -88,7 +89,7 @@ function value (field, operator, value) {
         input = array;
 
     // handle number and text input
-    } else if (fieldTemplate === 'number') {
+    } else if (fieldTemplate === 'number' && self.config.operators[operator][2] !== 'split') {
         input = elm('input', {name: 'value', type: 'number', value: value || '', step: 'any'});
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
