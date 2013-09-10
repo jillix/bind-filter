@@ -55,7 +55,7 @@ function edit (hash) {
     }
 
     // change value field and operator selection dependent of selected field
-    changeField.call(self, values.field, values.operator, values.originalValue || values.value);
+    changeField.call(self, values.field, values.operator, values.originalValue || values.value, true);
 
     self.domRefs.filter.style.display = 'block';
 
@@ -110,10 +110,11 @@ function disable (hash) {
     find.call(self);
 }
 
-function changeField (field, operator, value) {
+function changeField (field, operator, value, editMode) {
     var self = this;
 
     if (!field) {
+        // field is set in the for loop
         for (field in self.templates[self.template].schema) {
             if (field.indexOf('_') !== 0) {
                 break;
@@ -128,7 +129,7 @@ function changeField (field, operator, value) {
 
     // set operators which are compatible with the field template
     // and create value field depending on schema and operator
-    inputs.value.call(self, field, operator, value);
+    inputs.value.call(self, field, operator, value, editMode);
     self.emit('filtersChanged');
 }
 
@@ -178,7 +179,7 @@ function setTemplateSelection (template) {
     inputs.fields.call(self);
     
     // select a field
-    changeField.call(self);
+    //changeField.call(self);
     
     // add template to selection, it it not exists
     if (!self.templates[template.id] && self.domRefs.templateSelector) {

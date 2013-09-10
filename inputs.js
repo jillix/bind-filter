@@ -32,7 +32,7 @@ function checkOperator (fieldTemplate, operator) {
     }
 }
 
-function value (field, operator, value) {
+function value (field, operator, value, editMode) {
     var self = this;
     
     if (!self.template || !self.templates[self.template].schema[field] || !self.templates[self.template].schema[field].type) {
@@ -43,16 +43,18 @@ function value (field, operator, value) {
     var input;
     
     // refresh operators when changing the field
-    if (!operator) {
+    if (!operator || editMode) {
         var df = document.createDocumentFragment();
         var order = self.config.ui.operatorOrder;
+        
         for (var i in order) {
             var op = order[i];
             if (checkOperator.call(self, fieldTemplate, op)) {
                 var option = elm('option', {value: op});
                 option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;
-
+    
                 operator = operator || op;
+                console.log(operator);
                 
                 df.appendChild(option);
             }
@@ -62,9 +64,8 @@ function value (field, operator, value) {
             self.domRefs.inputs.operator.innerHTML = '';
             self.domRefs.inputs.operator.appendChild(df);
         }
-
     }
-
+    
     // handle boolean input
     if (fieldTemplate === 'boolean') {
         var select = elm('select', {name: 'value'});
