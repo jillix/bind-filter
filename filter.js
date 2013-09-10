@@ -83,6 +83,15 @@ function setFilters (filters, reset, dontFetchData) {
             for (var key in filters[i]) {
                 self.filters[hash][key] = filters[i][key];
             }
+
+            // if field type is string and operator is 'regexp' make it case insensitive
+            var field = self.templates[self.template].schema[filters[i].field];
+            if (filters[i].operator === 'regExp' && field && field.type === 'string' && !field.casesensitive) {
+                self.filters[hash].originalValue = filters[i].value;
+                self.filters[hash].value = '(?i)' + filters[i].value;
+            } else {
+                delete self.filters[hash].originalValue;
+            }
         }
     }
     

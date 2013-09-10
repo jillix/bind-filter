@@ -23,14 +23,6 @@ function save () {
         hash: self.current
     };
     
-    var field = self.templates[self.template].schema[filter.field];
-
-    // if field type is string and operator is 'regexp' make it case insensitive
-    if (field.type === 'string' && filter.operator === 'regExp' && !field.casesensitive) {
-        filter.originalValue = filter.value;
-        filter.value = '(?i)' + filter.value;
-    }
-    
     self.emit('showLoader');
     
     self.emit('setFilters', [filter]);
