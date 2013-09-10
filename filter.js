@@ -58,7 +58,10 @@ function setFilters (filters, reset, dontFetchData) {
     if (!filters || typeof filters !== "object") {
         return;
     }
-    
+
+    // we always reset the skip option
+    self.emit('resetSkip');
+
     // reset filters if reset is true
     if (reset) {
         self.filters = {};
@@ -178,12 +181,19 @@ function setTemplate (template, dontFetchData, force) {
         if (self.templates[template].sort) {
             self.emit("setOptions", { sort: self.templates[template].sort });
         }
-        
+
         setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true, dontFetchData);
         
         // emit the template
         self.emit('template', self.templates[template]);
     });
+}
+
+function resetSkip () {
+    var self = this;
+
+    self.options = self.options || {};
+    self.options.skip = 0;
 }
 
 function setOptions (options, reset, callFind) {
@@ -193,11 +203,15 @@ function setOptions (options, reset, callFind) {
         return;
     }
 
+    // when no skip is received, we force it to 0
+    //options.skip = options.skip || 0;
+
     // reset options
     if (reset) {
         self.options = options;
+    }
     // merge options
-    } else {
+    else {
         for (var option in options) {
             var value = options[option];
             
@@ -224,7 +238,6 @@ function setOptions (options, reset, callFind) {
             // }
 
             self.options[option] = value;
-
         }
     }
 
@@ -288,6 +301,7 @@ function initInterface () {
     self.on('getFilters', getFilters);
     self.on('getItem', getItem);
     self.on('refresh', find);
+    self.on('resetSkip', resetSkip);
 }
 
 function init (config) {
