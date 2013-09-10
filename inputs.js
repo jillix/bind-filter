@@ -39,7 +39,7 @@ function value (field, operator, value, editMode) {
         return;
     }
     
-    var fieldTemplate = self.config.operators[(operator || '=')][2] || self.templates[self.template].schema[field].type;
+    var fieldTemplate = self.templates[self.template].schema[field].type;
     var input;
     
     // refresh operators when changing the field
@@ -53,8 +53,10 @@ function value (field, operator, value, editMode) {
                 var option = elm('option', {value: op});
                 option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;
     
-                operator = operator || op;
-                console.log(operator);
+                // select operator
+                if (operator === op) {
+                    option.setAttribute('selected');
+                }
                 
                 df.appendChild(option);
             }
@@ -81,7 +83,7 @@ function value (field, operator, value, editMode) {
         input = select;
 
     // handle array input
-    } else if (fieldTemplate === 'array' || self.config.operators[operator][2] === 'split') {
+    } else if (fieldTemplate === 'array' || (operator && self.config.operators[operator][2] === 'split')) {
         var array = elm('input', {name: 'value', type: 'text', value: value || ''});
         // TODO implement tag input plugin here...
         /*array.addEventListener('keyup', function (event) {
@@ -92,7 +94,7 @@ function value (field, operator, value, editMode) {
         input = array;
 
     // handle number and text input
-    } else if (fieldTemplate === 'number' && self.config.operators[operator][2] !== 'split') {
+    } else if (fieldTemplate === 'number' && (operator && self.config.operators[operator][2] !== 'split')) {
         input = elm('input', {name: 'value', type: 'number', value: value || '', step: 'any'});
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
