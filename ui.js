@@ -70,7 +70,8 @@ function remove (hash) {
     var self = this;
     
     self.emit('showLoader');
-    
+    self.emit('resetSkip');
+
     self.domRefs.filter.style.display = 'none';
     list.remove.call(self, hash || self.current);
 
@@ -87,7 +88,8 @@ function enable (hash) {
     var self = this;
     
     self.emit('showLoader');
-    
+    self.emit('resetSkip');
+
     // TODO remove class with bind
     self.filters[hash].item.setAttribute('class', '');
     self.filters[hash].disabled = false;
@@ -99,7 +101,8 @@ function disable (hash) {
     var self = this;
     
     self.emit('showLoader');
-    
+    self.emit('resetSkip');
+
     // TODO add class with bind
     self.filters[hash].item.setAttribute('class', 'disabled');
     self.filters[hash].disabled = true;
@@ -137,7 +140,7 @@ function createTemplateSelectOption (template) {
 
 function setFilters (filters, reset) {
     var self = this;
-    
+
     // reset filters if reset is true
     if (reset && self.domRefs.list) {
         self.domRefs.list.innerHTML = '';
