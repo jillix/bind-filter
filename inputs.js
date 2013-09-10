@@ -45,7 +45,9 @@ function value (field, operator, value) {
     // refresh operators when changing the field
     if (!operator) {
         var df = document.createDocumentFragment();
-        for (var op in self.config.operators) {
+        var order = self.config.ui.operatorOrder;
+        for (var i in order) {
+            var op = order[i];
             if (checkOperator.call(self, fieldTemplate, op)) {
                 var option = elm('option', {value: op});
                 option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;

@@ -277,21 +277,6 @@ function getItem (dataItem, callback) {
     });
 }
 
-function sortOperators () {
-    var self = this;
-    var operatorOrder = self.config.ui.operatorOrder;
-
-    // TODO objects are not sorted
-    // this should be an array or another sollution must be found
-    // I know it works in some JS engines, but ordered object keys is not a standard
-    var sortedOperators = {}
-    for(var key in operatorOrder){
-        sortedOperators[operatorOrder[key]] = operatorConfig[operatorOrder[key]];
-    }
-
-    return sortedOperators;
-}
-
 function initInterface () {
     var self = this;
     
@@ -317,8 +302,14 @@ function init (config) {
     self.options = config.options || defaultOptions;
     self.config.operators = operatorConfig;
     
-    if (self.config.ui.operatorOrder) {
-        self.config.operators = sortOperators.call(self);
+    //create the operator order if it was not gven in the configuration
+    if (!self.config.ui.operatorOrder) {
+        var operatorOrder = [];
+        for (var operator in self.config.operators) {
+            operatorOrder.push(operator);
+        }
+
+        self.config.ui.operatorOrder = operatorOrder;
     }
 
     if (!config.waitFor) {
