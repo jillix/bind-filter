@@ -54,22 +54,22 @@ function createFilterItem (hash) {
 
         if (checkbox) {
             checkbox.addEventListener('change', function (event) {
+                self.emit('filtersChanged');
                 if (checkbox.checked) {
                     self.emit('enableFilter', hash);
                 } else {
                     self.emit('disableFilter', hash);
                 }
-                self.emit("filtersChanged");
             }, false);
         }
 
         // edit filter
         if (edit) {
             edit.addEventListener(self.config.ui.events.itemEdit || 'click', function (event) {
+                self.emit('filtersChanged');
                 event.stopPropagation();
                 event.preventDefault();
                 self.emit('editFilter', hash);
-                self.emit("filtersChanged");
             }, false);
             delete edit.style.display;
         }
@@ -77,10 +77,10 @@ function createFilterItem (hash) {
         // remove filter
         if (rm) {
             rm.addEventListener(self.config.ui.events.itemRemove || 'click', function (event) {
+                self.emit('filtersChanged');
                 event.stopPropagation();
                 event.preventDefault();
                 self.emit('removeFilter', hash);
-                self.emit("filtersChanged");
             }, false);
         }
     } else {
