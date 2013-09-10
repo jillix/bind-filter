@@ -69,7 +69,7 @@ function value (field, operator, value, editMode) {
     }
     
     // handle boolean input
-    if (operator && self.config.operators[operator][2] === 'boolean') {
+    if ((operator && self.config.operators[operator][2] === 'boolean') || fieldTemplate === 'boolean') {
         var select = elm('select', {name: 'value'});
         var opt1 = elm('option', {value: 'true'});
         opt1.innerHTML = 'true';
