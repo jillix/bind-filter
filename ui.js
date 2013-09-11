@@ -47,7 +47,7 @@ function edit (hash) {
     }
 
     // change value field and operator selection dependent of selected field
-    changeField.call(self, values.field, values.operator, values.originalValue || values.value, true);
+    changeField.call(self, values.field, values.operator, typeof values.originalValue === 'string' ? values.originalValue : values.value, true);
 
     self.domRefs.filter.style.display = 'block';
 

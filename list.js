@@ -42,7 +42,7 @@ function createFilterItem (hash) {
         });
     }
     if (value) {
-        value.innerHTML = self.filters[hash].value === undefined ? '' : (self.filters[hash].originalValue || self.filters[hash].value);
+        value.innerHTML = self.filters[hash].value === undefined ? '' : (typeof self.filters[hash].originalValue === 'string' ? self.filters[hash].originalValue : self.filters[hash].value);
     }
 
     // hide edit if it's a core field
