@@ -54,11 +54,11 @@ function find (all) {
     var self = this;
     
     if (!self.template) {
-        return self.emit('result', null, 'No template selected.');
+        return self.emit('result', new Error('NO_TEMPLATE_SELECTED'));
     }
     
     if (self.crudFindBusy) {
-        return self.emit('result', null, 'Find is busy.');
+        return self.emit('result', new Error('FILTER_IS_BUSY'));
     }
     
     self.crudFindBusy = true;
@@ -70,7 +70,7 @@ function find (all) {
         
         if (self.wasEmpty) {
             self.crudFindBusy = false;
-            return self.emit('result', null, 'empty query');
+            return self.emit('result', new Error('NO_FILTERS_SELECTED'));
         }
         
         self.wasEmpty = true;

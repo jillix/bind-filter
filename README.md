@@ -126,6 +126,12 @@ listen: {
 self.emit('result', function (err, data) {});
 ```
 
+Errors:
+
+- `NO_TEMPLATE_SELECTED` when a filtering is started before a template is set for the filter module
+- `FILTER_IS_BUSY` when a filtering is started while a previous one is not yet finished
+- `NO_FILTERS_SELECTED` when a 2nd consecutive filtering operation is tried with no query
+
 #####setFilters
 ```js
 self.on('setFilters', [{
