@@ -12,6 +12,6 @@
         "/loader.js",
         "/validate.js",
         "github/jillix/bind/v0.1.5",
-        "github/jillix/events/v0.1.3"
+        "github/jillix/events/v0.1.4"
     ]
 }
