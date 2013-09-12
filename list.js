@@ -5,11 +5,19 @@ function get(s,c){
     catch (err) {}
 }
 
+function buildItem (elem, content) {
+    var elem = elem.cloneNode();
+    elem.innerHTML = content;
+    return elem;
+}
+
 var getFieldLabel = require('./validate').getFieldLabel;
 
 function createFilterItem (hash) {
     var self = this;
-    var item = self.domRefs.listItem.cloneNode(true);
+
+    var item = buildItem(self.domRefs.listItem, self.domRefs.listItemContent);
+
     var checkbox = get(self.config.ui.item.onoff, item);
     var field = get(self.config.ui.item.field, item);
     var operator = get(self.config.ui.item.operator, item);
@@ -20,7 +28,9 @@ function createFilterItem (hash) {
     // enable/disable filter
     if (self.filters[hash].disabled) {
         item.setAttribute('class', 'disabled');
-        checkbox.removeAttribute('checked');
+        if (checkbox) {
+            checkbox.removeAttribute('checked');
+        }
     }
 
     // hide filter item
@@ -99,7 +109,7 @@ function createFilterItem (hash) {
 
 function save (hash) {
     var self = this;
-    
+
     // create filter item
     var item = createFilterItem.call(self, hash);
     if (self.filters[hash].item) {
@@ -121,7 +131,7 @@ function save (hash) {
 
 function remove (hash) {
     var self = this;
-    
+
     if (self.filters[hash]) {
         // remove dom element
         self.domRefs.list.removeChild(self.filters[hash].item);
