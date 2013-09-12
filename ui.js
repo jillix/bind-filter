@@ -200,6 +200,14 @@ function ui () {
     if (!self.config.ui.controls) {
         return self.emit('message', 'error', 'No controls configured.');
     }
+
+    //create the operator order if it was not gven in the configuration
+    if (!self.config.ui.operatorOrder) {
+        self.config.ui.operatorOrder = [];
+        for (var operator in self.config.operators) {
+            self.config.ui.operatorOrder.push(operator);
+        }
+    }
     
     // TODO check dom elements
     

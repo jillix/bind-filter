@@ -325,16 +325,6 @@ function init (config) {
     self.options = config.options || defaultOptions;
     self.config.operators = operatorConfig;
     
-    //create the operator order if it was not gven in the configuration
-    if (!self.config.ui.operatorOrder) {
-        var operatorOrder = [];
-        for (var operator in self.config.operators) {
-            operatorOrder.push(operator);
-        }
-
-        self.config.ui.operatorOrder = operatorOrder;
-    }
-
     if (!config.waitFor) {
         return console.error('At least a CRUD mofule must be a dependency of the bind-filter module.');
     }
