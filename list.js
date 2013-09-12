@@ -5,11 +5,24 @@ function get(s,c){
     catch (err) {}
 }
 
+function buildItem (tag, attributes, content) {
+    var elem = document.createElement(tag);
+    if (attributes && attributes.length) {
+        for (var i = 0; i < attributes.length; i++) {
+            elem.setAttribute(attributes[i].name, attributes[i].value);
+        }
+    }
+    elem.innerHTML = content;
+    return elem;
+}
+
 var getFieldLabel = require('./validate').getFieldLabel;
 
 function createFilterItem (hash) {
     var self = this;
-    var item = self.domRefs.listItem.cloneNode(true);
+
+    var item = buildItem(self.domRefs.listItemTag, self.domRefs.listItemAttrs, self.domRefs.listItemContent);
+
     var checkbox = get(self.config.ui.item.onoff, item);
     var field = get(self.config.ui.item.field, item);
     var operator = get(self.config.ui.item.operator, item);

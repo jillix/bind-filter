@@ -22,9 +22,9 @@ function save () {
         value: self.domRefs.inputs.value.value,
         hash: self.current
     };
-    
+
     self.emit('showLoader');
-    
+
     self.emit('setFilters', [filter]);
 
     var createKey = 'create';
@@ -60,7 +60,7 @@ function edit (hash) {
 
 function remove (hash) {
     var self = this;
-    
+
     self.emit('showLoader');
     self.emit('resetSkip');
 
@@ -78,7 +78,7 @@ function cancel () {
 
 function enable (hash) {
     var self = this;
-    
+
     self.emit('showLoader');
     self.emit('resetSkip');
 
@@ -91,7 +91,7 @@ function enable (hash) {
 
 function disable (hash) {
     var self = this;
-    
+
     self.emit('showLoader');
     self.emit('resetSkip');
 
@@ -138,23 +138,23 @@ function setFilters (filters, reset) {
     if (reset && self.domRefs.list) {
         self.domRefs.list.innerHTML = '';
     }
-    
+
     // filters to list
     for (var hash in filters) {
         list.save.call(self, hash);
     }
-    
+
     // hide filter form
     self.domRefs.filter.style.display = 'none';
 }
 
 function setTemplateOptions () {
     var self = this;
-    
+
     if (self.domRefs.templateSelector) {
 
         var df = document.createDocumentFragment();
-        
+
         for (var template in self.templates) {
             df.appendChild(createTemplateSelectOption(self.templates[template]));
         }
@@ -166,18 +166,18 @@ function setTemplateOptions () {
 
 function setTemplateSelection (template) {
     var self = this;
-    
+
     // set fields
     inputs.fields.call(self);
-    
+
     // select a field
     //changeField.call(self);
-    
+
     // add template to selection, it it not exists
     if (!self.templates[template.id] && self.domRefs.templateSelector) {
         self.domRefs.templateSelector.appendChild(createTemplateSelectOption(template));
     }
-    
+
     // select template
     if (self.domRefs.templateSelector) {
         self.domRefs.templateSelector.value = template.id;
@@ -208,9 +208,9 @@ function ui () {
             self.config.ui.operatorOrder.push(operator);
         }
     }
-    
+
     // TODO check dom elements
-    
+
     // get dom refs
     self.domRefs = {};
     self.domRefs.filter = get(self.config.ui.filter, self.dom);
@@ -222,11 +222,16 @@ function ui () {
     }
 
     // list item
-    self.domRefs.list = get(self.config.ui.list, self.dom);
-    self.domRefs.listItem = get(self.config.ui.listItem, self.domRefs.list);
+    var listItem = get(self.config.ui.listItem, self.dom);
+    if (listItem) {
+        self.domRefs.listItemTag = listItem.tagName;
+        self.domRefs.listItemAttrs = listItem.attributes;
+        self.domRefs.listItemContent = listItem.innerHTML;
+        self.domRefs.list = listItem.parentNode;
 
-    if (self.domRefs.list) {
-        self.domRefs.list.innerHTML = '';
+        if (self.domRefs.list) {
+            self.domRefs.list.innerHTML = '';
+        }
     }
 
     self.domRefs.inputs = {};
@@ -238,15 +243,15 @@ function ui () {
     for (var name in self.config.ui.controls) {
         self.domRefs.controls[name] = get(self.config.ui.controls[name], self.dom);
     }
-    
+
     // init message
     if (self.config.message) {
         message.call(self);
     }
-    
+
     // init loader
     loader.call(self);
-    
+
     // listen to ui events
     self.on('saveFilter', save);
     self.on('createFilter', edit);
@@ -256,18 +261,18 @@ function ui () {
     self.on('removeFilter', remove);
     self.on('cancelFilter', cancel);
     self.on('fieldChange', changeField);
-    
+
     // listen to alter inputs events
     self.on('templates', setTemplateOptions);
     self.on('template', setTemplateSelection);
     self.on('filtersCached', setFilters);
-    
+
     // listen crud events
     self.on('getTemplates', showLoader);
     self.on('find', showLoader);
     self.on('result', handleFindResult);
     self.on('templateResult', handleFindResult);
-    
+
     // add events to controls
     for (var handler in self.domRefs.controls) {
 
