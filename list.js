@@ -20,7 +20,9 @@ function createFilterItem (hash) {
     // enable/disable filter
     if (self.filters[hash].disabled) {
         item.setAttribute('class', 'disabled');
-        checkbox.removeAttribute('checked');
+        if (checkbox) {
+            checkbox.removeAttribute('checked');
+        }
     }
 
     // hide filter item
@@ -99,7 +101,7 @@ function createFilterItem (hash) {
 
 function save (hash) {
     var self = this;
-    
+
     // create filter item
     var item = createFilterItem.call(self, hash);
     if (self.filters[hash].item) {
@@ -121,7 +123,7 @@ function save (hash) {
 
 function remove (hash) {
     var self = this;
-    
+
     if (self.filters[hash]) {
         // remove dom element
         self.domRefs.list.removeChild(self.filters[hash].item);
