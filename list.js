@@ -5,13 +5,8 @@ function get(s,c){
     catch (err) {}
 }
 
-function buildItem (tag, attributes, content) {
-    var elem = document.createElement(tag);
-    if (attributes && attributes.length) {
-        for (var i = 0; i < attributes.length; i++) {
-            elem.setAttribute(attributes[i].name, attributes[i].value);
-        }
-    }
+function buildItem (elem, content) {
+    var elem = elem.cloneNode();
     elem.innerHTML = content;
     return elem;
 }
@@ -21,7 +16,7 @@ var getFieldLabel = require('./validate').getFieldLabel;
 function createFilterItem (hash) {
     var self = this;
 
-    var item = buildItem(self.domRefs.listItemTag, self.domRefs.listItemAttrs, self.domRefs.listItemContent);
+    var item = buildItem(self.domRefs.listItem, self.domRefs.listItemContent);
 
     var checkbox = get(self.config.ui.item.onoff, item);
     var field = get(self.config.ui.item.field, item);

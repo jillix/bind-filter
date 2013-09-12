@@ -224,14 +224,10 @@ function ui () {
     // list item
     var listItem = get(self.config.ui.listItem, self.dom);
     if (listItem) {
-        self.domRefs.listItemTag = listItem.tagName;
-        self.domRefs.listItemAttrs = listItem.attributes;
+        self.domRefs.listItem = listItem.cloneNode();
         self.domRefs.listItemContent = listItem.innerHTML;
         self.domRefs.list = listItem.parentNode;
-
-        if (self.domRefs.list) {
-            self.domRefs.list.innerHTML = '';
-        }
+        self.domRefs.list.innerHTML = '';
     }
 
     self.domRefs.inputs = {};
