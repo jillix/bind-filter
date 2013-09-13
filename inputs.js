@@ -48,6 +48,10 @@ function value (field, operator, value, editMode) {
         var order = self.config.ui.operatorOrder;
         
         for (var i in order) {
+            if (!order.hasOwnProperty(i)) {
+                continue;
+            }
+            
             var op = order[i];
             if (checkOperator.call(self, fieldTemplate, op)) {
                 var option = elm('option', {value: op});
