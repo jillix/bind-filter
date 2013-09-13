@@ -63,7 +63,7 @@ function createFilterItem (hash) {
     if (!self.filters[hash].fixed) {
 
         if (checkbox) {
-            checkbox.addEventListener('change', function (event) {
+            checkbox.addEventListener('click', function (event) {
                 self.emit('filtersChanged');
                 if (checkbox.checked) {
                     self.emit('enableFilter', hash);
