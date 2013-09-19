@@ -60,7 +60,7 @@ function getFieldLabel (field, locale) {
     
     locale = locale || M.getLocale();
     
-    var label = schema[field].label;
+    var label = (schema[field] || {}).label;
     if (typeof  label === "object") {
         label = label[M.getLocale()];
     }
