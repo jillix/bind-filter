@@ -84,6 +84,7 @@ function value (field, operator, value, editMode) {
         select.appendChild(opt1);
         select.appendChild(opt2);
         select.value = value;
+
         input = select;
 
     // handle array input
@@ -103,6 +104,9 @@ function value (field, operator, value, editMode) {
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
+
+    // adding custom classes
+    input.setAttribute("class", input.getAttribute("class") + config.ui.classes.value || '');
 
     self.domRefs.inputs.value = input;
 
