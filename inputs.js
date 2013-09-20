@@ -106,7 +106,7 @@ function value (field, operator, value, editMode) {
     }
 
     // adding custom classes
-    input.setAttribute("class", input.getAttribute("class") + config.ui.classes.value || '');
+    input.setAttribute("class", input.getAttribute("class") || '' + " " + self.config.ui.classes.value || '');
 
     self.domRefs.inputs.value = input;
 
