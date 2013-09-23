@@ -7,6 +7,8 @@ function queryBuilder (filters) {
     var fieldsInQuery = {};
     
     for (filter in filters) {
+        if (!filters.hasOwnProperty(filter)) return;
+
         if (!filters[filter].disabled && self.config.operators[filters[filter].operator]) {
             
             var expression = {};
