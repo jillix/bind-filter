@@ -11,9 +11,8 @@ function fields () {
     var df = document.createDocumentFragment();
     var locale = M.getLocale();
     for (var field in fields) {
-        if (!fields.templates.hasOwnProperty(field)) return;
-
         if (!fields.hasOwnProperty(field)) return;
+
         if (field.indexOf('_') !== 0 && !fields[field].noSearch) {
             var option = elm('option', {value: field});
             option.innerHTML = getFieldLabel.call(self, field, locale);
@@ -51,7 +50,6 @@ function value (field, operator, value, editMode) {
         var order = self.config.ui.operatorOrder;
         
         for (var i in order) {
-            if (!order.templates.hasOwnProperty(i)) return;
             if (!order.hasOwnProperty(i)) {
                 continue;
             }
