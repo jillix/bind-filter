@@ -358,7 +358,7 @@ function init (config) {
 
         var operators = self.config.operators;
         for (var operator in operators) {
-            if (!operators.hasOwnProperty(in)) return;
+            if (!operators.hasOwnProperty(operator)) return;
 
             (function (op) {
                 self.emit("message", op, function (err, newOperator) {
