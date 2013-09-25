@@ -184,9 +184,9 @@ function setTemplate (template, dontFetchData, force) {
     // get template from server or cache
     getTemplates.call(self, [template], false, function (err) {
         
-        if (err) {
+        if (err || !self.templates[template]) {
             // TODO handle error
-            return console.error(err);
+            return console.error(err || 'template ' + template + ' not found.');
         }
         
         // set current template (this is only the id)
