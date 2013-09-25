@@ -85,6 +85,12 @@ ui: {
         loader: '.progress',
         // all elements that should be hidden during a request
         hide: '.hideOnLoad'
+    },
+    
+    // set custom classes on filter inputs
+    classes: {
+        // set class for the value field
+        value: "myCustomClass"
     }
 },
 // pre-defined filters
