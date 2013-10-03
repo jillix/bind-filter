@@ -1,6 +1,12 @@
 M.wrap('github/jillix/bind-filter/dev/loader.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
-function get(s,c){try{return (c||document).querySelectorAll(s);}catch (err) {return [null];}}
+function get(s,c) {
+    try {
+        return (c||document).querySelector(s);
+    } catch (err) {
+        return null;
+    }
+}
 
 function handleInputs(disable) {
     var self = this;

@@ -1,6 +1,26 @@
 M.wrap('github/jillix/bind-filter/dev/inputs.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
-function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)if (!a.hasOwnProperty(c)) return;b.setAttribute(c,a[c]);return b}catch(e){return null}}
+function elm(d,a) {
+    try {
+        var b = document.createElement(d);
+        if ("object" === typeof a) {
+            for (var c in a) {
+                if (!a.hasOwnProperty(c)) continue;
+                b.setAttribute(c, a[c]);
+            }
+            return b;
+        }
+    } catch (e) {
+        return null;
+    }
+}
+function get(s,c) {
+    try {
+        return (c||document).querySelector(s);
+    } catch (err) {
+        return null;
+    }
+}
 
 var getFieldLabel = require('./validate').getFieldLabel;
 
@@ -11,7 +31,7 @@ function fields () {
     var df = document.createDocumentFragment();
     var locale = M.getLocale();
     for (var field in fields) {
-        if (!fields.hasOwnProperty(field)) return;
+        if (!fields.hasOwnProperty(field)) continue;
 
         if (field.indexOf('_') !== 0 && !fields[field].noSearch) {
             var option = elm('option', {value: field});
@@ -49,11 +69,8 @@ function value (field, operator, value, editMode) {
         var df = document.createDocumentFragment();
         var order = self.config.ui.operatorOrder;
         
-        for (var i in order) {
-            if (!order.hasOwnProperty(i)) {
-                continue;
-            }
-            
+        for (var i = 0; i < order.length; ++i) {
+
             var op = order[i];
             if (checkOperator.call(self, fieldTemplate, op)) {
                 var option = elm('option', {value: op});

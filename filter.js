@@ -28,7 +28,7 @@ var operatorConfig = {
 function MergeRecursive(obj1, obj2) {
 
     for (var p in obj2) {
-        if (!obj2.hasOwnProperty(p)) return;
+        if (!obj2.hasOwnProperty(p)) continue;
         try {
             // Property in destination object set; update its value.
             if (obj2[p].constructor == Object) {
@@ -82,7 +82,7 @@ function setFilters (filters, reset, dontFetchData) {
             
             // merge filter
             for (var key in filters[i]) {
-                if (!filters[i].hasOwnProperty(key)) return;
+                if (!filters[i].hasOwnProperty(key)) continue;
                 self.filters[hash][key] = filters[i][key];
             }
 
@@ -120,7 +120,7 @@ function getTemplates (templates, reset, callback) {
         
         // merge fetched templates into result templates
         for (var template in templates) {
-            if (!templates.hasOwnProperty(template)) return;
+            if (!templates.hasOwnProperty(template)) continue;
 
            self.templates[template] = templates[template];
         }
@@ -147,7 +147,7 @@ function setTemplates (templates, callback) {
             // select a template
             if (!self.template) {
                 for (template in self.templates) {
-                    if (!self.templates.hasOwnProperty(template)) return;
+                    if (!self.templates.hasOwnProperty(template)) continue;
 
                     self.template = template;
                     self.emit('template', self.templates[template]);
@@ -228,7 +228,8 @@ function setOptions (options, reset, callFind) {
     // merge options
     else {
         for (var option in options) {
-            if (!options.hasOwnProperty(option)) return;
+            if (!options.hasOwnProperty(option)) continue;
+
             var value = options[option];
             
             // option is an array
@@ -270,7 +271,8 @@ function getFilters (callback) {
     var self = this;
     var filters = [];
     for (var id in self.filters) {
-        if (!self.filters.hasOwnProperty(id)) return;
+        if (!self.filters.hasOwnProperty(id)) continue;
+
         var filter = self.filters[id];
         filter.item = null;
         filters.push(filter);
@@ -345,7 +347,7 @@ function init (config) {
 
     // run the binds
     for (var i in config.binds) {
-        if (!config.binds.hasOwnProperty(i)) return;
+        if (!config.binds.hasOwnProperty(i)) continue;
 
         Bind.call(self, config.binds[i]);
     }
@@ -358,7 +360,7 @@ function init (config) {
 
         var operators = self.config.operators;
         for (var operator in operators) {
-            if (!operators.hasOwnProperty(operator)) return;
+            if (!operators.hasOwnProperty(operator)) continue;
 
             (function (op) {
                 self.emit("message", op, function (err, newOperator) {

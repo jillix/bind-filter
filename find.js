@@ -5,9 +5,9 @@ function queryBuilder (filters) {
     var self = this;
     var query = {};
     var fieldsInQuery = {};
-    
+
     for (filter in filters) {
-        if (!filters.hasOwnProperty(filter)) return;
+        if (!filters.hasOwnProperty(filter)) continue;
 
         if (!filters[filter].disabled && self.config.operators[filters[filter].operator]) {
             

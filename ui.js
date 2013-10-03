@@ -6,10 +6,24 @@ var message = require('./message');
 var loader = require('./loader');
 
 // TODO use bind for dom interaction/manipulation
-function elm(d,a){try{var b=document.createElement(d);if("object"===typeof a)for(var c in a)if (!a.hasOwnProperty(c)) return;b.setAttribute(c,a[c]);return b}catch(e){return null}}
-function get(s,c){
-    try{return (c||document).querySelector(s);}
-    catch (err) {
+function elm(d,a) {
+    try {
+        var b = document.createElement(d);
+        if ("object" === typeof a) {
+            for (var c in a) {
+                if (!a.hasOwnProperty(c)) continue;
+                b.setAttribute(c, a[c]);
+            }
+            return b;
+        }
+    } catch (e) {
+        return null;
+    }
+}
+function get(s,c) {
+    try {
+        return (c||document).querySelector(s);
+    } catch (err) {
         return null;
     }
 }
@@ -108,7 +122,7 @@ function changeField (field, operator, value, editMode) {
     if (!field) {
         // field is set in the for loop
         for (field in self.templates[self.template].schema) {
-            if (!self.templates[self.template].schema.hasOwnProperty(field)) return;
+            if (!self.templates[self.template].schema.hasOwnProperty(field)) continue;
 
             if (field.indexOf('_') !== 0) {
                 break;
@@ -143,7 +157,7 @@ function setFilters (filters, reset) {
 
     // filters to list
     for (var hash in filters) {
-        if (!filters.hasOwnProperty(hash)) return;
+        if (!filters.hasOwnProperty(hash)) continue;
         list.save.call(self, hash);
     }
 
@@ -159,7 +173,7 @@ function setTemplateOptions () {
         var df = document.createDocumentFragment();
 
         for (var template in self.templates) {
-            if (!self.templates.hasOwnProperty(template)) return;
+            if (!self.templates.hasOwnProperty(template)) continue;
 
             df.appendChild(createTemplateSelectOption(self.templates[template]));
         }
@@ -210,7 +224,7 @@ function ui () {
     if (!self.config.ui.operatorOrder) {
         self.config.ui.operatorOrder = [];
         for (var operator in self.config.operators) {
-            if (!self.config.operators.hasOwnProperty(operator)) return;
+            if (!self.config.operators.hasOwnProperty(operator)) continue;
 
             self.config.ui.operatorOrder.push(operator);
         }
@@ -239,14 +253,14 @@ function ui () {
 
     self.domRefs.inputs = {};
     for (var name in self.config.ui.inputs) {
-        if (!self.config.ui.inputs.hasOwnProperty(name)) return;
+        if (!self.config.ui.inputs.hasOwnProperty(name)) continue;
 
         self.domRefs.inputs[name] = get(self.config.ui.inputs[name], self.dom);
     }
 
     self.domRefs.controls = {};
     for (var name in self.config.ui.controls) {
-        if (!self.config.ui.controls.hasOwnProperty(name)) return;
+        if (!self.config.ui.controls.hasOwnProperty(name)) continue;
 
         self.domRefs.controls[name] = get(self.config.ui.controls[name], self.dom);
     }
@@ -282,7 +296,7 @@ function ui () {
 
     // add events to controls
     for (var handler in self.domRefs.controls) {
-        if (!self.domRefs.controls.hasOwnProperty(handler)) return;
+        if (!self.domRefs.controls.hasOwnProperty(handler)) continue;
 
         var control = self.domRefs.controls[handler];
         if (control) {
