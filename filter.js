@@ -166,7 +166,7 @@ function setTemplate (template, dontFetchData, force) {
     var template = typeof template === 'string' ? template : template._id;
     if (!template) {
         // TODO handle error
-        return;
+        return console.error('Wrong template format: ' + typeof template);
     }
 
     // nothing to do if the same template
