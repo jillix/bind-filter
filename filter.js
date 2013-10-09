@@ -56,8 +56,8 @@ function uid (len, uid) {
 function setFilters (filters, reset, dontFetchData) {
     var self = this;
     
-    if (!filters || typeof filters !== "object") {
-        return;
+    if (!filters || typeof filters !== "object" || !self.template) {
+        return console.error('setFilters: no template set!');;
     }
 
     // we always reset the skip option
@@ -109,28 +109,28 @@ function setFilters (filters, reset, dontFetchData) {
 function getTemplates (templates, reset, callback) {
     var self = this;
 
-    // get templates to fetch from server
-    self.emit('find', [templates], function (err, templates) {
+    // fetch templates from server
+    self.emit('find', templates, function (err, result) {
 
-        self.emit('templateResult', err, templates);
+        self.emit('templateResult', err, result);
         
-        if (err) {
-            return callback(err);
-        }
-        
-        // merge fetched templates into result templates
-        for (var template in templates) {
-            if (!templates.hasOwnProperty(template)) continue;
-
-           self.templates[templates[template]._id] = templates[template];
+        if (err || !result) {
+            return callback(err || new Error('No templates found.'));
         }
         
         // reset cache
         if (reset) {
-            for (var template in templates) {
-                if (!templates.hasOwnProperty(template)) return;
-               self.templates[templates[template]._id] = templates[template];
-          }
+            self.templates = {};
+        }
+        
+        // merge fetched templates into result templates
+        for (var i = 0, l = result.length; i < l; ++i) {
+            self.templates[result[i]._id] = result[i];
+            
+            // select a template
+            if (result[i]._id === templates[0]) {
+                self.template = templates[0];
+            }
         }
         
         callback(null);
@@ -147,22 +147,12 @@ function setTemplates (templates, callback) {
                 return console.error(err);
             }
             
-            // select a template
-            if (!self.template) {
-                for (template in self.templates) {
-                    if (!self.templates.hasOwnProperty(template)) continue;
-
-                    self.template = template;
-                    self.emit('template', self.templates[template]);
-                    break;
-                }
-            }
-            
             if (callback) {
                 callback();
             }
-            
+
             // emit the templates
+            self.emit('template', self.templates[self.template]);
             self.emit('templates', self.templates);
         });
     }
@@ -173,7 +163,7 @@ function setTemplate (template, dontFetchData, force) {
     var self = this;
 
     // TODO this is a hack until bind knows how select keys in parameters
-    var template = typeof template === 'string' ? template : (template.id || template._id);
+    var template = typeof template === 'string' ? template : template._id;
     if (!template) {
         // TODO handle error
         return;
@@ -185,23 +175,20 @@ function setTemplate (template, dontFetchData, force) {
     }
 
     // get template from server or cache
-    getTemplates.call(self, template, false, function (err) {
+    getTemplates.call(self, [template], false, function (err) {
         
         if (err || !self.templates[template]) {
             // TODO handle error
             return console.error(err || 'template ' + template + ' not found.');
         }
         
-        // set current template (this is only the id)
-        self.template = template;
-        
         // set sort options
         if (self.templates[template].sort) {
             self.emit("setOptions", { sort: self.templates[template].sort });
         }
 
-        setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].options.filters || []), true, dontFetchData);
-        
+        setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true, dontFetchData);
+
         // emit the template
         self.emit('template', self.templates[template]);
     });
