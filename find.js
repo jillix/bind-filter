@@ -83,6 +83,7 @@ function find (all) {
     
     // get data with crud module
     return self.emit('find', self.query, function (err, data, xhr) {
+        if (err) { return console.error(err.message || err); }        
         self.crudFindBusy = false;
         var count = xhr.getResponseHeader('X-Mono-CRUD-Count');
         self.emit('result', err, data, count);
