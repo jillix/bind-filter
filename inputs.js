@@ -114,7 +114,6 @@ function value (field, operator, value, editMode) {
     } else if (fieldTemplate === 'number' && (operator && self.config.operators[operator][2] !== 'split')) {
         input = elm('input', {name: 'value', type: 'number', value: value || '', step: 'any'});
     } else {
-        console.log(">>>>>>>>>>>" + fieldTemplate + " " + operator);
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
     
