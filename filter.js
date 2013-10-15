@@ -258,15 +258,44 @@ function setOptions (options, reset, callFind) {
 }
 
 function getFilters (callback) {
+
+    // set self (the module)
     var self = this;
+
+    // filters to send
     var filters = [];
+
+    // each filter from self.filters
     for (var id in self.filters) {
+
         if (!self.filters.hasOwnProperty(id)) continue;
 
-        var filter = self.filters[id];
-        filter.item = null;
+        // current filter
+        var cFilter = self.filters[id];
+
+        // build filter to push
+        var filter = {};
+
+        // set only these fields
+        var fieldsToSend = ["field", "label", "operator", "originalValue", "value"];
+
+        for (var i = 0; i < fieldsToSend.length; ++i) {
+
+            // get the current field
+            var cField = fieldsToSend[i];
+
+            // if is NOT a key from cFilter go to the next one
+            if (!cFilter.hasOwnProperty(cField)) continue;
+
+            // set the field in filter
+            filter[cField] = cFilter[cField];
+        }
+
+        // push the filter in filters
         filters.push(filter);
     }
+
+    // and callback the filters
     callback(filters);
 }
 
