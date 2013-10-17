@@ -187,7 +187,7 @@ function setTemplate (template, dontFetchData, force) {
             self.emit("setOptions", { sort: self.templates[template].sort });
         }
 
-        setFilters.call(self, (self.config.setFilters || []).concat(self.templates[template].filters || []), true, dontFetchData);
+        setFilters.call(self, (self.config.setFilters || []).concat((self.templates[template].options || {}).filters || []), true, dontFetchData);
 
         // emit the template
         self.emit('template', self.templates[template]);
