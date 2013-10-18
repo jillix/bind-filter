@@ -85,7 +85,15 @@ function find (all) {
     return self.emit('find', self.query, function (err, data, xhr) {
         if (err) { return console.error(err.message || err); }        
         self.crudFindBusy = false;
-        var count = xhr.getResponseHeader('X-Mono-CRUD-Count');
+
+        var count;
+        
+        // verify if xhr exists
+        if (xhr) {
+            // it exists, so get the count from response
+            count = xhr.getResponseHeader('X-Mono-CRUD-Count');
+        }
+        
         self.emit('result', err, data, count);
     });
 }
