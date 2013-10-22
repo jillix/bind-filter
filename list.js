@@ -48,12 +48,12 @@ function createFilterItem (hash) {
     
     if (operator) {
         var myOperator = self.filters[hash].operator;
-        operator.innerHTML = self.config.i18n[myOperator] || myOperator;
+        operator.innerHTML = (self.config.i18n || {})[myOperator] || myOperator;
     }
     
     if (value) {
         var myValue = self.filters[hash].value === undefined ? '' : (typeof self.filters[hash].originalValue === 'string' ? self.filters[hash].originalValue : self.filters[hash].value);
-        value.innerHTML = self.config.i18n[myValue] || myValue;
+        value.innerHTML = (self.config.i18n || {})[myValue] || myValue;
     }
 
     // hide edit if it's a core field
