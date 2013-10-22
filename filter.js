@@ -183,8 +183,8 @@ function setTemplate (template, dontFetchData, force) {
         }
         
         // set sort options
-        if (self.templates[template].sort) {
-            self.emit("setOptions", { sort: self.templates[template].sort });
+        if ((self.templates[template].options || {}).sort) {
+            self.emit("setOptions", { sort: self.templates[template].options.sort });
         }
 
         setFilters.call(self, (self.config.setFilters || []).concat((self.templates[template].options || {}).filters || []), true, dontFetchData);
