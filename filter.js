@@ -389,6 +389,17 @@ function init (config) {
                 });
             })(operator);
         }
+        
+        // translate "true" and "false"
+        var values = ["true", "false"];
+        for (var i = 0; i < values.length; ++i) {
+            (function (val) {
+                self.emit("message", val, function (err, result) {
+                    if (err) { return; }
+                    self.config.i18n[val] = result.message;
+                });
+            })(values[i]);
+        }
     }
 
     if (self.config.ui) {

@@ -88,10 +88,10 @@ function value (field, operator, value, editMode) {
     if ((operator && self.config.operators[operator][2] === 'boolean') || fieldTemplate === 'boolean') {
         var select = elm('select', {name: 'value'});
         var opt1 = elm('option', {value: 'true'});
-        opt1.innerHTML = 'true';
+        opt1.innerHTML = self.config.i18n['true'] || 'true';
 
         var opt2 = elm('option', {value: 'false'});
-        opt2.innerHTML = 'false';
+        opt2.innerHTML = self.config.i18n['false'] || 'false';
 
         select.appendChild(opt1);
         select.appendChild(opt2);
