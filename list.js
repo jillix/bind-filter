@@ -45,17 +45,15 @@ function createFilterItem (hash) {
     if (field) {
         field.innerHTML = getFieldLabel.call(self, self.filters[hash].field);
     }
+    
     if (operator) {
-
         var myOperator = self.filters[hash].operator;
-
-        self.emit("message", myOperator, function (err, newOperator) {
-            if(err) { return; }
-            operator.innerHTML = newOperator.message;
-        });
+        operator.innerHTML = self.config.i18n[myOperator] || myOperator;
     }
+    
     if (value) {
-        value.innerHTML = self.filters[hash].value === undefined ? '' : (typeof self.filters[hash].originalValue === 'string' ? self.filters[hash].originalValue : self.filters[hash].value);
+        var myValue = self.filters[hash].value === undefined ? '' : (typeof self.filters[hash].originalValue === 'string' ? self.filters[hash].originalValue : self.filters[hash].value);
+        value.innerHTML = self.config.i18n[myValue] || myValue;
     }
 
     // hide edit if it's a core field
