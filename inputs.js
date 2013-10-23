@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/inputs.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function elm(d,a) {
     try {
@@ -146,5 +145,3 @@ function value (field, operator, value, editMode) {
 exports.value = value;
 exports.fields = fields;
 
-
-return module; });

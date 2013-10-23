@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/filter.js', function (require, module, exports) {
 var Bind = require('github/jillix/bind');
 var Events = require('github/jillix/events');
 
@@ -46,9 +45,9 @@ function MergeRecursive(obj1, obj2) {
 }
 
 function uid (len, uid) {
-    uid = "";
+    uid = '';
     for (var i = 0, l = len || 24; i < l; ++i) {
-        uid += "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[0 | Math.random() * 62];
+        uid += '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'[0 | Math.random() * 62];
     }
     return uid;
 };
@@ -56,7 +55,7 @@ function uid (len, uid) {
 function setFilters (filters, reset, dontFetchData) {
     var self = this;
     
-    if (!filters || typeof filters !== "object" || !self.template) {
+    if (!filters || typeof filters !== 'object' || !self.template) {
         return console.error('setFilters: no template set!');;
     }
 
@@ -184,7 +183,7 @@ function setTemplate (template, dontFetchData, force) {
         
         // set sort options
         if ((self.templates[template].options || {}).sort) {
-            self.emit("setOptions", { sort: self.templates[template].options.sort });
+            self.emit('setOptions', { sort: self.templates[template].options.sort });
         }
 
         setFilters.call(self, (self.config.setFilters || []).concat((self.templates[template].options || {}).filters || []), true, dontFetchData);
@@ -277,7 +276,7 @@ function getFilters (callback) {
         var filter = {};
 
         // set only these fields
-        var fieldsToSend = ["field", "label", "operator", "originalValue", "value"];
+        var fieldsToSend = ['field', 'label', 'operator', 'originalValue', 'value'];
 
         for (var i = 0; i < fieldsToSend.length; ++i) {
 
@@ -382,7 +381,7 @@ function init (config) {
             if (!operators.hasOwnProperty(operator)) continue;
 
             (function (op) {
-                self.emit("message", op, function (err, newOperator) {
+                self.emit('message', op, function (err, newOperator) {
                     if (err) { return; }
                     // cache the translated operator
                     self.config.i18n[op] = newOperator.message;
@@ -390,11 +389,11 @@ function init (config) {
             })(operator);
         }
         
-        // translate "true" and "false"
-        var values = ["true", "false"];
+        // translate 'true' and 'false'
+        var values = ['true', 'false'];
         for (var i = 0; i < values.length; ++i) {
             (function (val) {
-                self.emit("message", val, function (err, result) {
+                self.emit('message', val, function (err, result) {
                     if (err) { return; }
                     self.config.i18n[val] = result.message;
                 });
@@ -424,4 +423,3 @@ function init (config) {
 
 module.exports = init;
 
-return module; });

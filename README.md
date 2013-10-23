@@ -211,7 +211,8 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
- - added `operatorOrder` option that tells the UI the order in which operators should be displayed
+ - add new fixes and features here
 
-### v1.0.0
- - Initial release
+### v0.1.0
+ - Initial versioned release
+

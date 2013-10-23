@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/dev/loader.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c) {
     try {
@@ -61,5 +60,3 @@ function init () {
 
 module.exports = init;
 
-
-return module; });
