@@ -51,15 +51,22 @@ function queryBuilder (filters) {
     };
 }
 
-function find (all) {
+function find (all, callback) {
     var self = this;
     
+    // callback must be a function
+    callback = callback || function () {};
+    
     if (!self.template) {
-        return self.emit('result', new Error('NO_TEMPLATE_SELECTED'));
+        var err = new Error('NO_TEMPLATE_SELECTED');
+        callback (err);
+        return self.emit('result', err);
     }
     
     if (self.crudFindBusy) {
-        return self.emit('result', new Error('FILTER_IS_BUSY'));
+        var err = new Error('FILTER_IS_BUSY');
+        callback (err);
+        return self.emit('result', err);
     }
     
     self.crudFindBusy = true;
@@ -71,7 +78,9 @@ function find (all) {
         
         if (self.wasEmpty) {
             self.crudFindBusy = false;
-            return self.emit('result', new Error('NO_FILTERS_SELECTED'));
+            var err =  new Error('NO_FILTERS_SELECTED');
+            callback (err);
+            return self.emit('result', err);
         }
         
         self.wasEmpty = true;
@@ -82,7 +91,13 @@ function find (all) {
     
     // get data with crud module
     return self.emit('find', self.query, function (err, data, xhr) {
-        if (err) { return console.error(err.message || err); }        
+        
+        if (err) { 
+            err = err.message || err;
+            callback (err);
+            return console.error(err);
+        }
+        
         self.crudFindBusy = false;
 
         var count;
@@ -93,9 +108,9 @@ function find (all) {
             count = xhr.getResponseHeader('X-Mono-CRUD-Count');
         }
         
+        callback (err, data, count);
         self.emit('result', err, data, count);
     });
 }
 
 module.exports = find;
-

@@ -52,11 +52,16 @@ function uid (len, uid) {
     return uid;
 };
 
-function setFilters (filters, reset, dontFetchData) {
+function setFilters (filters, reset, dontFetchData, callback) {
     var self = this;
+
+    // callback must be a function
+    callback = callback || function () {};
     
     if (!filters || typeof filters !== 'object' || !self.template) {
-        return console.error('setFilters: no template set!');;
+        var err = "setFilters: no template set!";
+        callback (err);
+        return console.error(err);
     }
 
     // we always reset the skip option
@@ -101,7 +106,7 @@ function setFilters (filters, reset, dontFetchData) {
     
     // find data in db
     if (!dontFetchData) {
-        find.call(self);
+        find.call(self, undefined, callback);
     }
 }
 
@@ -158,18 +163,33 @@ function setTemplates (templates, callback) {
 }
 
 // TODO swap force and dontFetchData parameter to have the same syntax everywhere
-function setTemplate (template, dontFetchData, force) {
+function setTemplate (template, dontFetchData, force, callback) {
     var self = this;
 
+    if (typeof force === "function") {
+        callback = force;
+        force = undefined;
+    }
+    
+    if (typeof dontFetchData === "function") {
+        callback = dontFetchData;
+        dontFetchData = undefined;
+    }
+    
+    // callback must be a function
+    callback = callback || function () {};
+    
     // TODO this is a hack until bind knows how select keys in parameters
     var template = typeof template === 'string' ? template : template._id;
     if (!template) {
-        // TODO handle error
-        return console.error('Wrong template format: ' + typeof template);
+        var err = 'Wrong template format: ' + typeof template;
+        callback (err);
+        return console.error(err);
     }
 
     // nothing to do if the same template
     if (!force && self.template === template) {
+        callback();
         return;
     }
 
@@ -177,8 +197,9 @@ function setTemplate (template, dontFetchData, force) {
     getTemplates.call(self, [template], false, function (err) {
         
         if (err || !self.templates[template]) {
-            // TODO handle error
-            return console.error(err || 'template ' + template + ' not found.');
+            err = err || 'template ' + template + ' not found.';
+            callback (err);
+            return console.error(err);
         }
         
         // set sort options
@@ -186,7 +207,7 @@ function setTemplate (template, dontFetchData, force) {
             self.emit('setOptions', { sort: self.templates[template].options.sort });
         }
 
-        setFilters.call(self, (self.config.setFilters || []).concat((self.templates[template].options || {}).filters || []), true, dontFetchData);
+        setFilters.call(self, (self.config.setFilters || []).concat((self.templates[template].options || {}).filters || []), true, dontFetchData, callback);
 
         // emit the template
         self.emit('template', self.templates[template]);
@@ -200,7 +221,7 @@ function resetSkip () {
     self.options.skip = 0;
 }
 
-function setOptions (options, reset, callFind) {
+function setOptions (options, reset, callFind, callback) {
     var self = this;
 
     if (typeof options !== 'object') {
@@ -218,31 +239,7 @@ function setOptions (options, reset, callFind) {
     else {
         for (var option in options) {
             if (!options.hasOwnProperty(option)) continue;
-
             var value = options[option];
-            
-            // option is an array
-            //var optionValue = self.options[option];
-
-            // TODO How do we merge objects?
-            // switch ((optionValue || {}).constructor) {
-            //     case Array:
-            //         optionValue.push(value);
-            //         break;
-            //     case Object:
-            //         switch (value.constructor) {
-            //             case Object:
-            //                 optionValue = MergeRecursive(self.options[option], value);
-            //                 break;
-            //             default:
-            //                 optionValue = value;
-            //                 break;
-            //         }
-            //         break;
-            //     default:
-            //         optionValue = value;
-            // }
-
             self.options[option] = value;
         }
     }
@@ -252,7 +249,7 @@ function setOptions (options, reset, callFind) {
     
     // find data in db
     if (callFind) {
-        find.call(self);
+        find.call(self, undefined, callback);
     }
 }
 
@@ -422,4 +419,3 @@ function init (config) {
 }
 
 module.exports = init;
-
