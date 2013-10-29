@@ -62,7 +62,7 @@ function find (all, callback) {
         callback (err);
         return self.emit('result', err);
     }
-    
+
     if (self.crudFindBusy) {
         var err = new Error('FILTER_IS_BUSY');
         callback (err);
@@ -91,6 +91,8 @@ function find (all, callback) {
     
     // get data with crud module
     return self.emit('find', self.query, function (err, data, xhr) {
+
+        self.crudFindBusy = false;
         
         if (err) { 
             err = err.message || err;
@@ -98,8 +100,6 @@ function find (all, callback) {
             return console.error(err);
         }
         
-        self.crudFindBusy = false;
-
         var count;
         
         // verify if xhr exists
