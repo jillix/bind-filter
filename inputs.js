@@ -5,7 +5,12 @@ function elm(d,a) {
         if ("object" === typeof a) {
             for (var c in a) {
                 if (!a.hasOwnProperty(c)) continue;
-                b.setAttribute(c, a[c]);
+
+                if (typeof a[c] === 'object' && a[c] instanceof Array) {
+                    b.setAttribute(c, a[c].join(', '));
+                } else {
+                    b.setAttribute(c, a[c]);
+                }
             }
             return b;
         }
@@ -144,4 +149,3 @@ function value (field, operator, value, editMode) {
 
 exports.value = value;
 exports.fields = fields;
-
