@@ -86,7 +86,7 @@ ui: {
         // all elements that should be hidden during a request
         hide: '.hideOnLoad'
     },
-    
+
     // set custom classes on filter inputs
     classes: {
         // set class for the value field
@@ -212,6 +212,9 @@ Types: `alert` `error` `success` `info`
 
 ### dev
  - add new fixes and features here
+
+### v0.1.1
+ - callback function feature for findfunction
 
 ### v0.1.0
  - Initial versioned release
