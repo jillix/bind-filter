@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.2
+ - `crudFindBusy = false` before handling the error from find request
+
 ### v0.1.1
  - callback function feature for findfunction
 
