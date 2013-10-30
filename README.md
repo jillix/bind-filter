@@ -215,6 +215,7 @@ Types: `alert` `error` `success` `info`
 
 ### v0.1.2
  - `crudFindBusy = false` before handling the error from find request
+ - fixed displaying `Array` values in the value input in IE8
 
 ### v0.1.1
  - callback function feature for findfunction
