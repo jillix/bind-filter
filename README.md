@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.4
+ - added comparison operators to `date` values
+
 ### v0.1.3
  - send `hidden` field in `getFilters`
  - update to Bind v0.2.1

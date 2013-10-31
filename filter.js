@@ -11,17 +11,17 @@ var defaultOptions = {
     limit: 17
 };
 var operatorConfig = {
-    '=':        ['',        'mixed'],                                       // or
-    '!=':       ['$ne',     ['number', 'string', 'array']],                 // and
-    '>':        ['$gt',     ['number']],                                    // and
-    '<':        ['$lt',     ['number']],                                    // and
-    '>=':       ['$gte',    ['number']],                                    // and
-    '<=':       ['$lte',    ['number']],                                    // and
-    'in':       ['$in',     ['number', 'string', 'array'],    'split'],     // and ('or' can be achieved by concatenating the arrays)
-    'notin':    ['$nin',    ['number', 'string', 'array'],    'split'],     // or ('and' can be achieved by concatenating the arrays)
-    'all':      ['$all',    ['array'],    'split'],                         // or ('and' can be achieved by concatenating the arrays)
-    'regExp':   ['$regex',  ['string']],                                    // and ('or' is built in the regex syntax)
-    'exists':   ['$exists', 'mixed',    'boolean']                          // makes no sense
+    '=':        ['',        'mixed'],                                               // or
+    '!=':       ['$ne',     ['number', 'date', 'string', 'array']],                 // and
+    '>':        ['$gt',     ['number', 'date']],                                    // and
+    '<':        ['$lt',     ['number', 'date']],                                    // and
+    '>=':       ['$gte',    ['number', 'date']],                                    // and
+    '<=':       ['$lte',    ['number', 'date']],                                    // and
+    'in':       ['$in',     ['number', 'string', 'array'],              'split'],   // and ('or' can be achieved by concatenating the arrays)
+    'notin':    ['$nin',    ['number', 'string', 'array'],              'split'],   // or ('and' can be achieved by concatenating the arrays)
+    'all':      ['$all',    ['array'],    'split'],                                 // or ('and' can be achieved by concatenating the arrays)
+    'regExp':   ['$regex',  ['string']],                                            // and ('or' is built in the regex syntax)
+    'exists':   ['$exists', 'mixed',                                    'boolean']  // makes no sense
 };
 
 function MergeRecursive(obj1, obj2) {
@@ -419,3 +419,4 @@ function init (config) {
 }
 
 module.exports = init;
+
