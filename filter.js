@@ -59,7 +59,7 @@ function setFilters (filters, reset, dontFetchData, callback) {
     callback = callback || function () {};
     
     if (!filters || typeof filters !== 'object' || !self.template) {
-        var err = "setFilters: no template set!";
+        var err = 'setFilters: no template set!';
         callback (err);
         return console.error(err);
     }
@@ -166,12 +166,12 @@ function setTemplates (templates, callback) {
 function setTemplate (template, dontFetchData, force, callback) {
     var self = this;
 
-    if (typeof force === "function") {
+    if (typeof force === 'function') {
         callback = force;
         force = undefined;
     }
     
-    if (typeof dontFetchData === "function") {
+    if (typeof dontFetchData === 'function') {
         callback = dontFetchData;
         dontFetchData = undefined;
     }
@@ -273,7 +273,7 @@ function getFilters (callback) {
         var filter = {};
 
         // set only these fields
-        var fieldsToSend = ['field', 'label', 'operator', 'originalValue', 'value'];
+        var fieldsToSend = ['originalValue', 'field', 'operator', 'value', 'hidden', 'fixed', 'label'];
 
         for (var i = 0; i < fieldsToSend.length; ++i) {
 

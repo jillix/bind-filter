@@ -213,6 +213,10 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.3
+ - send `hidden` field in `getFilters`
+ - update to Bind v0.2.1
+
 ### v0.1.2
  - `crudFindBusy = false` before handling the error from find request
  - fixed displaying `Array` values in the value input in IE8
