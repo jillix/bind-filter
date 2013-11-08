@@ -298,7 +298,7 @@ function getFilters (callback) {
 function getItem (dataItem, callback) {
     var self = this;
 
-    if (!self.query) { return; }
+    if (!self.query || !dataItem._id) { return; }
 
     if (self.crudFindBusy) {
         return callback('Find is busy.');
@@ -306,17 +306,18 @@ function getItem (dataItem, callback) {
 
     self.crudFindBusy = true;
 
-    var queryWithoutLimit = JSON.parse(JSON.stringify(self.query));
-    delete queryWithoutLimit.o.limit;
+    var query = {
+        q: {_id: dataItem._id},
+        o: {limit: 1},
+        t: self.query.t
+    };
 
-    self.emit('find', queryWithoutLimit, function (err, data) {
+    self.emit('find', query, function (err, data) {
         self.crudFindBusy = false;
-
-        for (var i = 0, l = data.length; i < l; ++i) {
-            if (data[i]._id === dataItem._id) {
-                data[i].bindFilterMessage = 'show';
-                return callback(null, data[i]);
-            }
+        
+        if  (data && data[0]) {
+            data[0].bindFilterMessage = 'show';
+            return callback(null, data[0]);
         }
         
         // TODO How must this look?
