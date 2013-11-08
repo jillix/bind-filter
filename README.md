@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.5
+ - getItem fetches now only one item
+
 ### v0.1.4
  - added comparison operators to `date` values
 
