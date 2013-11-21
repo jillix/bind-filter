@@ -123,12 +123,14 @@ function disable (hash) {
 function changeField (field, operator, value, editMode) {
     var self = this;
 
+    var selectedTemplateSchema = self.templates[self.template].schema;
+
     if (!field) {
         // field is set in the for loop
-        for (field in self.templates[self.template].schema) {
-            if (!self.templates[self.template].schema.hasOwnProperty(field)) continue;
+        for (field in selectedTemplateSchema) {
+            if (!selectedTemplateSchema.hasOwnProperty(field)) continue;
 
-            if (field.indexOf('_') !== 0) {
+            if (field.indexOf('_') !== 0 && !selectedTemplateSchema[field].noSearch) {
                 break;
             }
         }
@@ -335,4 +337,3 @@ function ui () {
 }
 
 module.exports = ui;
-
