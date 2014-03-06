@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.7
+ - Events v0.1.8
+
 ### v0.1.6
  - Fixed the wrong condition when selecting "first item" in the field select: search for first **non-core key** and which doesn't have `noSearch: true`
 ### v0.1.5
