@@ -75,7 +75,7 @@ function value (field, operator, value, editMode) {
     
                 // select operator
                 if (operator === op) {
-                    option.setAttribute('selected');
+                    option.setAttribute('selected', '');
                 }
                 
                 df.appendChild(option);
