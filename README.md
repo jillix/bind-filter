@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.8
+ - fixed `setAttribute` bug (#22)
+
 ### v0.1.7
  - Events v0.1.8
 
