@@ -214,7 +214,7 @@ Types: `alert` `error` `success` `info`
  - add new fixes and features here
 
 ### v0.1.8
- - fixed `setAttribute` bug (#22)
+ - fixed `setAttribute` bug [#22](https://github.com/jillix/bind-filter/issues/22)
 
 ### v0.1.7
  - Events v0.1.8
