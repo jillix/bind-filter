@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new fixes and features here
 
+### v0.1.9
+ - Enable the filter if it is disabled when saving it
+
 ### v0.1.8
  - fixed `setAttribute` bug [#22](https://github.com/jillix/bind-filter/issues/22)
 
