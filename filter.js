@@ -43,6 +43,32 @@ function MergeRecursive(obj1, obj2) {
 
     return obj1;
 }
+function findValue (parent, dotNot) {
+
+    if (!dotNot) return undefined;
+
+    var splits = dotNot.split('.');
+    var value;
+
+    for (var i = 0; i < splits.length; i++) {
+        value = parent[splits[i]];
+        if (value === undefined) return undefined;
+        if (typeof value === 'object') parent = value;
+    }
+
+    return value;
+}
+
+function findFunction (parent, dotNot) {
+
+    var func = findValue(parent, dotNot);
+
+    if (typeof func !== 'function') {
+        return undefined;
+    }
+
+    return func;
+}
 
 function uid (len, uid) {
     uid = '';
@@ -71,10 +97,29 @@ function setFilters (filters, reset, dontFetchData, callback) {
     if (reset) {
         self.filters = {};
     }
-    
+
     // create and buffer filters
     for (var i = 0, l = filters.length; i < l; ++i) {
-    
+
+        // check if cutom filter
+        if (typeof filters[i] === 'string' && self.config.customFilterHandlers) {
+
+            // get the function
+            var filterFunction = findFunction(window, self.config.customFilterHandlers + "." + filters[i]);
+
+            // check if the function exists
+            if (!filterFunction) { continue; }
+
+            var filter = filterFunction.call(self);
+            if (filter && typeof filter === 'object') {
+                filters[i] = filter;
+            } else {
+                continue;
+            }
+        } else if (typeof filters[i] === 'string' && !self.config.customFilterHandlers) {
+            continue;
+        }
+
         // validate field
         if (validate.validate.call(self, filters[i])) {
             
@@ -420,4 +465,3 @@ function init (config) {
 }
 
 module.exports = init;
-

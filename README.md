@@ -211,7 +211,7 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
- - add new fixes and features here
+ - added dynamic custom pre-defined filter support
 
 ### v0.1.9
  - Enable the filter if it is disabled when saving it
