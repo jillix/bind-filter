@@ -211,7 +211,10 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
+
+### v0.2.0
  - added dynamic custom pre-defined filter support
+ - Updated to `bind@v0.3.0` and `events@v0.3.0`
 
 ### v0.1.9
  - Enable the filter if it is disabled when saving it
