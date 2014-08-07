@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/v0.2.0/inputs.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function elm(d,a) {
     try {
@@ -45,7 +46,7 @@ function fields () {
 
 function checkOperator (fieldTemplate, operator) {
     var self = this;
-    
+
     if (self.config.operators[operator][1] === 'mixed' || (self.config.operators[operator][1].indexOf(fieldTemplate) > -1)) {
         return true;
     }
@@ -53,41 +54,41 @@ function checkOperator (fieldTemplate, operator) {
 
 function value (field, operator, value, editMode) {
     var self = this;
-    
+
     if (!self.template || !self.templates[self.template].schema[field] || !self.templates[self.template].schema[field].type) {
         return;
     }
-    
+
     var fieldTemplate = self.templates[self.template].schema[field].type;
     var input;
-    
+
     // refresh operators when changing the field
     if (!operator || editMode) {
         var df = document.createDocumentFragment();
         var order = self.config.ui.operatorOrder;
-        
+
         for (var i = 0; i < order.length; ++i) {
 
             var op = order[i];
             if (checkOperator.call(self, fieldTemplate, op)) {
                 var option = elm('option', {value: op});
                 option.innerHTML = self.config.i18n ? (self.config.i18n[op] || op) : op;
-    
+
                 // select operator
                 if (operator === op) {
                     option.setAttribute('selected', '');
                 }
-                
+
                 df.appendChild(option);
             }
         }
-        
+
         if (self.domRefs.inputs.operator) {
             self.domRefs.inputs.operator.innerHTML = '';
             self.domRefs.inputs.operator.appendChild(df);
         }
     }
-    
+
     // handle boolean input
     if ((operator && self.config.operators[operator][2] === 'boolean') || fieldTemplate === 'boolean') {
         var select = elm('select', {name: 'value'});
@@ -120,7 +121,7 @@ function value (field, operator, value, editMode) {
     } else {
         input = elm('input', {name: 'value', type: 'text', value: value || ''});
     }
-    
+
     // adding custom classes
     if (self.config.ui && self.config.ui.classes) {
         input.setAttribute("class", input.getAttribute("class") || '' + " " + self.config.ui.classes.value || '');
@@ -149,3 +150,5 @@ function value (field, operator, value, editMode) {
 
 exports.value = value;
 exports.fields = fields;
+
+return module; });

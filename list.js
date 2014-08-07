@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/v0.2.0/list.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c) {
     try {
@@ -44,12 +45,12 @@ function createFilterItem (hash) {
     if (field) {
         field.innerHTML = getFieldLabel.call(self, self.filters[hash].field);
     }
-    
+
     if (operator) {
         var myOperator = self.filters[hash].operator;
         operator.innerHTML = (self.config.i18n || {})[myOperator] || myOperator;
     }
-    
+
     if (value) {
         var myValue = self.filters[hash].value === undefined ? '' : (typeof self.filters[hash].originalValue === 'string' ? self.filters[hash].originalValue : self.filters[hash].value);
         value.innerHTML = (self.config.i18n || {})[myValue] || myValue;
@@ -144,3 +145,5 @@ function remove (hash) {
 exports.save = save;
 exports.remove = remove;
 
+
+return module; });
