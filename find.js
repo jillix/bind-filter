@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/find.js', function (require, module, exports) {
 var currentFilters = {};
 
 function queryBuilder (filters) {
@@ -110,5 +109,3 @@ function find (all, callback) {
 }
 
 module.exports = find;
-
-return module; });

@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/list.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c) {
     try {
@@ -144,6 +143,3 @@ function remove (hash) {
 
 exports.save = save;
 exports.remove = remove;
-
-
-return module; });

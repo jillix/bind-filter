@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/filter.js', function (require, module, exports) {
 var Bind = require('github/jillix/bind');
 var Events = require('github/jillix/events');
 
@@ -466,5 +465,3 @@ function init (config) {
 }
 
 module.exports = init;
-
-return module; });

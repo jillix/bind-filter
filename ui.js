@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/ui.js', function (require, module, exports) {
 var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
@@ -343,5 +342,3 @@ function ui () {
 }
 
 module.exports = ui;
-
-return module; });
