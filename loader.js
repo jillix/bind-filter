@@ -1,3 +1,4 @@
+M.wrap('github/jillix/bind-filter/v0.2.0/loader.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function get(s,c) {
     try {
@@ -14,7 +15,7 @@ function handleInputs(disable) {
 
 function hideShowFilters (hide) {
     var self = this;
-    
+
     for (var i = 0, l = self.loader.hide.length; i < l; ++i) {
         self.loader.hide[i].style.display = hide ? 'none' : 'block';
     }
@@ -22,7 +23,7 @@ function hideShowFilters (hide) {
 
 function show () {
     var self = this;
-    
+
     // hide filter
     hideShowFilters.call(self, true);
     // disable inputs
@@ -33,7 +34,7 @@ function show () {
 
 function hide () {
     var self = this;
-    
+
     // hide loader
     self.loader.loader.style.display = 'none';
     // enable inputs
@@ -44,19 +45,21 @@ function hide () {
 
 function init () {
     var self = this;
-    
+
     if (!self.config.ui.loader) {
         return;
     }
-    
+
     self.loader = {
         loader: get(self.config.ui.loader.loader, self.dom)[0],
         hide: get(self.config.ui.loader.hide, self.dom)
     };
-    
+
     self.on('showLoader', show);
     self.on('hideLoader', hide);
 }
 
 module.exports = init;
 
+
+return module; });
