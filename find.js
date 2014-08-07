@@ -26,17 +26,13 @@ function queryBuilder (filters) {
 
             // handle or
             if (fieldsInQuery[cFilter.field]) {
-                if (operator[0] === '') {
-                    // create or array and move the existing expression to the array
-                    if (!query.$or) {
-                        query.$or = [{}];
-                        query.$or[0][cFilter.field] = query[cFilter.field];
-                        delete query[cFilter.field];
-                    }
-                    query.$or.push(expression);
-                } else {
-                    query[cFilter.field][operator[0]] = value;
+                // create or array and move the existing expression to the array
+                if (!query.$or) {
+                    query.$or = [{}];
+                    query.$or[0][cFilter.field] = query[cFilter.field];
+                    delete query[cFilter.field];
                 }
+                query.$or.push(expression);
             } else {
                 query[cFilter.field] = expression[cFilter.field];
             }
