@@ -8,41 +8,40 @@ function queryBuilder (filters) {
 
     for (filter in filters) {
         if (!filters.hasOwnProperty(filter)) continue;
+        var cFilter = filters[filter];
 
-        if (!filters[filter].disabled && self.config.operators[filters[filter].operator]) {
+        if (!cFilter.disabled && self.config.operators[cFilter.operator]) {
 
             var expression = {};
-            var values = filters[filter];
-            var value = values.value;
-            var operator = self.config.operators[values.operator];
-
+            var value = cFilter.value;
+            var operator = self.config.operators[cFilter.operator];
 
             // handle operators
             if (operator[0]) {
-                expression[values.field] = {};
-                expression[values.field][operator[0]] = value;
+                expression[cFilter.field] = {};
+                expression[cFilter.field][operator[0]] = value;
             } else {
-                expression[values.field] = value;
+                expression[cFilter.field] = value;
             }
 
             // handle or
-            if (fieldsInQuery[values.field]) {
+            if (fieldsInQuery[cFilter.field]) {
                 if (operator[0] === '') {
                     // create or array and move the existing expression to the array
                     if (!query.$or) {
                         query.$or = [{}];
-                        query.$or[0][values.field] = query[values.field];
-                        delete query[values.field];
+                        query.$or[0][cFilter.field] = query[cFilter.field];
+                        delete query[cFilter.field];
                     }
                     query.$or.push(expression);
                 } else {
-                    query[values.field][operator[0]] = value;
+                    query[cFilter.field][operator[0]] = value;
                 }
             } else {
-                query[values.field] = expression[values.field];
+                query[cFilter.field] = expression[cFilter.field];
             }
 
-            fieldsInQuery[values.field] = 1;
+            fieldsInQuery[cFilter.field] = 1;
         }
     }
     return {
