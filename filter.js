@@ -1,6 +1,6 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/filter.js', function (require, module, exports) {
 var Bind = require('github/jillix/bind');
 var Events = require('github/jillix/events');
+var Utils = require('github/jillix/utils');
 
 var find = require('./find');
 var ui = require('./ui');
@@ -44,32 +44,6 @@ function MergeRecursive(obj1, obj2) {
 
     return obj1;
 }
-function findValue (parent, dotNot) {
-
-    if (!dotNot) return undefined;
-
-    var splits = dotNot.split('.');
-    var value;
-
-    for (var i = 0; i < splits.length; i++) {
-        value = parent[splits[i]];
-        if (value === undefined) return undefined;
-        if (typeof value === 'object') parent = value;
-    }
-
-    return value;
-}
-
-function findFunction (parent, dotNot) {
-
-    var func = findValue(parent, dotNot);
-
-    if (typeof func !== 'function') {
-        return undefined;
-    }
-
-    return func;
-}
 
 function uid (len, uid) {
     uid = '';
@@ -106,7 +80,7 @@ function setFilters (filters, reset, dontFetchData, callback) {
         if (typeof filters[i] === 'string' && self.config.customFilterHandlers) {
 
             // get the function
-            var filterFunction = findFunction(window, self.config.customFilterHandlers + "." + filters[i]);
+            var filterFunction = Utils.findFunction(window, self.config.customFilterHandlers + '.' + filters[i]);
 
             // check if the function exists
             if (!filterFunction) { continue; }
@@ -466,5 +440,3 @@ function init (config) {
 }
 
 module.exports = init;
-
-return module; });

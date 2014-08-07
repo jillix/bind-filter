@@ -1,4 +1,3 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/ui.js', function (require, module, exports) {
 var find = require('./find');
 var list = require('./list');
 var inputs = require('./inputs');
@@ -9,7 +8,7 @@ var loader = require('./loader');
 function elm(d,a) {
     try {
         var b = document.createElement(d);
-        if ("object" === typeof a) {
+        if ('object' === typeof a) {
             for (var c in a) {
                 if (!a.hasOwnProperty(c)) continue;
 
@@ -343,5 +342,3 @@ function ui () {
 }
 
 module.exports = ui;
-
-return module; });

@@ -1,9 +1,8 @@
-M.wrap('github/jillix/bind-filter/v0.2.0/inputs.js', function (require, module, exports) {
 // TODO use bind for dom interaction/manipulation
 function elm(d,a) {
     try {
         var b = document.createElement(d);
-        if ("object" === typeof a) {
+        if ('object' === typeof a) {
             for (var c in a) {
                 if (!a.hasOwnProperty(c)) continue;
 
@@ -124,7 +123,7 @@ function value (field, operator, value, editMode) {
 
     // adding custom classes
     if (self.config.ui && self.config.ui.classes) {
-        input.setAttribute("class", input.getAttribute("class") || '' + " " + self.config.ui.classes.value || '');
+        input.setAttribute('class', input.getAttribute('class') || '' + ' ' + self.config.ui.classes.value || '');
     }
 
     self.domRefs.inputs.value = input;
@@ -150,5 +149,3 @@ function value (field, operator, value, editMode) {
 
 exports.value = value;
 exports.fields = fields;
-
-return module; });
