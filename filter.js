@@ -105,7 +105,7 @@ function setFilters (filters, reset, dontFetchData, callback) {
         if (typeof filters[i] === 'string' && self.config.customFilterHandlers) {
 
             // get the function
-            var filterFunction = findFunction(window, self.config.customFilterHandlers + "." + filters[i]);
+            var filterFunction = findFunction(window, self.config.customFilterHandlers + '.' + filters[i]);
 
             // check if the function exists
             if (!filterFunction) { continue; }

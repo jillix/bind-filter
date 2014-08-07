@@ -8,7 +8,7 @@ var loader = require('./loader');
 function elm(d,a) {
     try {
         var b = document.createElement(d);
-        if ("object" === typeof a) {
+        if ('object' === typeof a) {
             for (var c in a) {
                 if (!a.hasOwnProperty(c)) continue;
 

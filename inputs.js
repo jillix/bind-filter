@@ -2,7 +2,7 @@
 function elm(d,a) {
     try {
         var b = document.createElement(d);
-        if ("object" === typeof a) {
+        if ('object' === typeof a) {
             for (var c in a) {
                 if (!a.hasOwnProperty(c)) continue;
 
@@ -123,7 +123,7 @@ function value (field, operator, value, editMode) {
 
     // adding custom classes
     if (self.config.ui && self.config.ui.classes) {
-        input.setAttribute("class", input.getAttribute("class") || '' + " " + self.config.ui.classes.value || '');
+        input.setAttribute('class', input.getAttribute('class') || '' + ' ' + self.config.ui.classes.value || '');
     }
 
     self.domRefs.inputs.value = input;
