@@ -212,6 +212,11 @@ Types: `alert` `error` `success` `info`
 
 ### dev
 
+### v0.2.1
+ - Handle `$or` operator correctly
+ - Added `utils` library as dependency
+ - Replaced double quotes with simple ones
+
 ### v0.2.0
  - added dynamic custom pre-defined filter support
  - Updated to `bind@v0.3.0` and `events@v0.3.0`
