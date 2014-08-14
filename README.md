@@ -211,6 +211,10 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
+ - add new features here
+
+### v0.2.2
+ - Updated to Bind `v0.3.1`
 
 ### v0.2.1
  - Handle `$or` operator correctly

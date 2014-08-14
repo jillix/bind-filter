@@ -12,7 +12,7 @@
         "/loader.js",
         "/validate.js",
         "github/jillix/utils/v0.1.5",
-        "github/jillix/bind/v0.3.0",
+        "github/jillix/bind/v0.3.1",
         "github/jillix/events/v0.3.0"
     ]
 }
