@@ -213,6 +213,10 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new features here
 
+### v0.2.3
+ - Fixed `disabled` class handling that was overwriting other existing classes of a `filter-item` when adding a new filter while others were disabled
+ - Updated to Utils `v0.1.6`
+
 ### v0.2.2
  - Updated to Bind `v0.3.1`
 

@@ -29,7 +29,7 @@ function createFilterItem (hash) {
 
     // enable/disable filter
     if (self.filters[hash].disabled) {
-        item.setAttribute('class', 'disabled');
+        item.setAttribute('class', item.getAttribute('class') + ' disabled');
         if (checkbox) {
             checkbox.removeAttribute('checked');
         }
@@ -94,8 +94,7 @@ function createFilterItem (hash) {
             }, false);
         }
     } else {
-        // TODO handle attributes with bind
-        item.setAttribute('class', 'fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
+        item.setAttribute('class', item.getAttribute('class') + ' fixed' + (self.filters[hash].disabled ? ' disabled' : ''));
         if (checkbox) {
             checkbox.setAttribute('disabled', true);
         }
@@ -143,3 +142,4 @@ function remove (hash) {
 
 exports.save = save;
 exports.remove = remove;
+

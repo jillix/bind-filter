@@ -11,7 +11,7 @@
         "/message.js",
         "/loader.js",
         "/validate.js",
-        "github/jillix/utils/v0.1.5",
+        "github/jillix/utils/v0.1.6",
         "github/jillix/bind/v0.3.1",
         "github/jillix/events/v0.3.0"
     ]
