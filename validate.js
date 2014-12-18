@@ -10,7 +10,7 @@ function convert (values) {
 
         // handle array value
         if (operator[2] === 'split') {
-            var value = values.value.split(/[ ,]+/).filter(Boolean);
+            var value = values.value.trim().split(/\s*,\s*/g).filter(Boolean);
         }
 
         if (values.value === 'false') {
@@ -70,3 +70,4 @@ function getFieldLabel (field, locale) {
 exports.convert = convert;
 exports.validate = validate;
 exports.getFieldLabel = getFieldLabel;
+
