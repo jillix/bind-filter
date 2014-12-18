@@ -10,7 +10,7 @@ function convert (values) {
 
         // handle array value
         if (operator[2] === 'split') {
-            var value = values.value.split(/,\s*/g);
+            var value = values.value.split(/[ ,]+/).filter(Boolean);
         }
 
         if (values.value === 'false') {
