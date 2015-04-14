@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new features here
 
+### v0.2.5
+ - Find function no longer emits a count
+
 ### v0.2.4
  - Fixed broken value spliting for `$in` and `$nin` operators
 
