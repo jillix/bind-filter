@@ -85,7 +85,7 @@ function find (all, callback) {
     }
 
     // get data with crud module
-    return self.emit('find', self.query, function (err, data, xhr) {
+    return self.emit('find', self.query, function (err, data) {
 
         self.crudFindBusy = false;
 
@@ -95,16 +95,8 @@ function find (all, callback) {
             return console.error(err);
         }
 
-        var count;
-
-        // verify if xhr exists
-        if (xhr) {
-            // it exists, so get the count from response
-            count = xhr.getResponseHeader('X-Mono-CRUD-Count');
-        }
-
-        callback (err, data, count);
-        self.emit('result', err, data, count);
+        callback (err, data);
+        self.emit('result', err, data);
     });
 }
 
