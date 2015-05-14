@@ -43,12 +43,14 @@ function save () {
 
     self.emit('showLoader');
 
-    self.emit('setFilters', [filter]);
+    self.emit('setFilters', [filter], false, false, function (err, data) {
 
-    var createKey = 'create';
-    if (self.domRefs.controls[createKey]) {
-        self.domRefs.controls[createKey].focus();
-    }
+        var createKey = 'create';
+        if (self.domRefs.controls[createKey]) {
+            self.domRefs.controls[createKey].focus();
+        }
+
+    });
 }
 
 function edit (hash) {
