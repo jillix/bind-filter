@@ -213,6 +213,9 @@ Types: `alert` `error` `success` `info`
 ### dev
  - add new features here
 
+### v0.2.6
+ - Fixed editing disabled filters (they are not enabled back)
+
 ### v0.2.5
  - Find function no longer emits a count
 
