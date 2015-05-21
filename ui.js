@@ -43,17 +43,14 @@ function save () {
 
     self.emit('showLoader');
 
-    // if the filter is disabled, enable it
-    if ((self.filters[filter.hash] || {}).disabled) {
-        enable.call(self, filter.hash);
-    }
+    self.emit('setFilters', [filter], false, false, function (err, data) {
 
-    self.emit('setFilters', [filter]);
+        var createKey = 'create';
+        if (self.domRefs.controls[createKey]) {
+            self.domRefs.controls[createKey].focus();
+        }
 
-    var createKey = 'create';
-    if (self.domRefs.controls[createKey]) {
-        self.domRefs.controls[createKey].focus();
-    }
+    });
 }
 
 function edit (hash) {
