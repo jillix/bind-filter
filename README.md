@@ -211,7 +211,7 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
- - From now on, update the result when a disabled filter is edited and do not enable it on edit.
+ - From now on, do not fetch data using a CRUD read (find) operation when editing disabled filters and do not enable them after edit.
  - add new features here
 
 ### v0.2.5
