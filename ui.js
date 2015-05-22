@@ -43,7 +43,8 @@ function save () {
 
     self.emit('showLoader');
 
-    self.emit('setFilters', [filter], false, false, function (err, data) {
+    self.emit('setFilters', [filter], false,
+        (self.filters[filter.hash] || {}).disabled, function (err, data) {
 
         var createKey = 'create';
         if (self.domRefs.controls[createKey]) {
