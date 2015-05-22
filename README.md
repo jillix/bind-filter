@@ -211,6 +211,7 @@ Types: `alert` `error` `success` `info`
 ## Changelog
 
 ### dev
+ - From now on, update the result when a disabled filter is edited and do not enable it on edit.
  - add new features here
 
 ### v0.2.5
