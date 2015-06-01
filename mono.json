@@ -1,6 +1,6 @@
 {
     "source": "github",
-    "owner": "jillix",
+    "owner": "jxmono",
     "name": "bind-filter",
     "dependencies": [
         "/filter.js",
@@ -11,8 +11,8 @@
         "/message.js",
         "/loader.js",
         "/validate.js",
-        "github/jillix/utils/v0.1.6",
-        "github/jillix/bind/v0.3.2",
-        "github/jillix/events/v0.3.0"
+        "github/jxmono/utils/v0.2.0",
+        "github/jxmono/bind/v0.4.0",
+        "github/jxmono/events/v0.4.0"
     ]
 }
