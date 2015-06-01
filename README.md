@@ -214,6 +214,9 @@ Types: `alert` `error` `success` `info`
  - From now on, do not fetch data using a CRUD read (find) operation when editing disabled filters and do not enable them after edit.
  - add new features here
 
+### v0.2.6
+ - Fixed editing disabled filters (they are not enabled back)
+
 ### v0.2.5
  - Find function no longer emits a count
 
