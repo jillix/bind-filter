@@ -210,9 +210,10 @@ Types: `alert` `error` `success` `info`
 
 ## Changelog
 
-### dev
- - From now on, do not fetch data using a CRUD read (find) operation when editing disabled filters and do not enable them after edit.
- - add new features here
+### v0.3.0
+ - from now on, do not fetch data using a CRUD read (find) operation when editing disabled filters
+ - transferred module to the new jxMono organization
+ - updated Bind to `v0.4.0`, Events to `v0.4.0`, Utils to `v0.2.0`
 
 ### v0.2.6
  - Fixed editing disabled filters (they are not enabled back)
