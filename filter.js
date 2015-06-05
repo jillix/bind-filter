@@ -1,6 +1,6 @@
-var Bind = require('github/jillix/bind');
-var Events = require('github/jillix/events');
-var Utils = require('github/jillix/utils');
+var Bind = require('github/jxmono/bind');
+var Events = require('github/jxmono/events');
+var Utils = require('github/jxmono/utils');
 
 var find = require('./find');
 var ui = require('./ui');
